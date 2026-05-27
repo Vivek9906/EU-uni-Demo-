@@ -1,0 +1,37 @@
+import type { Metadata } from 'next';
+import { CheckCircle } from 'lucide-react';
+
+export const metadata: Metadata = { title: 'Admission Requirements', description: 'Entry requirements for AMU programs including MBA, Honorary Doctorate, and Professorship.' };
+
+const requirements = [
+  { level: "Bachelor's — MBA (BBA)", items: ['High school diploma or equivalent', 'Official transcripts', 'Statement of purpose (200–1000 words)', 'Valid passport or national ID', 'Passport-size photograph', 'English proficiency (if applicable)'] },
+  { level: "Master's — MBA", items: ["Recognized bachelor's degree", 'Minimum 2 years professional experience (preferred)', 'Official academic transcripts', 'Current CV/resume', 'Statement of purpose (200–1000 words)', 'Professional or academic reference', 'Valid passport or national ID'] },
+  { level: 'Honorary Doctorate', items: ['Minimum 10 years of professional leadership', 'Significant contributions to community, education, or industry', 'Recognized standing in profession', 'Commitment to ethical leadership', 'Track record of mentorship or philanthropy', 'Detailed statement of purpose'] },
+  { level: 'Honorary Professorship', items: ['Distinguished record of academic or professional achievement', 'Contributions to education, research, or knowledge advancement', 'Recognized expertise through publications or practice', 'Commitment to academic integrity', 'Statement of purpose describing contributions'] },
+];
+
+export default function RequirementsPage() {
+  return (
+    <>
+      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
+        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Admissions</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Admission Requirements</h1><p className="text-lg text-foreground-secondary">Detailed entry requirements for each program level at AMU.</p></div></div>
+      </section>
+      <section className="section-padding">
+        <div className="container-main max-w-4xl space-y-8">
+          {requirements.map((req) => (
+            <div key={req.level} className="card p-8">
+              <h2 className="font-heading text-xl font-bold mb-4 text-primary">{req.level}</h2>
+              <ul className="space-y-3">
+                {req.items.map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-foreground-secondary">
+                    <CheckCircle size={14} className="text-success shrink-0 mt-1" />{item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+}

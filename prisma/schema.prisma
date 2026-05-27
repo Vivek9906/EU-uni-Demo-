@@ -1,0 +1,229 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Application {
+  id              String   @id @default(cuid())
+  referenceNumber String   @unique
+  fullName        String
+  dateOfBirth     DateTime
+  gender          String
+  nationality     String
+  passportNumber  String
+  photoUrl        String?
+  email           String
+  phone           String
+  currentAddress  String
+  mailingAddress  String?
+  programLevel    String
+  programName     String
+  modeOfStudy     String
+  intendedStart   String
+  highestQualification String
+  institutionName String
+  graduationYear  String
+  transcriptsUrls String[]
+  currentJobTitle String?
+  employer        String?
+  yearsExperience String?
+  cvUrl           String?
+  statementOfPurpose String
+  referenceName   String?
+  referenceEmail  String?
+  referenceRelationship String?
+  confirmAccuracy Boolean  @default(false)
+  agreeTerms      Boolean  @default(false)
+  consentContact  Boolean  @default(false)
+  status          String   @default("pending")
+  notes           String?
+  submittedAt     DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([status])
+  @@index([programLevel])
+  @@index([submittedAt])
+}
+
+model Certificate {
+  id            String   @id @default(cuid())
+  certificateId String   @unique
+  holderName    String
+  programName   String
+  issuedDate    DateTime
+  applicationId String?
+  isValid       Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([certificateId])
+}
+
+model Faculty {
+  id             String   @id @default(cuid())
+  name           String
+  designation    String
+  department     String
+  specialization String
+  bio            String
+  photo          String?
+  email          String?
+  publications   String[]
+  order          Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([department])
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  description String
+  date        DateTime
+  endDate     DateTime?
+  venue       String
+  category    String
+  imageUrl    String?
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([date])
+}
+
+model News {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  content     String
+  excerpt     String
+  imageUrl    String?
+  category    String
+  author      String    @default("AMU Communications")
+  publishedAt DateTime?
+  isPublished Boolean   @default(false)
+  seoTitle    String?
+  seoDesc     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([publishedAt])
+}
+
+model Notice {
+  id            String   @id @default(cuid())
+  title         String
+  content       String
+  category      String
+  attachmentUrl String?
+  isActive      Boolean  @default(true)
+  postedAt      DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([category])
+  @@index([postedAt])
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        String
+  program     String
+  content     String
+  photo       String?
+  isApproved  Boolean  @default(false)
+  submittedAt DateTime @default(now())
+
+  @@index([isApproved])
+}
+
+model Scholarship {
+  id          String    @id @default(cuid())
+  name        String
+  type        String
+  amount      String
+  eligibility String
+  deadline    DateTime?
+  description String
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ContactInquiry {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String?
+  subject    String
+  message    String
+  status     String   @default("unread")
+  receivedAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([status])
+  @@index([receivedAt])
+}
+
+model GalleryImage {
+  id         String   @id @default(cuid())
+  url        String
+  caption    String?
+  album      String?
+  order      Int      @default(0)
+  uploadedAt DateTime @default(now())
+
+  @@index([album])
+}
+
+model AdminUser {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  name      String
+  role      String     @default("EDITOR")
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  auditLogs AuditLog[]
+
+  @@index([email])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  admin     AdminUser @relation(fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([createdAt])
+}
+
+model FAQ {
+  id       String  @id @default(cuid())
+  question String
+  answer   String
+  category String
+  order    Int     @default(0)
+  isActive Boolean @default(true)
+
+  @@index([category])
+}
+
+model SiteSettings {
+  id   String @id @default("site_settings")
+  data Json
+}
