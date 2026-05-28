@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  GraduationCap,
   Facebook,
   Twitter,
   Linkedin,
@@ -11,24 +10,28 @@ import {
   MapPin,
 } from 'lucide-react';
 
+function EUAULogoSmall({ className }: { className?: string }) {
+  return (
+    <img src="/logo.png" alt="EU American University Logo" className={className} />
+  );
+}
+
 const footerLinks = {
   Academics: [
-    { label: "Bachelor's MBA", href: '/academics/bachelors' },
-    { label: "Master's MBA", href: '/academics/masters' },
-    { label: 'Honorary Doctorate', href: '/academics/phd' },
-    { label: 'Professorship', href: '/academics/phd' },
+    { label: "Bachelor's Programs", href: '/academics/bachelors' },
+    { label: "Master's Programs", href: '/academics/masters' },
+    { label: 'Honorary Programs', href: '/academics/honorary' },
+    { label: 'Certifications', href: '/certifications' },
     { label: 'All Programs', href: '/academics' },
   ],
   Admissions: [
     { label: 'How to Apply', href: '/admissions' },
     { label: 'Requirements', href: '/admissions/requirements' },
     { label: 'Scholarships', href: '/admissions/scholarships' },
-    { label: 'Financial Aid', href: '/admissions/financial-aid' },
     { label: 'Apply Now', href: '/admissions/apply' },
   ],
   University: [
-    { label: 'About AMU', href: '/about' },
-    { label: 'Faculty', href: '/faculty' },
+    { label: 'About Us', href: '/about' },
     { label: 'Research', href: '/research' },
     { label: 'Campus Life', href: '/campus-life' },
     { label: 'Accreditation', href: '/accreditation' },
@@ -37,52 +40,50 @@ const footerLinks = {
   Support: [
     { label: 'Contact Us', href: '/contact' },
     { label: 'FAQ', href: '/faq' },
+    { label: 'Student Verification', href: '/student-verification' },
     { label: 'Verify Certificate', href: '/verify-certificate' },
     { label: 'News', href: '/news' },
     { label: 'Events', href: '/events' },
-    { label: 'Gallery', href: '/gallery' },
   ],
 };
 
 const socialLinks = [
-  { icon: Facebook, href: 'https://facebook.com/amuuniversity', label: 'Facebook' },
-  { icon: Twitter, href: 'https://twitter.com/amuuniversity', label: 'Twitter' },
-  { icon: Linkedin, href: 'https://linkedin.com/school/amuuniversity', label: 'LinkedIn' },
-  { icon: Instagram, href: 'https://instagram.com/amuuniversity', label: 'Instagram' },
-  { icon: Youtube, href: 'https://youtube.com/amuuniversity', label: 'YouTube' },
+  { icon: Facebook, href: 'https://facebook.com/euamericanuniversity', label: 'Facebook' },
+  { icon: Twitter, href: 'https://twitter.com/euamericanuniv', label: 'Twitter' },
+  { icon: Linkedin, href: 'https://linkedin.com/school/euamericanuniversity', label: 'LinkedIn' },
+  { icon: Instagram, href: 'https://instagram.com/euamericanuniversity', label: 'Instagram' },
+  { icon: Youtube, href: 'https://youtube.com/euamericanuniversity', label: 'YouTube' },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white" role="contentinfo">
+    <footer className="bg-[#0F1C35] text-white" role="contentinfo">
       {/* Main footer */}
       <div className="container-main py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12">
           {/* Brand column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-4" aria-label="American Management University Home">
-              <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
+            <Link href="/" className="flex items-center gap-3 mb-4" aria-label="EU American University Home">
+              <EUAULogoSmall className="w-10 h-10" />
               <div>
-                <div className="font-heading text-sm font-bold leading-tight">
-                  American Management
+                <div className="font-heading text-sm font-bold leading-tight tracking-wide uppercase">
+                  EU American
                 </div>
-                <div className="font-heading text-xs text-white/70 leading-tight">
+                <div className="font-heading text-[10px] text-white/70 leading-tight tracking-[0.2em] uppercase">
                   University
                 </div>
               </div>
             </Link>
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-xs">
-              A legacy of academic excellence, innovation, and global impact. Shaping leaders who transform the world since 1924.
+              Delivering accessible, high-quality education that equips individuals with the knowledge and global perspective needed to lead with purpose.
             </p>
             <div className="space-y-3 text-sm">
               <a
-                href="mailto:info@amu.edu.eu"
+                href="mailto:info@euamericanuniversity.us"
                 className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
               >
                 <Mail size={14} />
-                info@amu.edu.eu
+                info@euamericanuniversity.us
               </a>
               <a
                 href="tel:+33189370004"
@@ -101,7 +102,7 @@ export default function Footer() {
           {/* Link columns */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h3 className="font-accent text-xs font-semibold tracking-wider uppercase text-white/40 mb-4">
+              <h3 className="font-body text-xs font-semibold tracking-wider uppercase text-white/40 mb-4">
                 {title}
               </h3>
               <ul className="space-y-2.5">
@@ -125,7 +126,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="container-main py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/40">
-            © {new Date().getFullYear()} American Management University. All rights reserved.
+            © {new Date().getFullYear()} EU American University. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="text-xs text-white/40 hover:text-white/60 transition-colors">
@@ -133,6 +134,12 @@ export default function Footer() {
             </Link>
             <Link href="/terms" className="text-xs text-white/40 hover:text-white/60 transition-colors">
               Terms of Use
+            </Link>
+            <Link href="/refund-policy" className="text-xs text-white/40 hover:text-white/60 transition-colors">
+              Refund Policy
+            </Link>
+            <Link href="/cookie-policy" className="text-xs text-white/40 hover:text-white/60 transition-colors">
+              Cookie Policy
             </Link>
           </div>
           <div className="flex items-center gap-3">

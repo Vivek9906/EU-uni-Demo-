@@ -30,7 +30,7 @@ export default function StatsBar() {
               <div className="text-2xl lg:text-3xl font-heading font-bold text-primary">
                 {stat.value}
               </div>
-              <div className="text-xs font-accent text-foreground-muted mt-1 uppercase tracking-wider">
+              <div className="text-xs font-body text-foreground-muted mt-1 uppercase tracking-wider">
                 {stat.label}
               </div>
             </motion.div>

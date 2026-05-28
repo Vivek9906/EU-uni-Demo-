@@ -7,13 +7,16 @@ import LogoutButton from './LogoutButton';
 
 const sidebarLinks = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
+  { href: '/dashboard/students', label: 'Students', icon: Users },
   { href: '/dashboard/applications', label: 'Applications', icon: FileText },
   { href: '/dashboard/certificates', label: 'Certificates', icon: Award },
+  { href: '/dashboard/certifications', label: 'Certifications', icon: Award },
   { href: '/dashboard/inquiries', label: 'Inquiries', icon: MessageSquare },
   { href: '/dashboard/notices', label: 'Notices', icon: Bell },
   { href: '/dashboard/news', label: 'News & Media', icon: FileImage },
   { href: '/dashboard/events', label: 'Events', icon: Building2 },
   { href: '/dashboard/faculty', label: 'Faculty', icon: Users },
+  { href: '/dashboard/legal', label: 'Legal Pages', icon: FileText },
   { href: '/dashboard/faq', label: 'FAQ', icon: HelpCircle },
 ];
 
@@ -33,7 +36,7 @@ export default async function DashboardLayout({
       {/* Sidebar */}
       <aside className="w-64 bg-primary text-white flex flex-col shrink-0">
         <div className="h-16 flex items-center px-6 border-b border-white/10 shrink-0">
-          <span className="font-heading font-bold text-lg">AMU Admin</span>
+          <span className="font-heading font-bold text-lg">EUAU Admin</span>
         </div>
         
         <div className="flex-1 overflow-y-auto py-6 px-4">

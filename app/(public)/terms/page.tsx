@@ -32,7 +32,7 @@ export default function TermsPage() {
           <p>These terms are governed by the laws of France. Any disputes shall be subject to the exclusive jurisdiction of the courts of Paris.</p>
 
           <h2 className="font-heading text-xl font-bold text-foreground mt-8">8. Contact</h2>
-          <p>For legal inquiries, contact us at:<br />Email: legal@amu.edu.eu<br />Address: 11 rue Magdebourg, Paris, France 75016</p>
+          <p>For legal inquiries, contact us at:<br />Email: legal@euamericanuniversity.us<br />Address: 11 rue Magdebourg, Paris, France 75016</p>
         </div>
       </div>
     </section>

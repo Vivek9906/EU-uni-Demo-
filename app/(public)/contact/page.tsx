@@ -58,7 +58,7 @@ export default function ContactPage() {
                 <div className="space-y-3 text-sm text-foreground-secondary">
                   <div className="flex items-start gap-3"><MapPin size={16} className="text-primary shrink-0 mt-0.5" />11 rue Magdebourg, Paris, France 75016</div>
                   <div className="flex items-center gap-3"><Phone size={16} className="text-primary shrink-0" />+33 1 89 37 00 04</div>
-                  <div className="flex items-center gap-3"><Mail size={16} className="text-primary shrink-0" />info@amu.edu.eu</div>
+                  <div className="flex items-center gap-3"><Mail size={16} className="text-primary shrink-0" />info@euamericanuniversity.us</div>
                   <div className="flex items-center gap-3"><Clock size={16} className="text-primary shrink-0" />Mon–Fri: 9:00 AM – 5:00 PM (CET)</div>
                 </div>
               </div>
@@ -72,10 +72,10 @@ export default function ContactPage() {
               <div className="card p-6">
                 <h3 className="font-heading text-base font-bold mb-4">Department Contacts</h3>
                 <div className="space-y-2 text-sm text-foreground-secondary">
-                  <p><strong>Admissions:</strong> admissions@amu.edu.eu</p>
-                  <p><strong>Academic Affairs:</strong> academics@amu.edu.eu</p>
-                  <p><strong>Finance:</strong> finance@amu.edu.eu</p>
-                  <p><strong>Student Records:</strong> records@amu.edu.eu</p>
+                  <p><strong>Admissions:</strong> admissions@euamericanuniversity.us</p>
+                  <p><strong>Academic Affairs:</strong> academics@euamericanuniversity.us</p>
+                  <p><strong>Finance:</strong> finance@euamericanuniversity.us</p>
+                  <p><strong>Student Records:</strong> records@euamericanuniversity.us</p>
                 </div>
               </div>
               <div className="rounded-card overflow-hidden border border-border h-64">

@@ -1,38 +1,68 @@
 import type { Metadata } from 'next';
+import { prisma } from '@/lib/db';
+import Link from 'next/link';
 
-export const metadata: Metadata = { title: 'Privacy Policy', description: 'AMU Privacy Policy — how we collect, use, and protect your personal data.' };
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description: 'Privacy Policy for EU American University',
+};
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  // Try to fetch from DB first
+  const legalPage = await prisma.legalPage.findUnique({
+    where: { slug: 'privacy' },
+  });
+
   return (
-    <section className="section-padding">
+    <section className="section-padding bg-background-subtle min-h-[80vh]">
       <div className="container-main max-w-3xl">
-        <h1 className="text-4xl font-heading font-bold mb-8">Privacy Policy</h1>
-        <div className="prose prose-lg text-foreground-secondary space-y-6 text-sm leading-relaxed">
-          <p className="text-foreground-muted text-xs">Last updated: January 1, 2025</p>
+        <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-border">
+          <h1 className="font-heading text-3xl md:text-4xl font-bold mb-8">
+            {legalPage?.title || 'Privacy Policy'}
+          </h1>
+          
+          <div className="prose prose-blue max-w-none prose-headings:font-heading prose-headings:text-foreground prose-p:text-foreground-secondary">
+            {legalPage && legalPage.content !== 'This is managed via the admin CMS. Content is rendered from the /privacy page component.' ? (
+              <div dangerouslySetInnerHTML={{ __html: legalPage.content }} />
+            ) : (
+              // Hardcoded fallback per spec
+              <>
+                <p>Last updated: {new Date().toLocaleDateString()}</p>
+                
+                <h2>1. Information We Collect</h2>
+                <p>EU American University collects information you provide directly to us, including when you apply for admission, register for courses, create an account, or contact us. This may include:</p>
+                <ul>
+                  <li>Personal details (name, date of birth, nationality)</li>
+                  <li>Contact information (email, phone, address)</li>
+                  <li>Academic and professional history</li>
+                  <li>Financial information for payment processing</li>
+                </ul>
 
-          <h2 className="font-heading text-xl font-bold text-foreground mt-8">1. Information We Collect</h2>
-          <p>American Management University (&quot;AMU&quot;, &quot;we&quot;, &quot;us&quot;) collects personal information that you voluntarily provide when applying for programs, contacting us, or using our services. This may include your name, email address, phone number, date of birth, nationality, passport details, educational background, employment history, and statement of purpose.</p>
+                <h2>2. How We Use Your Information</h2>
+                <p>We use the information we collect to:</p>
+                <ul>
+                  <li>Process admissions applications and enrollment</li>
+                  <li>Deliver educational programs and services</li>
+                  <li>Communicate important administrative updates</li>
+                  <li>Comply with legal and accreditation requirements</li>
+                </ul>
 
-          <h2 className="font-heading text-xl font-bold text-foreground mt-8">2. How We Use Your Information</h2>
-          <p>We use your personal information to: process your application; communicate regarding your application status; issue certificates and academic records; respond to inquiries; send relevant academic communications; comply with legal obligations; and improve our services.</p>
+                <h2>3. Information Sharing</h2>
+                <p>We do not sell your personal information. We may share your information with:</p>
+                <ul>
+                  <li>Service providers acting on our behalf (e.g., payment processors, learning management systems)</li>
+                  <li>Accreditation bodies and regulatory authorities as required</li>
+                  <li>Other institutions for credit transfer (only with your explicit consent)</li>
+                </ul>
 
-          <h2 className="font-heading text-xl font-bold text-foreground mt-8">3. Data Protection</h2>
-          <p>We implement appropriate technical and organizational security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. All data is stored securely using encrypted databases and transmitted via TLS/SSL encryption.</p>
-
-          <h2 className="font-heading text-xl font-bold text-foreground mt-8">4. Data Retention</h2>
-          <p>We retain personal data for as long as necessary to fulfill the purposes outlined in this policy, or as required by applicable law. Academic records and certificates are retained indefinitely to support alumni verification services.</p>
-
-          <h2 className="font-heading text-xl font-bold text-foreground mt-8">5. Your Rights</h2>
-          <p>Under applicable data protection laws (including GDPR), you have the right to access, rectify, erase, restrict processing, and port your personal data. To exercise these rights, contact our Data Protection Officer at privacy@amu.edu.eu.</p>
-
-          <h2 className="font-heading text-xl font-bold text-foreground mt-8">6. Cookies</h2>
-          <p>Our website uses essential cookies necessary for site functionality and security. We do not use third-party tracking cookies unless you provide explicit consent.</p>
-
-          <h2 className="font-heading text-xl font-bold text-foreground mt-8">7. Third-Party Services</h2>
-          <p>We may share limited data with third-party service providers who assist us in operating our website, processing applications, and sending communications. These providers are contractually bound to protect your data.</p>
-
-          <h2 className="font-heading text-xl font-bold text-foreground mt-8">8. Contact</h2>
-          <p>For privacy-related inquiries, please contact us at:<br />Email: privacy@amu.edu.eu<br />Address: 11 rue Magdebourg, Paris, France 75016</p>
+                <h2>4. Data Security</h2>
+                <p>We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.</p>
+                
+                <h2>5. Contact Us</h2>
+                <p>If you have questions about this Privacy Policy, please contact us at: <a href="mailto:privacy@euamericanuniversity.edu">privacy@euamericanuniversity.edu</a></p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </section>

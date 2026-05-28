@@ -1,25 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --primary: #1A3C6E;
-  --primary-light: #2C5282;
-  --accent: #B8860B;
-  --bg: #FFFFFF;
-  --bg-subtle: #F7F8FA;
-  --bg-card: #FFFFFF;
-  --text-primary: #1A1A2E;
-  --text-secondary: #4A5568;
-  --text-muted: #718096;
-  --border: #E2E8F0;
+  --primary:        #1B3A6B;
+  --primary-hover:  #14305A;
+  --accent:         #C8A951;
+  --accent-dark:    #A88B3A;
+  --bg:             #FFFFFF;
+  --bg-subtle:      #F5F6F8;
+  --bg-card:        #FFFFFF;
+  --text-heading:   #0F1C35;
+  --text-body:      #3D4A5C;
+  --text-muted:     #6B7685;
+  --border:         #DDE3EC;
+  --nav-bg:         #FFFFFF;
+  --nav-text:       #1B3A6B;
+  --btn-primary-bg: #1B3A6B;
+  --btn-primary-txt:#FFFFFF;
+  --btn-outline-border: #1B3A6B;
+  --btn-outline-txt:#1B3A6B;
+  --footer-bg:      #0F1C35;
+  --footer-text:    #C8D3E0;
+  --shadow-card:    0 2px 12px rgba(27,58,107,0.08);
   --success: #276749;
   --error: #C53030;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-sm: 0 1px 3px rgba(27,58,107,0.06);
+  --shadow-md: 0 4px 16px rgba(27,58,107,0.08);
+  --shadow-lg: 0 8px 32px rgba(27,58,107,0.10);
 }
 
 @layer base {
@@ -35,8 +45,8 @@
   }
 
   body {
-    font-family: 'Source Sans 3', system-ui, -apple-system, sans-serif;
-    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text-body);
     background-color: var(--bg);
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
@@ -44,9 +54,9 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Merriweather', Georgia, serif;
+    font-family: 'EB Garamond', Georgia, serif;
     line-height: 1.3;
-    color: var(--text-primary);
+    color: var(--text-heading);
   }
 
   h1 { font-size: 2.5rem; font-weight: 700; }
@@ -61,7 +71,7 @@
   }
 
   a:hover {
-    color: var(--primary-light);
+    color: var(--primary-hover);
   }
 
   img {
@@ -70,8 +80,8 @@
   }
 
   ::selection {
-    background: rgba(26, 60, 110, 0.15);
-    color: var(--text-primary);
+    background: rgba(27, 58, 107, 0.15);
+    color: var(--text-heading);
   }
 }
 
@@ -85,7 +95,7 @@
   }
 
   .section-label {
-    @apply font-accent text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-3;
+    @apply font-body text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-3;
   }
 
   .section-title {
@@ -131,7 +141,7 @@
   }
 
   .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-accent font-medium;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-body font-medium;
   }
 
   .badge-primary {

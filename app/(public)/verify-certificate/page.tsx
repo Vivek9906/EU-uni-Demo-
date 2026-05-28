@@ -48,7 +48,7 @@ export default function VerifyCertificatePage() {
               )}
             </div>
           )}
-          <p className="text-xs text-foreground-muted text-center mt-6">Rate limit: 10 verifications per hour. For bulk verification, contact records@amu.edu.eu.</p>
+          <p className="text-xs text-foreground-muted text-center mt-6">Rate limit: 10 verifications per hour. For bulk verification, contact records@euamericanuniversity.us.</p>
         </div>
       </section>
     </>

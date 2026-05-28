@@ -85,7 +85,7 @@ export async function sendApplicationConfirmation(
     </p>
     <p style="color: #4A5568; line-height: 1.7;">
       If you have any questions, please don't hesitate to contact us at 
-      <a href="mailto:admissions@amu.edu.eu" style="color: #1A3C6E;">admissions@amu.edu.eu</a>.
+      <a href="mailto:admissions@euamericanuniversity.us" style="color: #1A3C6E;">admissions@euamericanuniversity.us</a>.
     </p>
     <p style="color: #4A5568; line-height: 1.7;">
       Best regards,<br>
@@ -95,7 +95,7 @@ export async function sendApplicationConfirmation(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@amu.edu.eu',
+      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
       subject: `Application Received — ${referenceNumber} | AMU`,
       html: wrapEmail(content),
@@ -132,14 +132,14 @@ export async function sendStatusUpdateEmail(
       </p>
     </div>
     <p style="color: #4A5568; line-height: 1.7;">
-      If you have any questions, please contact <a href="mailto:admissions@amu.edu.eu" style="color: #1A3C6E;">admissions@amu.edu.eu</a>.
+      If you have any questions, please contact <a href="mailto:admissions@euamericanuniversity.us" style="color: #1A3C6E;">admissions@euamericanuniversity.us</a>.
     </p>
     <p style="color: #4A5568; line-height: 1.7;">Best regards,<br><strong>AMU Admissions Office</strong></p>
   `;
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@amu.edu.eu',
+      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
       subject: `Application Update: ${status.charAt(0).toUpperCase() + status.slice(1)} — ${referenceNumber} | AMU`,
       html: wrapEmail(content),
@@ -166,7 +166,7 @@ export async function sendContactConfirmation(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@amu.edu.eu',
+      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
       subject: 'Your Inquiry Has Been Received | AMU',
       html: wrapEmail(content),
@@ -180,7 +180,7 @@ export async function sendAdminNotification(
   subject: string,
   body: string
 ): Promise<void> {
-  const adminEmail = process.env.SMTP_USER || 'admin@amu.edu.eu';
+  const adminEmail = process.env.SMTP_USER || 'admin@euamericanuniversity.us';
   const content = `
     <h2 style="color: #1A1A2E; font-family: 'Merriweather', Georgia, serif; font-size: 20px;">
       Admin Notification
@@ -190,7 +190,7 @@ export async function sendAdminNotification(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@amu.edu.eu',
+      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to: adminEmail,
       subject: `[AMU Admin] ${subject}`,
       html: wrapEmail(content),
@@ -227,7 +227,7 @@ export async function sendCertificateNotification(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@amu.edu.eu',
+      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
       subject: `Certificate Issued — ${certificateId} | AMU`,
       html: wrapEmail(content),

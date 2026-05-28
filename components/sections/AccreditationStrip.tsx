@@ -29,7 +29,7 @@ export default function AccreditationStrip() {
               className="flex flex-col items-center text-center p-4"
             >
               <div className="w-16 h-16 bg-primary/5 rounded-xl flex items-center justify-center mb-3">
-                <span className="text-xs font-accent font-bold text-primary">
+                <span className="text-xs font-body font-bold text-primary">
                   {acc.name}
                 </span>
               </div>

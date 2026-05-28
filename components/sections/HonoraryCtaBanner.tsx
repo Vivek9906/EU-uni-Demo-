@@ -18,7 +18,7 @@ export default function HonoraryCtaBanner() {
             Earn Recognition. Earn a Legacy.
           </h2>
           <p className="text-lg text-white/70 max-w-2xl mx-auto mb-8">
-            The AMU Honorary Doctorate and Professorship programs recognize
+            The EU American University Honorary Doctorate and Professorship programs recognize
             exceptional individuals who have made outstanding contributions to
             their fields and communities worldwide.
           </p>

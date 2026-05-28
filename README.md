@@ -57,7 +57,7 @@ Access the admin portal at **http://localhost:3000/admin/login**
 ### Default Admin Credentials
 | Field | Value |
 |-------|-------|
-| Email | admin@amu.edu.eu |
+| Email | admin@euamericanuniversity.us |
 | Password | ChangeMe@123! |
 
 > ⚠️ **Change the default password immediately after first login.**

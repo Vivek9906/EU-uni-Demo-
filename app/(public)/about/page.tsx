@@ -1,149 +1,123 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
-import { Clock, MapPin, Users, Globe, BookOpen, Award, ArrowRight } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Target, Heart, Lightbulb } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about American Management University\'s history, mission, vision, and leadership. A legacy of academic excellence since 1924.',
+  description: 'Learn about EU American University, our mission, vision, and core values.',
 };
 
-const timeline = [
-  { year: '1924', title: 'Foundation', description: 'American Management University established with a vision to provide accessible, quality higher education.' },
-  { year: '1960', title: 'International Expansion', description: 'AMU begins accepting international students, broadening its global reach and cultural diversity.' },
-  { year: '1985', title: 'European Operations', description: 'Establishment of European operations center, strengthening AMU\'s presence in the EU.' },
-  { year: '2000', title: 'Online Programs Launch', description: 'Introduction of online learning platforms, making education accessible to working professionals worldwide.' },
-  { year: '2010', title: 'Global Headquarters in Paris', description: 'AMU establishes its global headquarters at 11 rue Magdebourg, Paris, France.' },
-  { year: '2020', title: 'Accreditation Milestones', description: 'Achieves IARC, QAHE accreditation and ACBSP, IACBE, ASIC UK memberships.' },
-  { year: '2025', title: 'A Century of Excellence', description: 'Celebrating 100+ years of shaping global leaders across 100+ countries.' },
-];
-
-const leadership = [
-  { name: 'Board of Chancellors', role: 'University Governance', description: 'The Board of Chancellors provides strategic oversight and governance for AMU, ensuring the university fulfills its mission of academic excellence and global accessibility.' },
-  { name: 'Office of the Vice Chancellor', role: 'Academic Leadership', description: 'The Vice Chancellor leads the academic mission of the university, overseeing curriculum development, faculty affairs, and academic quality assurance.' },
-  { name: 'Office of Academic Affairs', role: 'Program Administration', description: 'The Office of Academic Affairs manages program delivery, student academic services, and ensures the quality and relevance of all academic programs.' },
-  { name: 'Office of Admissions', role: 'Student Enrollment', description: 'The Office of Admissions handles application processing, enrollment management, and provides guidance to prospective students worldwide.' },
+const values = [
+  {
+    icon: ShieldCheck,
+    title: 'Integrity',
+    description: 'We uphold the highest ethical standards in our academic programs and institutional operations.',
+  },
+  {
+    icon: Target,
+    title: 'Excellence',
+    description: 'We strive for exceptional quality in teaching, research, and service to our global community.',
+  },
+  {
+    icon: Heart,
+    title: 'Inclusivity',
+    description: 'We foster a welcoming environment that respects diverse perspectives and backgrounds.',
+  },
+  {
+    icon: Lightbulb,
+    title: 'Innovation',
+    description: 'We embrace creative solutions and forward-thinking approaches to education and global challenges.',
+  },
 ];
 
 export default function AboutPage() {
   return (
     <>
-      {/* Hero */}
       <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
         <div className="container-main">
           <div className="max-w-3xl">
-            <span className="section-label">About AMU</span>
+            <span className="section-label">About Us</span>
             <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">
-              A Century of Shaping Global Leaders
+              Our Identity & Purpose
             </h1>
             <p className="text-lg text-foreground-secondary leading-relaxed">
-              American Management University is a nonprofit institution committed to providing globally accessible, career-relevant education that prepares ethical leaders for today&apos;s interconnected world.
+              Discover the mission, vision, and core values that drive EU American University to deliver exceptional education worldwide.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Mission, Vision, Values */}
-      <section className="section-padding">
+      <section className="section-padding border-b border-border">
         <div className="container-main">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="card p-8">
-              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                <BookOpen className="w-6 h-6 text-primary" />
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+              <div 
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1600&q=80)' }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end">
+                <div className="p-8">
+                  <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-lg p-4 inline-block">
+                    <p className="text-white font-heading text-xl font-bold">Empowering Leaders</p>
+                    <p className="text-white/80 text-sm">Since our founding</p>
+                  </div>
+                </div>
               </div>
-              <h3 className="font-heading text-xl font-bold mb-3">Our Mission</h3>
-              <p className="text-sm text-foreground-secondary leading-relaxed">
-                To provide globally accessible, career-relevant education that prepares ethical leaders for today&apos;s interconnected world. We offer flexible learning pathways — both coursework and validation-based — to meet the diverse needs of working professionals across business, leadership, education, and management.
-              </p>
             </div>
-            <div className="card p-8">
-              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
-                <Globe className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="font-heading text-xl font-bold mb-3">Our Vision</h3>
-              <p className="text-sm text-foreground-secondary leading-relaxed">
-                A world where education is accessible, flexible, and transformative. We envision empowering individuals from all backgrounds to become ethical leaders in business, government, education, and beyond, redefining what higher education means in the 21st century.
+
+            <div>
+              <h2 className="section-title mb-6">Our Mission</h2>
+              <p className="text-foreground-secondary leading-relaxed mb-8">
+                The mission of EU American University is to deliver accessible, high-quality education that equips individuals with the knowledge, skills, and global perspective needed to lead with purpose. We are committed to fostering academic excellence, innovation, and ethical leadership in a diverse and inclusive learning environment.
               </p>
-            </div>
-            <div className="card p-8">
-              <div className="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center mb-4">
-                <Award className="w-6 h-6 text-success" />
-              </div>
-              <h3 className="font-heading text-xl font-bold mb-3">Our Values</h3>
-              <p className="text-sm text-foreground-secondary leading-relaxed">
-                Academic excellence, integrity, global accessibility, innovation, and service. These core values guide every decision we make, from curriculum design to student support, ensuring that AMU remains a leader in international education.
+
+              <h2 className="section-title mb-6">Our Vision</h2>
+              <p className="text-foreground-secondary leading-relaxed">
+                We envision EU American University as a premier global institution recognized for transforming lives through education. We aim to be at the forefront of innovative learning, empowering our graduates to drive positive change and address complex challenges in an interconnected world.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="section-padding bg-background-subtle">
+      <section className="section-padding bg-background-subtle border-b border-border">
         <div className="container-main">
-          <div className="text-center mb-12">
-            <span className="section-label">Our Journey</span>
-            <h2 className="section-title">University History</h2>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="section-title">Our Core Values</h2>
+            <p className="text-foreground-secondary">
+              These fundamental principles guide our decisions, actions, and interactions within our academic community and beyond.
+            </p>
           </div>
-          <div className="max-w-3xl mx-auto">
-            {timeline.map((item, index) => (
-              <div key={item.year} className="flex gap-6 mb-8 last:mb-0">
-                <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xs font-accent font-bold shrink-0">
-                    {item.year}
-                  </div>
-                  {index < timeline.length - 1 && (
-                    <div className="w-0.5 h-full bg-primary/20 mt-2" />
-                  )}
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value) => (
+              <div key={value.title} className="bg-white p-6 rounded-xl border border-border shadow-sm text-center hover:shadow-md transition-shadow">
+                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <value.icon className="w-7 h-7 text-primary" />
                 </div>
-                <div className="pb-8">
-                  <h3 className="font-heading text-lg font-bold mb-1">{item.title}</h3>
-                  <p className="text-sm text-foreground-secondary">{item.description}</p>
-                </div>
+                <h3 className="font-heading text-xl font-bold mb-3">{value.title}</h3>
+                <p className="text-sm text-foreground-secondary leading-relaxed">
+                  {value.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Leadership */}
       <section className="section-padding">
-        <div className="container-main">
-          <div className="text-center mb-12">
-            <span className="section-label">Leadership</span>
-            <h2 className="section-title">University Governance</h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {leadership.map((leader) => (
-              <div key={leader.name} className="card p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/5 rounded-xl flex items-center justify-center shrink-0">
-                    <Users className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-heading text-base font-bold">{leader.name}</h3>
-                    <span className="text-xs text-accent font-accent font-medium">{leader.role}</span>
-                    <p className="text-sm text-foreground-secondary mt-2">{leader.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="section-padding bg-primary text-white">
         <div className="container-main text-center">
-          <h2 className="font-heading text-3xl font-bold mb-4">Ready to Begin Your Journey?</h2>
-          <p className="text-white/70 mb-8 max-w-xl mx-auto">
-            Join thousands of graduates from 100+ countries who chose AMU to advance their careers and make a global impact.
+          <h2 className="section-title mb-6">Join Our Global Community</h2>
+          <p className="text-lg text-foreground-secondary max-w-2xl mx-auto mb-8">
+            Ready to take the next step in your educational journey? Explore our programs and discover how EU American University can help you achieve your goals.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/admissions/apply" className="bg-accent hover:bg-accent-dark text-white px-8 py-3 rounded-card font-semibold transition-colors inline-flex items-center gap-2">
-              Apply Now <ArrowRight size={16} />
+            <Link href="/academics" className="btn-primary gap-2">
+              Explore Programs <ArrowRight size={16} />
             </Link>
-            <Link href="/contact" className="border border-white/20 hover:bg-white/10 text-white px-8 py-3 rounded-card font-semibold transition-colors">
-              Contact Us
+            <Link href="/contact" className="btn-ghost">
+              Contact Admissions
             </Link>
           </div>
         </div>

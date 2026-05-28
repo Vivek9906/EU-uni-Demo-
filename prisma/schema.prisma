@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -22,12 +22,12 @@ model Application {
   mailingAddress  String?
   programLevel    String
   programName     String
-  modeOfStudy     String
+  modeOfStudy     String   @default("online")
   intendedStart   String
   highestQualification String
   institutionName String
   graduationYear  String
-  transcriptsUrls String[]
+  transcriptsUrls String?
   currentJobTitle String?
   employer        String?
   yearsExperience String?
@@ -72,7 +72,7 @@ model Faculty {
   bio            String
   photo          String?
   email          String?
-  publications   String[]
+  publications   String?
   order          Int      @default(0)
   isActive       Boolean  @default(true)
   createdAt      DateTime @default(now())
@@ -91,6 +91,7 @@ model Event {
   venue       String
   category    String
   imageUrl    String?
+  attendees   String?
   isPublished Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -107,7 +108,7 @@ model News {
   excerpt     String
   imageUrl    String?
   category    String
-  author      String    @default("AMU Communications")
+  author      String    @default("EU American University Communications")
   publishedAt DateTime?
   isPublished Boolean   @default(false)
   seoTitle    String?
@@ -204,7 +205,7 @@ model AuditLog {
   action    String
   entity    String
   entityId  String?
-  metadata  Json?
+  metadata  String?
   createdAt DateTime @default(now())
   admin     AdminUser @relation(fields: [adminId], references: [id])
 
@@ -225,5 +226,68 @@ model FAQ {
 
 model SiteSettings {
   id   String @id @default("site_settings")
-  data Json
+  data String
+}
+
+// ─── NEW MODELS ─────────────────────────────────────────────
+
+model Student {
+  id                 String   @id @default(cuid())
+  enrollmentId       String   @unique
+  fullName           String
+  programName        String
+  programLevel       String
+  enrollmentYear     Int
+  expectedCompletion String?
+  photo              String?
+  status             String   @default("enrolled")
+  isPubliclyVisible  Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([enrollmentId])
+  @@index([status])
+}
+
+model Certification {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  category    String
+  description String
+  imageUrl    String
+  isBundle    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  enrollments CertificationEnrollment[]
+
+  @@index([slug])
+  @@index([category])
+}
+
+model CertificationEnrollment {
+  id              String        @id @default(cuid())
+  certificationId String
+  fullName        String
+  email           String
+  phone           String
+  message         String?
+  status          String        @default("pending")
+  enrolledAt      DateTime      @default(now())
+  certification   Certification @relation(fields: [certificationId], references: [id])
+
+  @@index([certificationId])
+  @@index([status])
+}
+
+model LegalPage {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  content     String
+  lastUpdated DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
 }

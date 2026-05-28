@@ -20,13 +20,13 @@ const pillars = [
     icon: Lightbulb,
     title: 'Innovative Research',
     description:
-      'Cutting-edge research initiatives across 50+ centers, driving knowledge creation and addressing global challenges.',
+      'Research initiatives across multiple disciplines, driving knowledge creation and addressing global challenges in business and society.',
   },
   {
     icon: Users,
-    title: 'Vibrant Campus Life',
+    title: 'Global Community',
     description:
-      'A diverse community of students from 100+ countries creating a rich multicultural learning environment.',
+      'A diverse community of students and alumni from 100+ countries creating a rich multicultural learning environment.',
   },
 ];
 
@@ -40,10 +40,10 @@ export default function WhyAMU() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="section-label">Why Choose AMU</span>
+            <span className="section-label">Why Choose EU American University</span>
             <h2 className="section-title">Four Pillars of Excellence</h2>
             <p className="section-subtitle mx-auto">
-              Discover what makes American Management University a leader in
+              Discover what makes EU American University a leader in
               global education.
             </p>
           </motion.div>

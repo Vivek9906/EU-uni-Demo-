@@ -15,13 +15,13 @@ export default function AboutPreview() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="section-label">About AMU</span>
+            <span className="section-label">About Us</span>
             <h2 className="section-title">Excellence Rooted in Purpose</h2>
             <p className="text-foreground-secondary leading-relaxed mb-4">
-              American Management University is an internationally operating
+              EU American University is an internationally operating
               institution focused on providing flexible, career-driven academic
               programs. With a European foundation and a U.S. administrative
-              presence, AMU serves students and professionals across multiple
+              presence, we serve students and professionals across multiple
               regions.
             </p>
             <p className="text-foreground-secondary leading-relaxed mb-8">
@@ -43,21 +43,26 @@ export default function AboutPreview() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className="aspect-[4/3] bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl overflow-hidden relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-10 h-10 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M22 10v6M2 10l10-5 10 5-10 5z" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M6 12v5c3 3 9 3 12 0v-5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden relative">
+              <div
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80)' }}
+              />
+              <div className="absolute inset-0 bg-primary/60 flex items-center justify-center">
+                <div className="text-center text-white p-8">
+                  <div className="space-y-4">
+                    <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3 inline-block">
+                      <div className="text-sm font-body uppercase tracking-wider opacity-80">IARC & QAHE Accredited</div>
+                    </div>
+                    <div className="flex gap-3 justify-center flex-wrap">
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-xs font-body">ACBSP Member</div>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-xs font-body">IACBE Member</div>
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-xs font-body">ASIC UK</div>
+                    </div>
+                    <p className="text-white/60 text-sm max-w-xs mx-auto">
+                      Approved distance learning establishment by the French Ministry&apos;s Rector of the Paris Academy
+                    </p>
                   </div>
-                  <h3 className="font-heading text-xl font-bold text-primary mb-2">
-                    Since 1924
-                  </h3>
-                  <p className="text-sm text-foreground-muted">
-                    A century of shaping global leaders
-                  </p>
                 </div>
               </div>
             </div>
@@ -65,17 +70,17 @@ export default function AboutPreview() {
             {/* Floating stat cards */}
             <div className="absolute -bottom-4 -left-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
               <div className="text-xl font-heading font-bold text-primary">#1</div>
-              <div className="text-xs text-foreground-muted font-accent">For Innovation</div>
+              <div className="text-xs text-foreground-muted font-body">For Innovation</div>
             </div>
 
             <div className="absolute top-4 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
               <div className="text-xl font-heading font-bold text-accent">100+</div>
-              <div className="text-xs text-foreground-muted font-accent">Countries</div>
+              <div className="text-xs text-foreground-muted font-body">Countries</div>
             </div>
 
             <div className="absolute bottom-12 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
               <div className="text-xl font-heading font-bold text-success">250+</div>
-              <div className="text-xs text-foreground-muted font-accent">Alumni Network</div>
+              <div className="text-xs text-foreground-muted font-body">Alumni Network</div>
             </div>
           </motion.div>
         </div>

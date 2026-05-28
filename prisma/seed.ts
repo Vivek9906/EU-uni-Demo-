@@ -6,13 +6,25 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database...');
 
+  await prisma.siteSettings.deleteMany();
+  await prisma.legalPage.deleteMany();
+  await prisma.notice.deleteMany();
+  await prisma.scholarship.deleteMany();
+  await prisma.testimonial.deleteMany();
+  await prisma.fAQ.deleteMany();
+  await prisma.event.deleteMany();
+  await prisma.news.deleteMany();
+  await prisma.certification.deleteMany();
+  await prisma.student.deleteMany();
+  await prisma.adminUser.deleteMany();
+
   // 1. Super Admin User
   const hashedPassword = await bcrypt.hash('ChangeMe@123!', 12);
   await prisma.adminUser.upsert({
-    where: { email: 'admin@amu.edu.eu' },
+    where: { email: 'info@euamericanuniversity.us' },
     update: {},
     create: {
-      email: 'admin@amu.edu.eu',
+      email: 'info@euamericanuniversity.us',
       password: hashedPassword,
       name: 'Super Administrator',
       role: 'SUPER_ADMIN',
@@ -20,123 +32,134 @@ async function main() {
   });
   console.log('✅ Admin user created');
 
-  // 2. Faculty Members
-  const facultyData = [
+  // 2. Students (for verification demo)
+  const studentsData = [
     {
-      name: 'Dr. Eleanor Whitfield',
-      designation: 'Professor & Dean of Business',
-      department: 'Business Administration',
-      specialization: 'Strategic Management & Corporate Governance',
-      bio: 'Dr. Eleanor Whitfield brings over 25 years of academic and industry experience in strategic management. She has served as a consultant to Fortune 500 companies and has published extensively in leading journals including the Harvard Business Review and the Academy of Management Journal. Her research focuses on corporate governance, stakeholder theory, and sustainable business practices. Dr. Whitfield holds a PhD from the London School of Economics and has been recognized with numerous teaching excellence awards.',
-      email: 'e.whitfield@amu.edu.eu',
-      publications: [
-        'Corporate Governance in the Digital Age (2024)',
-        'Stakeholder Theory Revisited (2023)',
-        'Sustainable Business Practices: A Framework (2022)',
-      ],
-      order: 1,
+      enrollmentId: 'EUAU-2024-00001',
+      fullName: 'Sarah Mitchell',
+      programName: 'Master of Business Administration',
+      programLevel: 'masters',
+      enrollmentYear: 2024,
+      expectedCompletion: '2026',
+      status: 'enrolled',
+      isPubliclyVisible: true,
     },
     {
-      name: 'Prof. Marcus Chen',
-      designation: 'Associate Professor of Finance',
-      department: 'Business Administration',
-      specialization: 'International Finance & Risk Management',
-      bio: 'Professor Marcus Chen is a distinguished scholar in international finance with a career spanning two decades. He previously held positions at INSEAD and the National University of Singapore. His research on emerging market risk assessment has been widely cited, and he serves on the editorial boards of several financial journals. Prof. Chen regularly advises multinational corporations on cross-border investment strategies and financial risk mitigation.',
-      email: 'm.chen@amu.edu.eu',
-      publications: [
-        'Emerging Market Risk Assessment Models (2024)',
-        'Cross-Border Investment Strategies (2023)',
-        'Financial Innovation in Southeast Asia (2022)',
-      ],
-      order: 2,
+      enrollmentId: 'EUAU-2024-00002',
+      fullName: 'James Okoye',
+      programName: 'Honorary Doctorate (Honoris Causa)',
+      programLevel: 'honorary',
+      enrollmentYear: 2024,
+      status: 'graduated',
+      isPubliclyVisible: true,
     },
     {
-      name: 'Dr. Amara Okonkwo',
-      designation: 'Professor of Leadership Studies',
-      department: 'Leadership & Management',
-      specialization: 'Organizational Behavior & Leadership Development',
-      bio: 'Dr. Amara Okonkwo is an internationally recognized authority on leadership development and organizational behavior. With a PhD from Yale University, she has dedicated her career to understanding how leaders can drive transformative change within organizations. Her groundbreaking research on adaptive leadership in multicultural environments has been featured in The Economist and the Financial Times. Dr. Okonkwo has coached senior executives at organizations including the World Bank and the United Nations.',
-      email: 'a.okonkwo@amu.edu.eu',
-      publications: [
-        'Adaptive Leadership in Multicultural Organizations (2024)',
-        'The Future of Work: Leadership Perspectives (2023)',
-        'Emotional Intelligence and Executive Performance (2021)',
-      ],
-      order: 3,
-    },
-    {
-      name: 'Dr. Heinrich Müller',
-      designation: 'Professor of Economics',
-      department: 'Business Administration',
-      specialization: 'Macroeconomics & Public Policy',
-      bio: 'Dr. Heinrich Müller is a distinguished economist who previously served as an economic advisor to the European Commission. With over 20 years of experience in policy research and academic instruction, he brings a unique perspective that bridges theoretical economics with real-world policy challenges. His work on fiscal policy in the European Union has influenced key economic decisions at the continental level. Dr. Müller holds degrees from the University of Munich and MIT.',
-      email: 'h.muller@amu.edu.eu',
-      publications: [
-        'Fiscal Policy in the EU: Challenges and Opportunities (2024)',
-        'Economic Recovery Post-Pandemic: Lessons Learned (2023)',
-        'Public Policy and Economic Growth (2022)',
-      ],
-      order: 4,
-    },
-    {
-      name: 'Dr. Sophia Laurent',
-      designation: 'Associate Professor of Marketing',
-      department: 'Business Administration',
-      specialization: 'Digital Marketing & Consumer Behavior',
-      bio: 'Dr. Sophia Laurent is a leading researcher in digital marketing and consumer psychology. Prior to her academic career, she spent a decade as a marketing executive at L\'Oréal and Google. Her research explores how digital transformation is reshaping consumer behavior and brand strategy. Dr. Laurent has received the European Marketing Academy Best Paper Award and serves as a consultant to several global brands on digital strategy.',
-      email: 's.laurent@amu.edu.eu',
-      publications: [
-        'Digital Marketing Transformation: A Global Perspective (2024)',
-        'Consumer Behavior in the Age of AI (2023)',
-        'Brand Strategy in the Social Media Era (2022)',
-      ],
-      order: 5,
+      enrollmentId: 'EUAU-2023-00145',
+      fullName: 'Maria Fernandez',
+      programName: 'Bachelor of Business Administration',
+      programLevel: 'bachelors',
+      enrollmentYear: 2023,
+      expectedCompletion: '2027',
+      status: 'enrolled',
+      isPubliclyVisible: true,
     },
   ];
 
-  for (const faculty of facultyData) {
-    await prisma.faculty.create({ data: faculty });
+  for (const student of studentsData) {
+    await prisma.student.upsert({
+      where: { enrollmentId: student.enrollmentId },
+      update: {},
+      create: student,
+    });
   }
-  console.log('✅ Faculty members created');
+  console.log('✅ Students created');
 
-  // 3. News Articles
+  // 3. Certifications (all 30 + 1 bundle)
+  const certificationsData = [
+    // Bundle
+    { slug: 'complete-professional-bundle', title: 'The Complete Professional Certification Bundle', category: 'bundle', description: 'Master all 25 professional domains in one comprehensive package. The most recognized certification collection offered by EU American University, covering technology, business, engineering, research, and personal development.', imageUrl: 'https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80', isBundle: true, order: 0 },
+    // Technology & IT
+    { slug: 'certified-ai-specialist', title: 'Certified Artificial Intelligence Specialist', category: 'technology', description: 'Gain advanced expertise in artificial intelligence systems, machine learning algorithms, and neural network design. This certification prepares professionals to lead AI-driven projects across industries.', imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80', order: 1 },
+    { slug: 'certified-advanced-data-science-expert', title: 'Certified Advanced Data Science Expert', category: 'technology', description: 'Master advanced data analytics, statistical modeling, and big data technologies. Graduates of this program are equipped to make data-driven decisions at the enterprise level.', imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80', order: 2 },
+    { slug: 'certified-data-science-practitioner', title: 'Certified Data Science Practitioner', category: 'technology', description: 'Build a strong foundation in data science fundamentals including Python programming, data visualization, and predictive modeling for business applications.', imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80', order: 3 },
+    { slug: 'certified-cloud-computing-specialist', title: 'Certified Cloud Computing Specialist', category: 'technology', description: 'Develop proficiency in cloud architecture, deployment strategies, and multi-cloud management across AWS, Azure, and Google Cloud platforms.', imageUrl: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&q=80', order: 4 },
+    { slug: 'certified-blockchain-specialist', title: 'Certified Blockchain Specialist', category: 'technology', description: 'Understand distributed ledger technology, smart contracts, and decentralized applications. This certification covers blockchain architecture and its real-world applications.', imageUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80', order: 5 },
+    { slug: 'certified-advanced-blockchain-developer', title: 'Certified Advanced Blockchain Developer', category: 'technology', description: 'Take your blockchain skills further with advanced smart contract development, DeFi protocols, and enterprise blockchain solutions across multiple chains.', imageUrl: 'https://images.unsplash.com/photo-1642104704074-907c0698cbd9?w=800&q=80', order: 6 },
+    { slug: 'certified-iot-specialist', title: 'Certified Internet of Things Specialist', category: 'technology', description: 'Learn to design, deploy, and manage IoT ecosystems including sensor networks, edge computing, and connected device security for modern enterprises.', imageUrl: 'https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=800&q=80', order: 7 },
+    { slug: 'certified-cyber-defense-specialist', title: 'Certified Cyber Defense Specialist', category: 'technology', description: 'Protect organizational assets with advanced cybersecurity techniques including threat detection, incident response, and security operations center management.', imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80', order: 8 },
+    { slug: 'certified-cyber-law-policy-expert', title: 'Certified Cyber Law and Policy Expert', category: 'technology', description: 'Navigate the intersection of technology and law with expertise in data privacy regulations, digital rights, intellectual property, and cybercrime legislation.', imageUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80', order: 9 },
+    // Business & Management
+    { slug: 'certified-business-strategist', title: 'Certified Business Strategist', category: 'business', description: 'Develop strategic thinking and competitive analysis skills to drive organizational growth. This program covers market positioning, corporate strategy, and value creation.', imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80', order: 10 },
+    { slug: 'certified-project-management-professional', title: 'Certified Project Management Professional', category: 'business', description: 'Master project planning, execution, and stakeholder management using proven methodologies including Agile, Scrum, and traditional Waterfall frameworks.', imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80', order: 11 },
+    { slug: 'certified-operations-management-expert', title: 'Certified Operations Management Expert', category: 'business', description: 'Optimize business processes, supply chain operations, and quality management systems. This certification prepares leaders to improve efficiency across organizations.', imageUrl: 'https://images.unsplash.com/photo-1664575602554-2087b04935a5?w=800&q=80', order: 12 },
+    { slug: 'certified-leadership-excellence-specialist', title: 'Certified Leadership Excellence Specialist', category: 'business', description: 'Build transformative leadership skills through proven frameworks in emotional intelligence, team dynamics, conflict resolution, and organizational change.', imageUrl: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80', order: 13 },
+    { slug: 'certified-hr-manager', title: 'Certified Human Resources Manager', category: 'business', description: 'Gain expertise in talent acquisition, employee development, compensation strategy, and labor relations to become a strategic HR partner in any organization.', imageUrl: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80', order: 14 },
+    { slug: 'certified-financial-risk-manager', title: 'Certified Financial Risk Manager', category: 'business', description: 'Identify, analyze, and mitigate financial risks using quantitative models and regulatory frameworks. Essential for professionals in banking, insurance, and corporate finance.', imageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80', order: 15 },
+    { slug: 'certified-marketing-brand-strategist', title: 'Certified Marketing & Brand Strategist', category: 'business', description: 'Create compelling brand narratives and marketing strategies that resonate with target audiences. Covers digital marketing, content strategy, and brand positioning.', imageUrl: 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=800&q=80', order: 16 },
+    { slug: 'certified-supply-chain-management-expert', title: 'Certified Supply Chain Management Expert', category: 'business', description: 'Design and manage end-to-end supply chains with expertise in logistics, procurement, inventory management, and global trade compliance.', imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80', order: 17 },
+    { slug: 'certified-entrepreneurship-innovation-specialist', title: 'Certified Entrepreneurship & Innovation Specialist', category: 'business', description: 'Transform business ideas into successful ventures. This certification covers startup methodologies, venture financing, and innovation management principles.', imageUrl: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&q=80', order: 18 },
+    // Engineering & Sciences
+    { slug: 'certified-renewable-energy-specialist', title: 'Certified Renewable Energy Specialist', category: 'engineering', description: 'Advance your knowledge in solar, wind, and alternative energy technologies. This program prepares professionals to lead the transition to sustainable energy systems.', imageUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80', order: 19 },
+    { slug: 'certified-environmental-sustainability-expert', title: 'Certified Environmental Sustainability Expert', category: 'engineering', description: 'Develop strategies for environmental conservation, corporate sustainability reporting, and green business practices aligned with global standards.', imageUrl: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80', order: 20 },
+    { slug: 'certified-quality-assurance-engineer', title: 'Certified Quality Assurance Engineer', category: 'engineering', description: 'Implement quality management systems, testing methodologies, and continuous improvement processes that meet international standards like ISO 9001.', imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80', order: 21 },
+    { slug: 'certified-industrial-safety-specialist', title: 'Certified Industrial Safety Specialist', category: 'engineering', description: 'Ensure workplace safety compliance through risk assessment, hazard prevention, and occupational health management following OSHA and international safety guidelines.', imageUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80', order: 22 },
+    // Research & Academia
+    { slug: 'certified-academic-research-specialist', title: 'Certified Academic Research Specialist', category: 'research', description: 'Strengthen your research methodology skills including qualitative and quantitative analysis, literature review, and academic publishing for scholarly contributions.', imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80', order: 23 },
+    { slug: 'certified-scientific-writing-expert', title: 'Certified Scientific Writing Expert', category: 'research', description: 'Master the art of scientific communication through effective writing for journals, grant proposals, conference presentations, and research reports.', imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80', order: 24 },
+    { slug: 'certified-public-policy-analyst', title: 'Certified Public Policy Analyst', category: 'research', description: 'Analyze and evaluate public policies using evidence-based frameworks. This program prepares professionals for roles in government, think tanks, and international organizations.', imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80', order: 25 },
+    { slug: 'certified-education-leadership-specialist', title: 'Certified Education Leadership Specialist', category: 'research', description: 'Lead educational institutions with expertise in curriculum development, accreditation processes, faculty management, and student success strategies.', imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80', order: 26 },
+    // Personal Development & Wellness
+    { slug: 'certified-life-coach-wellness-specialist', title: 'Certified Life Coach & Wellness Specialist', category: 'personal', description: 'Help individuals achieve personal and professional goals through structured coaching methodologies, wellness planning, and positive psychology techniques.', imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80', order: 27 },
+    { slug: 'certified-public-speaking-communication-expert', title: 'Certified Public Speaking & Communication Expert', category: 'personal', description: 'Develop persuasive communication and public speaking skills for professional settings including boardrooms, conferences, and media appearances.', imageUrl: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80', order: 28 },
+    { slug: 'certified-emotional-intelligence-practitioner', title: 'Certified Emotional Intelligence Practitioner', category: 'personal', description: 'Enhance self-awareness, empathy, and social skills through the study of emotional intelligence frameworks and their application in leadership and teamwork.', imageUrl: 'https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=800&q=80', order: 29 },
+    { slug: 'certified-mindfulness-resilience-coach', title: 'Certified Mindfulness & Resilience Coach', category: 'personal', description: 'Guide individuals and teams toward greater resilience, stress management, and mental clarity using mindfulness practices and evidence-based wellness strategies.', imageUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80', order: 30 },
+  ];
+
+  for (const cert of certificationsData) {
+    await prisma.certification.upsert({
+      where: { slug: cert.slug },
+      update: {},
+      create: cert,
+    });
+  }
+  console.log('✅ Certifications created');
+
+  // 4. News Articles
   const newsData = [
     {
-      title: 'AMU Launches New Partnership with European Business Schools Network',
-      slug: 'amu-european-partnership-2025',
-      content: `<p>American Management University is proud to announce a groundbreaking partnership with the European Business Schools Network (EBSN), bringing together leading institutions from across the continent to foster academic collaboration and student exchange opportunities.</p>
-<p>This strategic alliance will enable AMU students to access a network of over 50 partner institutions across Europe, providing unparalleled opportunities for international exposure and cross-cultural learning. The partnership includes joint research initiatives, faculty exchange programs, and collaborative curriculum development.</p>
-<p>"This partnership represents a significant milestone in our mission to provide globally relevant education," said the AMU Chancellor. "Our students will now have access to an even broader network of academic resources and professional connections."</p>
-<p>The agreement was signed during a ceremony at AMU's Paris headquarters, attended by representatives from 15 European business schools. Programs under this partnership are expected to begin in the Fall 2025 semester.</p>`,
-      excerpt: 'AMU partners with the European Business Schools Network to offer expanded international opportunities for students and faculty.',
+      title: 'EU American University Launches New Partnership with European Business Schools Network',
+      slug: 'euau-european-partnership-2025',
+      content: `<p>EU American University is proud to announce a groundbreaking partnership with the European Business Schools Network (EBSN), bringing together leading institutions from across the continent to foster academic collaboration and student exchange opportunities.</p>
+<p>This strategic alliance will enable our students to access a network of over 50 partner institutions across Europe, providing unparalleled opportunities for international exposure and cross-cultural learning. The partnership includes joint research initiatives, faculty exchange programs, and collaborative curriculum development.</p>
+<p>"This partnership represents a significant milestone in our mission to provide globally relevant education," said the EUAU Chancellor. "Our students will now have access to an even broader network of academic resources and professional connections."</p>
+<p>The agreement was signed during a ceremony at EU American University's Paris headquarters, attended by representatives from 15 European business schools. Programs under this partnership are expected to begin in the Fall 2025 semester.</p>`,
+      excerpt: 'EU American University partners with the European Business Schools Network to offer expanded international opportunities for students and faculty.',
       category: 'Partnerships',
-      author: 'AMU Communications',
+      author: 'EU American University Communications',
       isPublished: true,
       publishedAt: new Date('2025-03-15'),
     },
     {
-      title: 'AMU Ranked Among Top 10 for Management Programs in Europe',
-      slug: 'amu-top-10-management-ranking',
-      content: `<p>American Management University has been ranked among the top 10 institutions for management and leadership programs in Europe by a leading international education ranking body. This recognition reflects AMU's commitment to academic excellence and its impact on the global business education landscape.</p>
-<p>The ranking evaluated institutions based on several key criteria, including program quality, faculty expertise, graduate employability, international diversity, and research output. AMU scored particularly high in international diversity and graduate outcomes.</p>
-<p>"This ranking is a testament to the hard work of our faculty, staff, and students," remarked the Vice Chancellor. "We are committed to continuously improving our programs and providing our students with the skills they need to succeed in a rapidly changing global economy."</p>
-<p>AMU's MBA program was specifically highlighted for its innovative curriculum that combines traditional business fundamentals with cutting-edge topics such as digital transformation, sustainable leadership, and global strategy.</p>`,
-      excerpt: 'AMU earns a place among Europe\'s top 10 institutions for management and leadership education.',
+      title: 'EU American University Ranked Among Top 10 for Management Programs in Europe',
+      slug: 'euau-top-10-management-ranking',
+      content: `<p>EU American University has been ranked among the top 10 institutions for management and leadership programs in Europe by a leading international education ranking body. This recognition reflects our commitment to academic excellence and our impact on the global business education landscape.</p>
+<p>The ranking evaluated institutions based on several key criteria, including program quality, faculty expertise, graduate employability, international diversity, and research output. EU American University scored particularly high in international diversity and graduate outcomes.</p>
+<p>"This ranking is a testament to the hard work of our faculty, staff, and students," remarked the Vice Chancellor. "We are committed to continuously improving our programs and providing our students with the skills they need to succeed in a rapidly changing global economy."</p>`,
+      excerpt: 'EU American University earns a place among Europe\'s top 10 institutions for management and leadership education.',
       category: 'Rankings',
-      author: 'AMU Communications',
+      author: 'EU American University Communications',
       isPublished: true,
       publishedAt: new Date('2025-02-20'),
     },
     {
       title: 'Honorary Doctorate Recipients Make Global Impact in 2025',
       slug: 'honorary-doctorate-global-impact-2025',
-      content: `<p>American Management University celebrates the remarkable achievements of its 2025 Honorary Doctorate recipients, who continue to make significant contributions to business, education, and community development worldwide.</p>
+      content: `<p>EU American University celebrates the remarkable achievements of its 2025 Honorary Doctorate recipients, who continue to make significant contributions to business, education, and community development worldwide.</p>
 <p>This year's cohort of honorary doctorate recipients includes distinguished leaders from over 30 countries, representing diverse fields including entrepreneurship, nonprofit leadership, public administration, and academic research. Their collective impact spans community development projects, educational initiatives, and innovative business ventures.</p>
-<p>"Our honorary doctorate program recognizes individuals who have demonstrated exceptional leadership and made meaningful contributions to their communities and professions," explained the Dean of Academic Affairs. "These recipients exemplify the values of excellence, integrity, and service that AMU stands for."</p>
-<p>The university encourages qualified candidates to explore the Honorary Doctorate program and join a growing network of distinguished global leaders.</p>`,
-      excerpt: 'AMU\'s 2025 Honorary Doctorate recipients demonstrate the program\'s global reach and impact across 30+ countries.',
+<p>"Our honorary doctorate program recognizes individuals who have demonstrated exceptional leadership and made meaningful contributions to their communities and professions," explained the Dean of Academic Affairs. "These recipients exemplify the values of excellence, integrity, and service that EU American University stands for."</p>`,
+      excerpt: 'EU American University\'s 2025 Honorary Doctorate recipients demonstrate the program\'s global reach and impact across 30+ countries.',
       category: 'Awards',
-      author: 'AMU Communications',
+      author: 'EU American University Communications',
       isPublished: true,
       publishedAt: new Date('2025-01-10'),
     },
@@ -147,34 +170,123 @@ async function main() {
   }
   console.log('✅ News articles created');
 
-  // 4. Events
+  // 5. Events — 5 Past + 5 Upcoming
   const eventsData = [
+    // Past Events
     {
-      title: 'AMU Commencement Ceremony 2027',
-      slug: 'commencement-ceremony-2027',
-      description: `Join us for the American Management University Commencement Ceremony 2027, a celebration of academic achievement and the culmination of years of dedication and hard work. This prestigious event will honor our graduating class, including recipients of Bachelor's, Master's, and Doctoral degrees, as well as Honorary Doctorate and Professorship recipients.
-
-The ceremony will feature keynote addresses from distinguished leaders in business and education, the conferral of degrees, and special recognition of outstanding academic achievement. Family, friends, faculty, and alumni are all welcome to attend this momentous occasion.
-
-Formal academic attire is required for all graduates. Reception to follow the ceremony.`,
-      date: new Date('2027-06-15T10:00:00'),
-      endDate: new Date('2027-06-15T14:00:00'),
-      venue: 'AMU Grand Hall, 11 rue Magdebourg, Paris, France 75016',
-      category: 'Ceremony',
+      title: 'International Leadership Forum 2024',
+      slug: 'international-leadership-forum-2024',
+      description: 'Over 400 global leaders, academics, and professionals gathered in Paris for two days of thought-provoking discussions on the future of international leadership. The forum featured keynote addresses, panel debates, and networking sessions that explored how organizations can build stronger, more inclusive leadership cultures.',
+      date: new Date('2024-10-14T09:00:00'),
+      endDate: new Date('2024-10-15T17:00:00'),
+      venue: 'Paris, France',
+      category: 'Conference',
+      imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80',
+      attendees: '400+',
       isPublished: true,
     },
     {
-      title: 'International Leadership Summit 2025',
-      slug: 'international-leadership-summit-2025',
-      description: `American Management University presents the International Leadership Summit 2025, bringing together thought leaders, executives, and academics from around the world to explore the future of leadership in a rapidly evolving global landscape.
-
-This two-day summit will feature panel discussions, keynote presentations, and interactive workshops covering topics such as digital transformation, sustainable business practices, cross-cultural leadership, and the role of AI in management. Participants will have the opportunity to network with peers and gain actionable insights for their leadership journey.
-
-Early registration is recommended as spaces are limited.`,
-      date: new Date('2025-09-20T09:00:00'),
-      endDate: new Date('2025-09-21T17:00:00'),
-      venue: 'AMU Conference Center, Paris, France',
+      title: 'MBA Alumni Global Networking Gala',
+      slug: 'mba-alumni-global-networking-gala-2024',
+      description: 'A virtual networking event that brought together 850 MBA alumni from across the globe for an evening of professional connections, career insights, and celebration of shared achievements. The gala featured alumni success stories, industry trend presentations, and breakout rooms organized by sector.',
+      date: new Date('2024-06-20T18:00:00'),
+      endDate: new Date('2024-06-20T22:00:00'),
+      venue: 'Virtual',
+      category: 'Networking',
+      imageUrl: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80',
+      attendees: '850',
+      isPublished: true,
+    },
+    {
+      title: 'Honorary Doctorate Conferment Ceremony 2024',
+      slug: 'honorary-doctorate-conferment-2024',
+      description: 'Two hundred distinguished professionals from over 40 countries received their Honorary Doctorate awards at a formal ceremony held at the Paris Grand Hall. The event honored individuals whose lifetime contributions have advanced their fields of expertise and improved their communities.',
+      date: new Date('2024-03-05T10:00:00'),
+      endDate: new Date('2024-03-05T14:00:00'),
+      venue: 'Paris Grand Hall',
+      category: 'Ceremony',
+      imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
+      attendees: '200',
+      isPublished: true,
+    },
+    {
+      title: 'EU American Research Symposium 2023',
+      slug: 'euau-research-symposium-2023',
+      description: 'A gathering of 120 researchers and scholars who presented their latest findings in business management, public administration, and social sciences. The symposium promoted interdisciplinary dialogue and collaboration between academic researchers and industry practitioners.',
+      date: new Date('2023-11-18T09:00:00'),
+      endDate: new Date('2023-11-18T17:00:00'),
+      venue: 'Brussels',
+      category: 'Academic',
+      imageUrl: 'https://images.unsplash.com/photo-1587825140708-dfaf18c4e236?w=800&q=80',
+      attendees: '120',
+      isPublished: true,
+    },
+    {
+      title: 'Annual Convocation 2023',
+      slug: 'annual-convocation-2023',
+      description: 'The largest gathering in the university\'s recent history, with 1,200 graduates from over 80 countries celebrating their academic achievements. The ceremony included keynote speeches from industry leaders, the conferral of degrees, and special awards for outstanding achievement.',
+      date: new Date('2023-09-02T10:00:00'),
+      endDate: new Date('2023-09-02T15:00:00'),
+      venue: 'Paris',
+      category: 'Ceremony',
+      imageUrl: 'https://images.unsplash.com/photo-1627556704290-2b1f5853ff78?w=800&q=80',
+      attendees: '1200',
+      isPublished: true,
+    },
+    // Upcoming Events
+    {
+      title: 'Commencement & Honorary Doctorate Ceremony 2027',
+      slug: 'commencement-honorary-doctorate-2027',
+      description: 'Celebrate academic excellence at EU American University\'s flagship ceremony, honoring all graduating students and distinguished Honorary Doctorate recipients. This formal event will feature keynote addresses from world-renowned leaders, the conferral of degrees across all program levels, and a reception for graduates and their families.',
+      date: new Date('2027-06-12T10:00:00'),
+      endDate: new Date('2027-06-12T15:00:00'),
+      venue: 'EU American Grand Hall, Paris',
+      category: 'Ceremony',
+      imageUrl: 'https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80',
+      isPublished: true,
+    },
+    {
+      title: 'Global Business Leadership Summit 2027',
+      slug: 'global-business-leadership-summit-2027',
+      description: 'A two-day summit bringing together executives, thought leaders, and emerging professionals to explore the future of global business leadership. Sessions will cover digital transformation, sustainable growth strategies, and leadership in times of uncertainty. Available both in-person and virtually.',
+      date: new Date('2027-03-08T09:00:00'),
+      endDate: new Date('2027-03-09T17:00:00'),
+      venue: 'Virtual & Paris Campus',
       category: 'Conference',
+      imageUrl: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80',
+      isPublished: true,
+    },
+    {
+      title: 'MBA & Professional Development Expo 2027',
+      slug: 'mba-professional-development-expo-2027',
+      description: 'An interactive expo featuring workshops, career coaching sessions, and networking opportunities designed for MBA students and professionals looking to enhance their skills. The event will include employer showcases, resume reviews, and panel discussions on career advancement.',
+      date: new Date('2027-01-25T10:00:00'),
+      endDate: new Date('2027-01-25T18:00:00'),
+      venue: 'London Partnership Hub',
+      category: 'Expo',
+      imageUrl: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80',
+      isPublished: true,
+    },
+    {
+      title: 'Alumni Reunion & Awards Night 2026',
+      slug: 'alumni-reunion-awards-night-2026',
+      description: 'Reconnect with fellow graduates at EU American University\'s annual alumni reunion. The evening will feature award presentations honoring alumni who have made outstanding contributions to their professions and communities, followed by dinner and networking.',
+      date: new Date('2026-12-06T18:00:00'),
+      endDate: new Date('2026-12-06T23:00:00'),
+      venue: 'Paris, France',
+      category: 'Networking',
+      imageUrl: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80',
+      isPublished: true,
+    },
+    {
+      title: 'Research & Innovation Conference 2026',
+      slug: 'research-innovation-conference-2026',
+      description: 'Present and discuss the latest research findings in business, public administration, social work, and management. This conference invites researchers, faculty, and doctoral candidates to share their work and collaborate on interdisciplinary projects.',
+      date: new Date('2026-10-10T09:00:00'),
+      endDate: new Date('2026-10-10T17:00:00'),
+      venue: 'Brussels',
+      category: 'Academic',
+      imageUrl: 'https://images.unsplash.com/photo-1587825140708-dfaf18c4e236?w=800&q=80',
       isPublished: true,
     },
   ];
@@ -184,38 +296,23 @@ Early registration is recommended as spaces are limited.`,
   }
   console.log('✅ Events created');
 
-  // 5. FAQ Items
+  // 6. FAQ Items
   const faqData = [
-    // Admissions
-    { question: 'What are the admission requirements for the MBA program?', answer: 'Applicants must hold a recognized bachelor\'s degree from an accredited institution. Professional experience is valued but not mandatory for the Bachelor\'s level MBA. For the Master\'s level MBA, a minimum of 2 years of professional experience is preferred. All applicants must submit a completed application form, official transcripts, a statement of purpose, and a current CV/resume.', category: 'Admissions', order: 1 },
-    { question: 'How do I apply to AMU?', answer: 'You can apply online through our application portal at /admissions/apply. Complete all required sections of the application form, upload supporting documents, and submit. You will receive a confirmation email with your unique Application Reference Number (format: AMU-2025-XXXXX) once your application is successfully submitted.', category: 'Admissions', order: 2 },
-    { question: 'What is the application deadline?', answer: 'AMU operates on a rolling admissions basis, meaning applications are reviewed as they are received. However, we recommend applying at least 8 weeks before your intended start date to allow sufficient time for processing. Specific scholarship deadlines may apply — please check the Scholarships page for details.', category: 'Admissions', order: 3 },
-    { question: 'Can international students apply?', answer: 'Absolutely. AMU welcomes students from all countries and backgrounds. We have students from over 100 countries. International applicants follow the same application process. Our admissions team is experienced in evaluating international credentials and can guide you through the process.', category: 'Admissions', order: 4 },
-    { question: 'Are there scholarships available?', answer: 'Yes, AMU offers several scholarship opportunities including merit-based scholarships, need-based financial aid, and special scholarships for international students. Visit our Scholarships page for detailed eligibility criteria and application instructions.', category: 'Admissions', order: 5 },
-    // Programs
-    { question: 'What programs does AMU offer?', answer: 'AMU offers MBA programs at both the Bachelor\'s and Master\'s level, as well as doctoral-level programs including the Honorary Doctorate and Honorary Professorship. Each program is designed to provide practical, career-relevant education with a global perspective.', category: 'Programs', order: 1 },
-    { question: 'What is the difference between the Bachelor\'s and Master\'s MBA?', answer: 'The Bachelor\'s MBA (BBA) provides foundational business education covering core management disciplines. The Master\'s MBA builds on this foundation with advanced coursework in strategic leadership, global business strategy, and specialized electives. The Master\'s program is designed for professionals seeking to advance into senior leadership roles.', category: 'Programs', order: 2 },
-    { question: 'What is an Honorary Doctorate?', answer: 'An Honorary Doctorate (Honoris Causa) is a prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society at large. It recognizes a lifetime of professional excellence and service. The program name submitted during application is exactly what appears on your certificate.', category: 'Programs', order: 3 },
-    { question: 'What is an Honorary Professorship?', answer: 'An Honorary Professorship is an academic distinction that recognizes individuals who have made outstanding contributions to education, research, or their professional field. Recipients gain the academic title and are listed among AMU\'s distinguished faculty. This recognition is awarded based on merit and professional accomplishment.', category: 'Programs', order: 4 },
-    { question: 'Are programs available online?', answer: 'Yes, AMU offers flexible delivery modes including fully online, hybrid, and on-campus options. Our online programs use state-of-the-art learning platforms that provide interactive coursework, virtual collaboration tools, and access to digital libraries. Students can choose the mode that best fits their schedule and learning preferences.', category: 'Programs', order: 5 },
-    // Fees
-    { question: 'What are the tuition fees?', answer: 'Tuition fees vary by program and delivery mode. Please contact our admissions office at admissions@amu.edu.eu for the current fee schedule. AMU strives to make quality education accessible and offers various financial aid options.', category: 'Fees', order: 1 },
-    { question: 'Are there payment plans available?', answer: 'Yes, AMU offers flexible payment plans that allow students to spread their tuition payments over the duration of their program. Installment options are available. Please contact the finance office for details on available payment arrangements.', category: 'Fees', order: 2 },
-    { question: 'What does tuition include?', answer: 'Tuition covers all academic instruction, access to online learning platforms, digital library resources, academic support services, and the issuance of official academic credentials upon completion. Some programs may have additional fees for specific materials or services.', category: 'Fees', order: 3 },
-    { question: 'Are there any additional fees?', answer: 'Additional fees may apply for application processing, transcript requests, certificate reissuance, and certain specialized course materials. All applicable fees are disclosed during the admissions process. There are no hidden charges.', category: 'Fees', order: 4 },
-    { question: 'Can I get a refund if I withdraw?', answer: 'AMU has a structured refund policy that varies based on the timing of withdrawal. Full details of the refund policy are provided in the student handbook and enrollment agreement. We encourage students to review these terms carefully before enrollment.', category: 'Fees', order: 5 },
-    // Campus Life
-    { question: 'Where is AMU located?', answer: 'AMU\'s global headquarters and main campus are located at 11 rue Magdebourg, Paris, France 75016. We also have a US regional contact office in Upland, California and a learning site in Manila, Philippines. Our online programs are accessible from anywhere in the world.', category: 'Campus Life', order: 1 },
-    { question: 'Is there housing available for students?', answer: 'AMU can assist students attending on-campus programs with finding suitable housing near our Paris campus. We partner with local housing providers and can provide recommendations for student-friendly accommodations in the Paris area.', category: 'Campus Life', order: 2 },
-    { question: 'What student support services are available?', answer: 'AMU provides comprehensive student support including academic advising, career counseling, library access, technical support for online learners, and an international student services office. Our goal is to ensure every student has the resources they need to succeed.', category: 'Campus Life', order: 3 },
-    { question: 'Are there networking opportunities?', answer: 'AMU offers extensive networking opportunities through alumni events, industry conferences, guest speaker series, and our global alumni network spanning 100+ countries. Our International Leadership Summit and Commencement Ceremony are flagship networking events.', category: 'Campus Life', order: 4 },
-    { question: 'How do I connect with other students?', answer: 'Students can connect through our online learning platform, virtual student lounges, alumni network events, and social media communities. AMU fosters a strong sense of community among its diverse international student body.', category: 'Campus Life', order: 5 },
-    // Certificates
-    { question: 'How can I verify my certificate?', answer: 'Certificates can be verified online through our Certificate Verification page at /verify-certificate. Enter your Certificate ID or Reference Number to instantly verify the authenticity and details of any AMU-issued certificate.', category: 'Certificates', order: 1 },
-    { question: 'What appears on the certificate?', answer: 'The certificate displays the exact program name as submitted during the application process. This is clearly stated during application — the program name you select is precisely what will be printed on your official certificate. Please ensure accuracy during application.', category: 'Certificates', order: 2 },
-    { question: 'How long does it take to receive my certificate?', answer: 'Certificates are typically issued within 4-6 weeks after the completion of all program requirements and approval by the academic board. Digital copies may be provided earlier. Expedited processing is available upon request.', category: 'Certificates', order: 3 },
-    { question: 'Can I request a replacement certificate?', answer: 'Yes, replacement certificates can be requested through the Student Records office. A processing fee may apply. Please contact records@amu.edu.eu with your student ID and program details to initiate a replacement request.', category: 'Certificates', order: 4 },
-    { question: 'Is my AMU degree recognized internationally?', answer: 'AMU is accredited by recognized accreditation bodies and operates with authorization in France. Our degrees are recognized in many countries. AMU is a member of ACBSP, IACBE, and ASIC UK, and holds IARC and QAHE accreditation. We recommend checking with your specific country\'s credential evaluation body for detailed recognition information.', category: 'Certificates', order: 5 },
+    { question: 'What are the admission requirements for the MBA program?', answer: 'Applicants must hold a recognized bachelor\'s degree from an accredited institution. Professional experience is valued but not mandatory for the Bachelor\'s level. For the Master\'s level MBA, a minimum of 2 years of professional experience is preferred. All applicants must submit a completed application form, official transcripts, a statement of purpose, and a current CV/resume.', category: 'Admissions', order: 1 },
+    { question: 'How do I apply to EU American University?', answer: 'You can apply online through our application portal at /admissions/apply. Complete all required sections of the application form, upload supporting documents, and submit. You will receive a confirmation email with your unique Application Reference Number once your application is successfully submitted.', category: 'Admissions', order: 2 },
+    { question: 'What is the application deadline?', answer: 'EU American University operates on a rolling admissions basis, meaning applications are reviewed as they are received. However, we recommend applying at least 8 weeks before your intended start date to allow sufficient time for processing.', category: 'Admissions', order: 3 },
+    { question: 'Can international students apply?', answer: 'Absolutely. EU American University welcomes students from all countries and backgrounds. We have students from over 100 countries. International applicants follow the same application process.', category: 'Admissions', order: 4 },
+    { question: 'Are there scholarships available?', answer: 'Yes, EU American University offers several scholarship opportunities including merit-based scholarships, need-based financial aid, and special scholarships for international students. Visit our Scholarships page for details.', category: 'Admissions', order: 5 },
+    { question: 'What programs does EU American University offer?', answer: 'EU American University offers Bachelor\'s programs (BBA, BPA, BSW), Master\'s programs (MBA, MPA, MSW), honorary recognition programs (Honorary Doctorate, Doctor of Philosophy, Honorary Professorship), and 30 professional certification programs across five categories.', category: 'Programs', order: 1 },
+    { question: 'What is the difference between the Bachelor\'s and Master\'s programs?', answer: 'Bachelor\'s programs provide foundational education covering core disciplines. Master\'s programs build on this with advanced coursework in strategic leadership, specialized electives, and capstone research. Master\'s programs are designed for professionals seeking senior leadership roles.', category: 'Programs', order: 2 },
+    { question: 'What is an Honorary Doctorate?', answer: 'An Honorary Doctorate (Honoris Causa) is a prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society. The program name submitted during application is exactly what appears on your certificate.', category: 'Programs', order: 3 },
+    { question: 'Are programs available online?', answer: 'Yes, all EU American University programs are delivered online, making quality education accessible to working professionals worldwide. Our online programs use modern learning platforms with interactive coursework and digital resources.', category: 'Programs', order: 4 },
+    { question: 'What are the tuition fees?', answer: 'Tuition fees vary by program. Please contact our admissions office at admissions@euamericanuniversity.us for the current fee schedule. EU American University strives to make quality education accessible and offers various financial aid options.', category: 'Fees', order: 1 },
+    { question: 'Are there payment plans available?', answer: 'Yes, EU American University offers flexible payment plans that allow students to spread their tuition payments over the duration of their program.', category: 'Fees', order: 2 },
+    { question: 'Can I get a refund if I withdraw?', answer: 'EU American University has a structured refund policy. Full refund within 14 days of enrollment if coursework has not started, 50% within 30 days, and no refund after 30 days. See our Refund Policy page for details.', category: 'Fees', order: 3 },
+    { question: 'How can I verify my certificate?', answer: 'Certificates can be verified online through our Certificate Verification page at /verify-certificate. Enter your Certificate ID or Reference Number to instantly verify authenticity.', category: 'Certificates', order: 1 },
+    { question: 'How can I verify my enrollment status?', answer: 'Use the Student Verification portal at /student-verification. Enter your Enrollment ID (format: EUAU-YYYY-NNNNN) to view your verified enrollment status and academic details.', category: 'Certificates', order: 2 },
+    { question: 'Is my EU American University degree recognized internationally?', answer: 'EU American University is accredited by recognized accreditation bodies and operates with authorization in France. Our degrees are recognized in many countries. We hold IARC and QAHE accreditation and are members of ACBSP, IACBE, and ASIC UK.', category: 'Certificates', order: 3 },
   ];
 
   for (const faq of faqData) {
@@ -223,24 +320,24 @@ Early registration is recommended as spaces are limited.`,
   }
   console.log('✅ FAQ items created');
 
-  // 6. Testimonials
+  // 7. Testimonials
   const testimonialData = [
     {
       name: 'Dr. James Okoye',
       program: 'Honorary Doctorate in Business Leadership',
-      content: 'Receiving the Honorary Doctorate from American Management University was a defining moment in my career. The recognition validated decades of work in community development across West Africa. AMU\'s commitment to recognizing global leaders who make a difference is truly commendable. I am proud to be part of this distinguished alumni network.',
+      content: 'Receiving the Honorary Doctorate from EU American University was a defining moment in my career. The recognition validated decades of work in community development across West Africa. I am proud to be part of this distinguished alumni network.',
       isApproved: true,
     },
     {
       name: 'Maria Fernandez',
       program: 'Master of Business Administration (MBA)',
-      content: 'The MBA program at AMU transformed my approach to business leadership. The flexible online format allowed me to continue working while pursuing my degree, and the curriculum was directly applicable to my role as a marketing director. The faculty brought real-world experience into every lecture, and the global network of peers I built has been invaluable.',
+      content: 'The MBA program at EU American University transformed my approach to business leadership. The flexible online format allowed me to continue working while pursuing my degree, and the curriculum was directly applicable to my role as a marketing director.',
       isApproved: true,
     },
     {
       name: 'Prof. Ahmed Al-Rashid',
       program: 'Honorary Professorship',
-      content: 'Being awarded an Honorary Professorship by AMU was an incredible honor that recognized my contributions to education in the Middle East. The process was thorough and professional, and the certificate proudly hangs in my office. AMU\'s dedication to academic excellence and global recognition of achievement sets it apart from other institutions.',
+      content: 'Being awarded an Honorary Professorship by EU American University was an incredible honor that recognized my contributions to education in the Middle East. The process was thorough and professional.',
       isApproved: true,
     },
   ];
@@ -250,14 +347,14 @@ Early registration is recommended as spaces are limited.`,
   }
   console.log('✅ Testimonials created');
 
-  // 7. Scholarships
+  // 8. Scholarships
   const scholarshipData = [
     {
-      name: 'AMU Merit Excellence Scholarship',
+      name: 'EUAU Merit Excellence Scholarship',
       type: 'merit',
       amount: 'Up to 50% tuition reduction',
-      eligibility: 'Available to students with outstanding academic records and professional achievements. Applicants must demonstrate a GPA equivalent of 3.5 or above and provide evidence of leadership or community involvement.',
-      description: 'The Merit Excellence Scholarship rewards outstanding academic achievement and leadership potential. Recipients are selected based on their academic records, professional accomplishments, and commitment to making a positive impact in their communities.',
+      eligibility: 'Available to students with outstanding academic records and professional achievements. Applicants must demonstrate a GPA equivalent of 3.5 or above.',
+      description: 'The Merit Excellence Scholarship rewards outstanding academic achievement and leadership potential.',
       deadline: new Date('2025-12-31'),
       isActive: true,
     },
@@ -265,8 +362,8 @@ Early registration is recommended as spaces are limited.`,
       name: 'Global Leaders Financial Aid Grant',
       type: 'need',
       amount: 'Up to 40% tuition assistance',
-      eligibility: 'Available to students from developing nations or those demonstrating financial need. Applicants must submit documentation of financial circumstances and maintain satisfactory academic progress.',
-      description: 'The Global Leaders Grant provides financial assistance to talented students who face economic barriers to accessing quality higher education. AMU believes that financial circumstances should not prevent motivated individuals from achieving their academic goals.',
+      eligibility: 'Available to students from developing nations or those demonstrating financial need.',
+      description: 'The Global Leaders Grant provides financial assistance to talented students who face economic barriers to accessing quality higher education.',
       deadline: new Date('2025-11-30'),
       isActive: true,
     },
@@ -274,8 +371,8 @@ Early registration is recommended as spaces are limited.`,
       name: 'International Diversity Scholarship',
       type: 'international',
       amount: 'Up to 30% tuition reduction',
-      eligibility: 'Available to international students from underrepresented regions. Priority given to applicants from countries with limited access to business education. Must demonstrate commitment to applying education for community benefit.',
-      description: 'The International Diversity Scholarship promotes AMU\'s mission of providing globally accessible education by reducing barriers for students from underrepresented regions. This scholarship celebrates the diversity that enriches our academic community.',
+      eligibility: 'Available to international students from underrepresented regions.',
+      description: 'The International Diversity Scholarship promotes EU American University\'s mission of providing globally accessible education.',
       deadline: new Date('2026-03-31'),
       isActive: true,
     },
@@ -286,38 +383,12 @@ Early registration is recommended as spaces are limited.`,
   }
   console.log('✅ Scholarships created');
 
-  // 8. Notices
+  // 9. Notices
   const noticeData = [
-    {
-      title: 'Fall 2025 Enrollment Now Open',
-      content: 'Applications for the Fall 2025 semester are now being accepted across all programs. Prospective students are encouraged to submit their applications early to ensure timely processing. Visit the Admissions page to begin your application.',
-      category: 'academic',
-      isActive: true,
-    },
-    {
-      title: 'Updated Academic Calendar 2025-2026',
-      content: 'The academic calendar for the 2025-2026 academic year has been published. Key dates include the Fall semester start on September 15, 2025, and the Spring semester start on February 1, 2026. Please review the full calendar for important deadlines and holidays.',
-      category: 'academic',
-      isActive: true,
-    },
-    {
-      title: 'Library Database Access Expanded',
-      content: 'AMU has expanded its digital library resources with access to three new academic databases including JSTOR, ProQuest, and Emerald Insight. All enrolled students can access these resources through the online portal using their student credentials.',
-      category: 'admin',
-      isActive: true,
-    },
-    {
-      title: 'Commencement 2027 Registration Opens Soon',
-      content: 'Eligible graduates planning to participate in the Commencement Ceremony 2027 should begin their registration process. Detailed instructions will be sent to qualifying students via email. The ceremony is scheduled for June 15, 2027, at AMU Grand Hall, Paris.',
-      category: 'general',
-      isActive: true,
-    },
-    {
-      title: 'Scholarship Application Deadline Reminder',
-      content: 'Students interested in the AMU Merit Excellence Scholarship are reminded that the application deadline is December 31, 2025. Ensure all required documents are submitted before the deadline. Late applications will not be considered.',
-      category: 'academic',
-      isActive: true,
-    },
+    { title: 'Fall 2025 Enrollment Now Open', content: 'Applications for the Fall 2025 semester are now being accepted across all programs. Prospective students are encouraged to submit their applications early.', category: 'academic', isActive: true },
+    { title: 'Updated Academic Calendar 2025-2026', content: 'The academic calendar for the 2025-2026 academic year has been published. Key dates include the Fall semester start on September 15, 2025.', category: 'academic', isActive: true },
+    { title: 'New Professional Certification Programs Available', content: 'EU American University has launched 30 professional certification programs across five categories. Visit the Certifications page to explore all available programs.', category: 'academic', isActive: true },
+    { title: 'Student Verification Portal Now Live', content: 'Students can now verify their enrollment status online at /student-verification using their Enrollment ID.', category: 'general', isActive: true },
   ];
 
   for (const notice of noticeData) {
@@ -325,31 +396,64 @@ Early registration is recommended as spaces are limited.`,
   }
   console.log('✅ Notices created');
 
-  // 9. Site Settings
+  // 10. Legal Pages
+  const legalPages = [
+    {
+      slug: 'privacy',
+      title: 'Privacy Policy',
+      content: 'This is managed via the admin CMS. Content is rendered from the /privacy page component.',
+    },
+    {
+      slug: 'terms',
+      title: 'Terms of Use',
+      content: 'This is managed via the admin CMS. Content is rendered from the /terms page component.',
+    },
+    {
+      slug: 'refund-policy',
+      title: 'Refund Policy',
+      content: 'This is managed via the admin CMS. Content is rendered from the /refund-policy page component.',
+    },
+    {
+      slug: 'cookie-policy',
+      title: 'Cookie Policy',
+      content: 'This is managed via the admin CMS. Content is rendered from the /cookie-policy page component.',
+    },
+  ];
+
+  for (const page of legalPages) {
+    await prisma.legalPage.upsert({
+      where: { slug: page.slug },
+      update: {},
+      create: page,
+    });
+  }
+  console.log('✅ Legal pages created');
+
+  // 11. Site Settings
   await prisma.siteSettings.upsert({
     where: { id: 'site_settings' },
     update: {},
     create: {
       id: 'site_settings',
-      data: {
-        siteName: 'American Management University',
-        tagline: 'A leader\'s choice in education',
-        contactEmail: 'info@amu.edu.eu',
-        contactPhone: '+33 1 89 37 00 04',
-        address: '11 rue Magdebourg, Paris, France 75016',
+      data: JSON.stringify({
+        siteName: "EU American University",
+        tagline: "A leader's choice in education",
+        contactEmail: "info@euamericanuniversity.us",
+        contactPhone: "+33 1 89 37 00 04",
+        address: "11 rue Magdebourg, Paris, France 75016",
         socialMedia: {
-          facebook: 'https://facebook.com/amuuniversity',
-          twitter: 'https://twitter.com/amuuniversity',
-          linkedin: 'https://linkedin.com/school/amuuniversity',
-          instagram: 'https://instagram.com/amuuniversity',
-          youtube: 'https://youtube.com/amuuniversity',
+          facebook: "https://facebook.com/euamericanuniversity",
+          twitter: "https://twitter.com/euamericanuniv",
+          linkedin: "https://linkedin.com/school/euamericanuniversity",
+          instagram: "https://instagram.com/euamericanuniversity",
+          youtube: "https://youtube.com/euamericanuniversity"
         },
         seoDefaults: {
-          titleTemplate: '%s | American Management University',
-          defaultDescription: 'American Management University — A prestigious international institution offering MBA, Honorary Doctorate, and Professorship programs. Shaping global leaders since 1924.',
+          titleTemplate: "%s | EU American University",
+          defaultDescription: "EU American University offers globally recognized programs in Business Administration, Public Administration, Social Work, Honorary Doctorate, and Professional Certifications."
         },
-        maintenanceMode: false,
-      },
+        maintenanceMode: false
+      }),
     },
   });
   console.log('✅ Site settings created');

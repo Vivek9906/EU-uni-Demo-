@@ -30,7 +30,7 @@ export default function FacultyPage() {
                 <p className="text-xs text-foreground-muted mb-3">{f.department} · {f.specialization}</p>
                 <p className="text-sm text-foreground-secondary leading-relaxed mb-4">{f.bio}</p>
                 <div className="flex gap-3">
-                  <a href={`mailto:${f.name.split(' ')[0].toLowerCase()[0]}.${f.name.split(' ').pop()?.toLowerCase()}@amu.edu.eu`} className="text-xs text-primary flex items-center gap-1"><Mail size={12} />Email</a>
+                  <a href={`mailto:${f.name.split(' ')[0].toLowerCase()[0]}.${f.name.split(' ').pop()?.toLowerCase()}@euamericanuniversity.us`} className="text-xs text-primary flex items-center gap-1"><Mail size={12} />Email</a>
                   <span className="text-xs text-primary flex items-center gap-1"><BookOpen size={12} />Publications</span>
                 </div>
               </div>
