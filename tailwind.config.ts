@@ -11,17 +11,17 @@ const config: Config = {
       colors: {
         primary: {
           DEFAULT: '#1B3A6B',
-          light: '#14305A',
-          dark: '#0F1C35',
+          light: '#2C5282',
+          dark: '#0F2347',
         },
         accent: {
-          DEFAULT: '#C8A951',
-          light: '#D4BC6E',
-          dark: '#A88B3A',
+          DEFAULT: '#E09900',
+          light: '#F5C842',
+          dark: '#B87C00',
         },
         background: {
           DEFAULT: '#FFFFFF',
-          subtle: '#F5F6F8',
+          subtle: '#F7F8FA',
           card: '#FFFFFF',
         },
         foreground: {
@@ -34,14 +34,15 @@ const config: Config = {
         error: '#C53030',
       },
       fontFamily: {
-        heading: ['EB Garamond', 'Georgia', 'serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-open-sans)', 'Open Sans', 'system-ui', 'sans-serif'],
+        body: ['var(--font-open-sans)', 'Open Sans', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        sm: '0 1px 3px rgba(27,58,107,0.06)',
-        md: '0 4px 16px rgba(27,58,107,0.08)',
-        lg: '0 8px 32px rgba(27,58,107,0.10)',
+        sm: '0 1px 3px rgba(27,58,107,0.08)',
+        md: '0 4px 16px rgba(27,58,107,0.12)',
+        lg: '0 8px 32px rgba(27,58,107,0.16)',
         card: '0 2px 12px rgba(27,58,107,0.08)',
+        gold: '0 4px 16px rgba(224, 153, 0, 0.25)',
       },
       maxWidth: {
         content: '1200px',

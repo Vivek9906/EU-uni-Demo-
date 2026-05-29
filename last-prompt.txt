@@ -1,0 +1,89 @@
+<USER_REQUEST>
+# 🎓 EU AMERICAN UNIVERSITY — FINAL DELIVERY PROMPT (V4)
+### Complete Fix, Polish & Feature Completion Pass
+### Live demo: https://eu-uni-demo.vercel.app/
+### Date: May 2026
+
+---
+
+> **INSTRUCTIONS FOR CLAUDE OPUS**: This is the FINAL delivery pass. Every single item below is a confirmed bug, missing feature, or client requirement that must be completed before handoff. Work through each section in order. Do NOT skip items. Do NOT leave stubs or TODOs. Do NOT introduce new bugs while fixing old ones. After every fix, verify it does not break adjacent functionality. The entire codebase must be conflict-free and production-ready when this prompt is done.
+
+---
+
+## ══════════════════════════════════════
+## FIX 1 — STUDENT VERIFICATION PORTAL
+## ══════════════════════════════════════
+
+### The Problem (confirmed from screenshot)
+- Student enrolled via the public form → Admin approved in admin panel → Admin issued certificate → Student verification portal at `/student-verification/AMU-2026-73046` returns "No record found"
+- **Root cause 1**: Enrollment ID format mismatch — the application form or admin generates `AMU-YYYY-NNNNN` but the `Student` model uses `EUAU-YYYY-NNNNN`. One of them is wrong, make them consistent. **Use `EUAU-YYYY-NNNNN` everywhere**.
+- **Root cause 2**: Admitting/approving an application in the admin does NOT automatically create/update a `Student` record. The two flows are completely disconnected. Fix this.
+- **Root cause 3**: The verification API may be querying the wrong model or field.
+
+### The Complete Fix
+
+#### A. Make Application Approval Create a Student Record Automatically
+
+```typescript
+// When admin changes application status to "accepted", trigger this:
+// app/api/admin/applications/[id]/status/route.ts  OR  server action
+
+async function approveApplication(applicationId: string) {
+<truncated 45215 bytes>
+const where: Prisma.TestimonialWhereInput = { isApproved: true }
+  if (program !== 'all') where.program = { contains: program, mode: 'insensitive' }
+
+  const [testimonials, total] = await prisma.$transaction([
+    prisma.testimonial.findMany({
+      where,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { submittedAt: 'desc' },
+    }),
+    prisma.testimonial.count({ where }),
+  ])
+
+  // Get unique programs for filter
+  const allPrograms = await prisma.testimonial.findMany({
+    where: { isApproved: true },
+    select: { program: true },
+    distinct: ['program'],
+  })
+
+  return (
+    <>
+      <PageHero
+        label="STUDENT VOICES"
+        title="What Our Graduates Say"
+        description="Hear from professionals, leaders, and innovators who chose EU American University."
+      />
+
+      {/* Program filter tabs */}
+      <section style={{ background: 'var(--bg-subtle)', padding: '20px 0', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <FilterTab label="All" value="all" current={program} />
+            {allPrograms.map(p => (
+              <FilterTab key={p.program} label={p.program} value={p.program} current={program} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3-column card grid */}
+      <section style={{ padding: '60px 0' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gap: 24,
+          }}>
+            {testimonials.map(t => (
+              <TestimonialCard key={t.id} testimonial={t} />
+            ))}
+          </div>
+
+   
+<truncated 30883 bytes>
+
+NOTE: The output was truncated because it was too long. Use a more targeted query or a smaller range to get the information you need.

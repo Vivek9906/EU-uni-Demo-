@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FlaskConical, Globe, BookOpen, Users, ArrowRight } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Research', description: 'Research centers, projects, and publications at AMU. Driving innovation and knowledge creation.' };
 
@@ -14,9 +15,11 @@ const centers = [
 export default function ResearchPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Research</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Research & Innovation</h1><p className="text-lg text-foreground-secondary">AMU is committed to advancing knowledge through cutting-edge research across 50+ centers worldwide.</p></div></div>
-      </section>
+      <PageHero
+        title="Research & Innovation"
+        subtitle="AMU is committed to advancing knowledge through cutting-edge research across 50+ centers worldwide."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Research & Innovation' }]}
+      />
       <section className="section-padding">
         <div className="container-main">
           <h2 className="section-title mb-8 text-center">Research Centers</h2>

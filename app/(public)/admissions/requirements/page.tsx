@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { CheckCircle } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Admission Requirements', description: 'Entry requirements for AMU programs including MBA, Honorary Doctorate, and Professorship.' };
 
@@ -13,9 +14,11 @@ const requirements = [
 export default function RequirementsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Admissions</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Admission Requirements</h1><p className="text-lg text-foreground-secondary">Detailed entry requirements for each program level at AMU.</p></div></div>
-      </section>
+      <PageHero
+        title="Admission Requirements"
+        subtitle="Detailed entry requirements for each program level at AMU."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Admission Requirements' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl space-y-8">
           {requirements.map((req) => (

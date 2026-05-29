@@ -102,7 +102,7 @@ export default function Footer() {
           {/* Link columns */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h3 className="font-body text-xs font-semibold tracking-wider uppercase text-white/40 mb-4">
+              <h3 className="footer-heading">
                 {title}
               </h3>
               <ul className="space-y-2.5">
@@ -110,7 +110,7 @@ export default function Footer() {
                   <li key={link.href + link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-white/60 hover:text-white transition-colors"
+                      className="text-sm text-white/60 hover:text-[#E09900] hover:pl-1 transition-all duration-200"
                     >
                       {link.label}
                     </Link>

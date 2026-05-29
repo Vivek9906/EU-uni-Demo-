@@ -8,45 +8,47 @@ datasource db {
 }
 
 model Application {
-  id              String   @id @default(cuid())
-  referenceNumber String   @unique
-  fullName        String
-  dateOfBirth     DateTime
-  gender          String
-  nationality     String
-  passportNumber  String
-  photoUrl        String?
-  email           String
-  phone           String
-  currentAddress  String
-  mailingAddress  String?
-  programLevel    String
-  programName     String
-  modeOfStudy     String   @default("online")
-  intendedStart   String
-  highestQualification String
-  institutionName String
-  graduationYear  String
-  transcriptsUrls String?
-  currentJobTitle String?
-  employer        String?
-  yearsExperience String?
-  cvUrl           String?
-  statementOfPurpose String
-  referenceName   String?
-  referenceEmail  String?
+  id                    String   @id @default(cuid())
+  referenceNumber       String   @unique
+  fullName              String
+  dateOfBirth           DateTime
+  gender                String
+  nationality           String
+  passportNumber        String
+  photoUrl              String?
+  email                 String
+  phone                 String
+  currentAddress        String
+  mailingAddress        String?
+  programLevel          String
+  programName           String
+  modeOfStudy           String   @default("online")
+  intendedStart         String
+  highestQualification  String
+  institutionName       String
+  graduationYear        String
+  transcriptsUrls       String?
+  currentJobTitle       String?
+  employer              String?
+  yearsExperience       String?
+  cvUrl                 String?
+  statementOfPurpose    String
+  referenceName         String?
+  referenceEmail        String?
   referenceRelationship String?
-  confirmAccuracy Boolean  @default(false)
-  agreeTerms      Boolean  @default(false)
-  consentContact  Boolean  @default(false)
-  status          String   @default("pending")
-  notes           String?
-  submittedAt     DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  confirmAccuracy       Boolean  @default(false)
+  agreeTerms            Boolean  @default(false)
+  consentContact        Boolean  @default(false)
+  status                String   @default("pending")
+  notes                 String?
+  submittedAt           DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  student               Student?
 
   @@index([status])
   @@index([programLevel])
   @@index([submittedAt])
+  @@index([email])
 }
 
 model Certificate {
@@ -98,6 +100,7 @@ model Event {
 
   @@index([slug])
   @@index([date])
+  @@index([isPublished])
 }
 
 model News {
@@ -118,6 +121,7 @@ model News {
 
   @@index([slug])
   @@index([publishedAt])
+  @@index([isPublished])
 }
 
 model Notice {
@@ -132,6 +136,7 @@ model Notice {
 
   @@index([category])
   @@index([postedAt])
+  @@index([isActive])
 }
 
 model Testimonial {
@@ -200,13 +205,13 @@ model AdminUser {
 }
 
 model AuditLog {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   adminId   String
   action    String
   entity    String
   entityId  String?
   metadata  String?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   admin     AdminUser @relation(fields: [adminId], references: [id])
 
   @@index([adminId])
@@ -229,37 +234,41 @@ model SiteSettings {
   data String
 }
 
-// ─── NEW MODELS ─────────────────────────────────────────────
-
 model Student {
-  id                 String   @id @default(cuid())
-  enrollmentId       String   @unique
+  id                 String       @id @default(cuid())
+  enrollmentId       String       @unique
+  applicationId      String?      @unique
   fullName           String
+  email              String
   programName        String
   programLevel       String
   enrollmentYear     Int
+  intendedStartDate  String?
   expectedCompletion String?
   photo              String?
-  status             String   @default("enrolled")
-  isPubliclyVisible  Boolean  @default(true)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  status             String       @default("enrolled")
+  isPubliclyVisible  Boolean      @default(true)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  application        Application? @relation(fields: [applicationId], references: [id])
 
   @@index([enrollmentId])
   @@index([status])
+  @@index([programLevel])
+  @@index([enrollmentYear])
 }
 
 model Certification {
-  id          String   @id @default(cuid())
-  slug        String   @unique
+  id          String                    @id @default(cuid())
+  slug        String                    @unique
   title       String
   category    String
   description String
   imageUrl    String
-  isBundle    Boolean  @default(false)
-  isActive    Boolean  @default(true)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
+  isBundle    Boolean                   @default(false)
+  isActive    Boolean                   @default(true)
+  order       Int                       @default(0)
+  createdAt   DateTime                  @default(now())
   enrollments CertificationEnrollment[]
 
   @@index([slug])
@@ -290,4 +299,17 @@ model LegalPage {
   updatedAt   DateTime @updatedAt
 
   @@index([slug])
+}
+
+model Subscriber {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String?
+  isActive       Boolean   @default(true)
+  noticeUpdates  Boolean   @default(true)
+  newsUpdates    Boolean   @default(true)
+  eventUpdates   Boolean   @default(true)
+  subscribedAt   DateTime  @default(now())
+  unsubscribedAt DateTime?
+  source         String    @default("popup")
 }

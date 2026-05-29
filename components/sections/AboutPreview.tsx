@@ -43,44 +43,31 @@ export default function AboutPreview() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden relative">
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80)' }}
+            {/* Decorative gold accent border */}
+            <div className="absolute -top-3 -right-3 w-full h-full border-[3px] border-[#E09900] rounded-2xl z-0 hidden lg:block" />
+
+            <div className="relative z-10 rounded-2xl overflow-hidden shadow-lg">
+              <img
+                src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=900&q=85"
+                alt="Professional university lecture at EU American University"
+                className="w-full h-[480px] object-cover"
               />
-              <div className="absolute inset-0 bg-primary/60 flex items-center justify-center">
-                <div className="text-center text-white p-8">
-                  <div className="space-y-4">
-                    <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3 inline-block">
-                      <div className="text-sm font-body uppercase tracking-wider opacity-80">IARC & QAHE Accredited</div>
-                    </div>
-                    <div className="flex gap-3 justify-center flex-wrap">
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-xs font-body">ACBSP Member</div>
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-xs font-body">IACBE Member</div>
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-xs font-body">ASIC UK</div>
-                    </div>
-                    <p className="text-white/60 text-sm max-w-xs mx-auto">
-                      Approved distance learning establishment by the French Ministry&apos;s Rector of the Paris Academy
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Floating stat cards */}
-            <div className="absolute -bottom-4 -left-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
-              <div className="text-xl font-heading font-bold text-primary">#1</div>
-              <div className="text-xs text-foreground-muted font-body">For Innovation</div>
+            <div className="absolute -bottom-4 -left-4 bg-white rounded-card shadow-lg border border-border p-4 z-20">
+              <div className="text-xl font-bold text-[#1B3A6B]">#1</div>
+              <div className="text-xs text-foreground-muted">For Innovation</div>
             </div>
 
-            <div className="absolute top-4 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
-              <div className="text-xl font-heading font-bold text-accent">100+</div>
-              <div className="text-xs text-foreground-muted font-body">Countries</div>
+            <div className="absolute top-4 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-20 hidden lg:block">
+              <div className="text-xl font-bold text-[#E09900]">100+</div>
+              <div className="text-xs text-foreground-muted">Countries</div>
             </div>
 
-            <div className="absolute bottom-12 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
-              <div className="text-xl font-heading font-bold text-success">250+</div>
-              <div className="text-xs text-foreground-muted font-body">Alumni Network</div>
+            <div className="absolute bottom-12 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-20 hidden lg:block">
+              <div className="text-xl font-bold text-success">250+</div>
+              <div className="text-xs text-foreground-muted">Alumni Network</div>
             </div>
           </motion.div>
         </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, FileText, Clock, CheckCircle } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: 'Admissions',
@@ -17,22 +18,11 @@ const steps = [
 export default function AdmissionsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main">
-          <div className="max-w-3xl">
-            <span className="section-label">Admissions</span>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">
-              Your Journey Begins Here
-            </h1>
-            <p className="text-lg text-foreground-secondary leading-relaxed mb-8">
-              AMU operates on a rolling admissions basis. We welcome applications from qualified candidates worldwide. Begin your application today and take the next step in your career.
-            </p>
-            <Link href="/admissions/apply" className="btn-primary gap-2">
-              Start Your Application <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Your Journey Begins Here"
+        subtitle="AMU operates on a rolling admissions basis. We welcome applications from qualified candidates worldwide. Begin your application today and take the next step in your career."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Your Journey Begins Here' }]}
+      />
 
       <section className="section-padding">
         <div className="container-main">

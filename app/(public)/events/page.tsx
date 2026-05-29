@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { Calendar, MapPin, ArrowRight, Clock, Users } from 'lucide-react';
-import { format } from 'date-fns';
+import { PageHero } from '@/components/ui/PageHero';
+
 
 export const metadata: Metadata = {
   title: 'Events',
@@ -29,19 +30,11 @@ export default async function EventsPage({ searchParams }: { searchParams: { tab
 
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main">
-          <div className="max-w-3xl">
-            <span className="section-label">University Life</span>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">
-              Events & Conferences
-            </h1>
-            <p className="text-lg text-foreground-secondary leading-relaxed">
-              Join the EU American University community at our global events, conferences, and networking opportunities.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Events & Conferences"
+        subtitle="Join the EU American University community at our global events, conferences, and networking opportunities."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Events & Conferences' }]}
+      />
 
       <section className="section-padding">
         <div className="container-main">
@@ -83,16 +76,16 @@ export default async function EventsPage({ searchParams }: { searchParams: { tab
                     <div className="flex items-center gap-2 text-sm text-foreground-secondary">
                       <Calendar size={16} className="text-primary/70 shrink-0" />
                       <span>
-                        {format(new Date(event.date), 'MMMM d, yyyy')}
-                        {event.endDate && ` - ${format(new Date(event.endDate), 'MMMM d, yyyy')}`}
+                        {new Date(event.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                        {event.endDate && ` - ${new Date(event.endDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`}
                       </span>
                     </div>
                     
                     <div className="flex items-center gap-2 text-sm text-foreground-secondary">
                       <Clock size={16} className="text-primary/70 shrink-0" />
                       <span>
-                        {format(new Date(event.date), 'h:mm a')}
-                        {event.endDate && ` - ${format(new Date(event.endDate), 'h:mm a')}`}
+                        {new Date(event.date).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                        {event.endDate && ` - ${new Date(event.endDate).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`}
                       </span>
                     </div>
 

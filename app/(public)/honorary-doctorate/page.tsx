@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Award, CheckCircle, Star, Globe, Users } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Honorary Doctorate', description: 'Be recognized for a lifetime of achievement. Learn about AMU\'s Honorary Doctorate (Honoris Causa) program.' };
 
@@ -15,16 +16,11 @@ const faqs = [
 export default function HonoraryDoctoratePage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main text-center">
-          <Award className="w-14 h-14 text-accent mx-auto mb-6" />
-          <h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Be Recognized for a Lifetime of Achievement</h1>
-          <p className="text-lg text-foreground-secondary max-w-2xl mx-auto mb-8">
-            The AMU Honorary Doctorate (Honoris Causa) program recognizes exceptional leaders who have made outstanding contributions to their profession, community, and the world.
-          </p>
-          <Link href="/admissions/apply" className="btn-primary gap-2">Apply for Honorary Doctorate <ArrowRight size={16} /></Link>
-        </div>
-      </section>
+      <PageHero
+        title="Be Recognized for a Lifetime of Achievement"
+        subtitle="The AMU Honorary Doctorate (Honoris Causa) program recognizes exceptional leaders who have made outstanding contributions to their profession, community, and the world."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Be Recognized for a Lifetime of Achievement' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl">
           <div className="grid md:grid-cols-2 gap-8 mb-16">

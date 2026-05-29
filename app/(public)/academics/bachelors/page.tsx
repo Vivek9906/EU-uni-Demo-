@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Globe } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: "Bachelor's Programs",
@@ -16,18 +17,11 @@ const programs = [
 export default function BachelorsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main">
-          <div className="max-w-3xl">
-            <Link href="/academics" className="text-sm text-primary hover:text-primary-light mb-4 inline-flex items-center gap-1">← Back to Programs</Link>
-            <span className="section-label">Undergraduate</span>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">Bachelor&apos;s Programs</h1>
-            <p className="text-lg text-foreground-secondary leading-relaxed">
-              EU American University offers three undergraduate programs designed to provide a strong academic foundation and prepare graduates for professional success in business, public service, and social work.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Bachelor&apos;s Programs"
+        subtitle="EU American University offers three undergraduate programs designed to provide a strong academic foundation and prepare graduates for professional success in business, public service, and social work."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Bachelor&apos;s Programs' }]}
+      />
 
       <section className="section-padding">
         <div className="container-main">

@@ -15,18 +15,16 @@ export async function GET(
       return rateLimitResponse(rateCheck.resetIn);
     }
 
-    const { enrollmentId } = params;
+    const rawId = params.enrollmentId?.trim()?.toUpperCase();
+    const normalizedId = rawId?.replace(/^AMU-/, 'EUAU-');
 
-    if (!enrollmentId) {
-      return NextResponse.json(
-        { error: 'Enrollment ID is required' },
-        { status: 400 }
-      );
+    if (!normalizedId || !/^EUAU-\d{4}-\d{5}$/.test(normalizedId)) {
+      return NextResponse.json({ found: false }, { status: 200 });
     }
 
     const student = await prisma.student.findUnique({
       where: {
-        enrollmentId: enrollmentId,
+        enrollmentId: normalizedId,
       },
       select: {
         enrollmentId: true,
@@ -34,6 +32,7 @@ export async function GET(
         programName: true,
         programLevel: true,
         enrollmentYear: true,
+        intendedStartDate: true,
         expectedCompletion: true,
         status: true,
         photo: true,
@@ -43,24 +42,16 @@ export async function GET(
 
     if (!student || !student.isPubliclyVisible) {
       return NextResponse.json(
-        { error: 'No matching record found' },
-        { status: 404 }
+        { found: false },
+        { status: 200 }
       );
     }
 
     // Return the safe public data
-    return NextResponse.json({
-      student: {
-        enrollmentId: student.enrollmentId,
-        fullName: student.fullName,
-        programName: student.programName,
-        programLevel: student.programLevel,
-        enrollmentYear: student.enrollmentYear,
-        expectedCompletion: student.expectedCompletion,
-        status: student.status,
-        photo: student.photo,
-      }
-    });
+    return NextResponse.json(
+      { found: true, student },
+      { status: 200 }
+    );
 
   } catch (error) {
     console.error('Error in student verification API:', error);

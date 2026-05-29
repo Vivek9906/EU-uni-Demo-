@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, ChevronDown, ChevronUp } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 const faqData: Record<string, { question: string; answer: string }[]> = {
   Admissions: [
@@ -52,9 +53,11 @@ export default function FAQPage() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Support</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Frequently Asked Questions</h1><p className="text-lg text-foreground-secondary">Find answers to common questions about AMU programs, admissions, and more.</p></div></div>
-      </section>
+      <PageHero
+        title="Frequently Asked Questions"
+        subtitle="Find answers to common questions about AMU programs, admissions, and more."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Frequently Asked Questions' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl">
           <div className="relative mb-8">

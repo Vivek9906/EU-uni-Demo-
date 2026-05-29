@@ -4,12 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Menu,
-  X,
-  ChevronDown,
-  Shield,
-} from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { NavbarNotificationBell } from '../navigation/NavbarNotificationBell';
 
 interface NavChild {
   label: string;
@@ -60,8 +56,16 @@ const navItems: NavItem[] = [
         title: 'Honorary',
         items: [
           { label: 'Honorary Doctorate', href: '/academics/honorary', description: 'Honoris Causa' },
-          { label: 'Doctor of Philosophy', href: '/academics/honorary', description: 'PhD Recognition' },
-          { label: 'Professorship', href: '/academics/honorary', description: 'Honorary Professorship' },
+          { label: 'Honorary Professorship', href: '/academics/honorary', description: 'Honorary Professorship' },
+          { label: 'View Honorary Programs', href: '/academics/honorary', description: 'All honorary recognitions' },
+        ],
+      },
+      {
+        title: 'PhD',
+        items: [
+          { label: 'Doctor of Philosophy', href: '/academics/phd/doctor-of-philosophy', description: 'Doctoral research program' },
+          { label: 'PhD Overview', href: '/academics/phd', description: 'Doctoral programs overview' },
+          { label: 'Apply for PhD', href: '/admissions/apply', description: 'Start your doctoral application' },
         ],
       },
     ],
@@ -93,9 +97,7 @@ const navItems: NavItem[] = [
 ];
 
 function EUAULogo({ className }: { className?: string }) {
-  return (
-    <img src="/logo.png" alt="EU American University Logo" className={className} />
-  );
+  return <img src="/logo.png" alt="EU American University Logo" className={className} />;
 }
 
 export default function Navbar() {
@@ -120,16 +122,13 @@ export default function Navbar() {
   return (
     <nav
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-md'
-          : 'bg-white shadow-sm'
+        scrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white shadow-sm'
       }`}
       role="navigation"
       aria-label="Main navigation"
     >
       <div className="container-main">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="EU American University Home">
             <EUAULogo className="w-10 h-10" />
             <div className="hidden sm:block">
@@ -142,7 +141,6 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
               <div
@@ -153,18 +151,18 @@ export default function Navbar() {
               >
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-md
-                    ${
-                      pathname === item.href
-                        ? 'text-primary bg-primary/5'
-                        : 'text-foreground-secondary hover:text-primary hover:bg-primary/5'
-                    }`}
+                  className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-md ${
+                    pathname === item.href
+                      ? 'text-primary bg-primary/5'
+                      : 'text-foreground-secondary hover:text-primary hover:bg-primary/5'
+                  }`}
                 >
                   {item.label}
-                  {(item.children || item.megaMenu) && <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />}
+                  {(item.children || item.megaMenu) && (
+                    <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
+                  )}
                 </Link>
 
-                {/* Standard Dropdown */}
                 {item.children && (
                   <AnimatePresence>
                     {openDropdown === item.label && (
@@ -182,9 +180,7 @@ export default function Navbar() {
                               href={child.href}
                               className="flex flex-col px-4 py-3 hover:bg-background-subtle transition-colors"
                             >
-                              <span className="text-sm font-medium text-foreground">
-                                {child.label}
-                              </span>
+                              <span className="text-sm font-medium text-foreground">{child.label}</span>
                               {child.description && (
                                 <span className="text-xs text-foreground-muted mt-0.5">
                                   {child.description}
@@ -198,7 +194,6 @@ export default function Navbar() {
                   </AnimatePresence>
                 )}
 
-                {/* Mega Menu for Programs */}
                 {item.megaMenu && (
                   <AnimatePresence>
                     {openDropdown === item.label && (
@@ -208,9 +203,9 @@ export default function Navbar() {
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.15 }}
                         className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-white rounded-card shadow-lg border border-border overflow-hidden"
-                        style={{ width: '640px' }}
+                        style={{ width: '820px' }}
                       >
-                        <div className="grid grid-cols-3 gap-0 divide-x divide-border">
+                        <div className="grid grid-cols-4 gap-0 divide-x divide-border">
                           {item.megaMenu.map((group) => (
                             <div key={group.title} className="py-4 px-5">
                               <h4 className="text-xs font-semibold tracking-wider uppercase text-foreground-muted mb-3">
@@ -234,7 +229,10 @@ export default function Navbar() {
                           ))}
                         </div>
                         <div className="border-t border-border px-5 py-3 bg-background-subtle">
-                          <Link href="/academics" className="text-sm font-medium text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1">
+                          <Link
+                            href="/academics"
+                            className="text-sm font-medium text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1"
+                          >
                             View All Programs →
                           </Link>
                         </div>
@@ -246,8 +244,8 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
+            <NavbarNotificationBell />
             <Link href="/contact" className="text-sm font-medium text-foreground-secondary hover:text-primary transition-colors">
               Contact
             </Link>
@@ -256,7 +254,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="lg:hidden p-2 rounded-md hover:bg-background-subtle transition-colors"
@@ -268,7 +265,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -281,14 +277,10 @@ export default function Navbar() {
             <div className="container-main py-4 space-y-1">
               {navItems.map((item) => (
                 <div key={item.label}>
-                  {(item.children || item.megaMenu) ? (
+                  {item.children || item.megaMenu ? (
                     <div>
                       <button
-                        onClick={() =>
-                          setOpenDropdown(
-                            openDropdown === item.label ? null : item.label
-                          )
-                        }
+                        onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
                         className="flex items-center justify-between w-full px-3 py-3 text-sm font-medium text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
                         aria-expanded={openDropdown === item.label}
                       >

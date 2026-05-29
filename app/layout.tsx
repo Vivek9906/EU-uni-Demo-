@@ -1,5 +1,13 @@
 import type { Metadata } from 'next';
+import { Open_Sans } from 'next/font/google';
 import './globals.css';
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-open-sans',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: {
@@ -73,7 +81,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={`scroll-smooth ${openSans.variable}`}>
       <head>
         <script
           type="application/ld+json"

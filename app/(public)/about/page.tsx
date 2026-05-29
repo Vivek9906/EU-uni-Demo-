@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, ShieldCheck, Target, Heart, Lightbulb } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -34,19 +35,11 @@ const values = [
 export default function AboutPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main">
-          <div className="max-w-3xl">
-            <span className="section-label">About Us</span>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">
-              Our Identity & Purpose
-            </h1>
-            <p className="text-lg text-foreground-secondary leading-relaxed">
-              Discover the mission, vision, and core values that drive EU American University to deliver exceptional education worldwide.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Our Identity & Purpose"
+        subtitle="Discover the mission, vision, and core values that drive EU American University to deliver exceptional education worldwide."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Our Identity & Purpose' }]}
+      />
 
       <section className="section-padding border-b border-border">
         <div className="container-main">

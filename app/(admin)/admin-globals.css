@@ -1,0 +1,68 @@
+/* admin-globals.css — Separate file, scoped to /dashboard/* */
+
+:root {
+  --admin-sidebar-bg:    #111827;
+  --admin-sidebar-text:  rgba(255,255,255,0.65);
+  --admin-sidebar-active:#E09900;
+  --admin-sidebar-hover: rgba(255,255,255,0.08);
+  --admin-sidebar-width: 240px;
+
+  --admin-header-bg:     #FFFFFF;
+  --admin-header-border: #E5E7EB;
+  --admin-body-bg:       #F3F4F6;
+  --admin-card-bg:       #FFFFFF;
+  --admin-card-border:   #E5E7EB;
+  --admin-card-shadow:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+
+  --admin-primary:       #1B3A6B;
+  --admin-gold:          #E09900;
+  --admin-success:       #059669;
+  --admin-danger:        #DC2626;
+  --admin-warning:       #D97706;
+  --admin-info:          #2563EB;
+
+  --admin-text-heading:  #111827;
+  --admin-text-body:     #374151;
+  --admin-text-muted:    #6B7280;
+
+  --admin-input-border:  #D1D5DB;
+  --admin-input-focus:   #1B3A6B;
+  --admin-radius:        8px;
+  --admin-transition:    all 0.15s ease;
+}
+
+body.admin-mode {
+  background-color: var(--admin-body-bg);
+  color: var(--admin-text-body);
+}
+
+.admin-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--admin-input-border);
+  border-radius: var(--admin-radius);
+  font-size: 14px;
+  transition: var(--admin-transition);
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: var(--admin-input-focus);
+  box-shadow: 0 0 0 3px rgba(27, 58, 107, 0.1);
+}
+
+.admin-btn {
+  padding: 8px 16px;
+  background-color: var(--admin-primary);
+  color: white;
+  border: none;
+  border-radius: var(--admin-radius);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--admin-transition);
+}
+
+.admin-btn:hover {
+  opacity: 0.9;
+}

@@ -14,8 +14,8 @@ const stats = [
 
 export default function StatsBar() {
   return (
-    <section className="bg-background-subtle border-y border-border">
-      <div className="container-main py-10 lg:py-12">
+    <section className="bg-[#1B3A6B]">
+      <div className="container-main py-12 lg:py-14">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-4">
           {stats.map((stat, index) => (
             <motion.div
@@ -26,11 +26,11 @@ export default function StatsBar() {
               transition={{ delay: index * 0.1, duration: 0.4 }}
               className="text-center"
             >
-              <stat.icon className="w-6 h-6 text-primary/40 mx-auto mb-2" />
-              <div className="text-2xl lg:text-3xl font-heading font-bold text-primary">
+              <stat.icon className="w-6 h-6 text-[#E09900]/60 mx-auto mb-2" />
+              <div className="text-2xl lg:text-3xl font-bold text-[#E09900]">
                 {stat.value}
               </div>
-              <div className="text-xs font-body text-foreground-muted mt-1 uppercase tracking-wider">
+              <div className="text-xs text-white/60 mt-1 uppercase tracking-wider">
                 {stat.label}
               </div>
             </motion.div>

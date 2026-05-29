@@ -90,18 +90,29 @@ export function countWords(text: string): number {
 }
 
 export const PROGRAM_LEVELS = [
-  { value: 'bachelors', label: "Bachelor's" },
-  { value: 'masters', label: "Master's" },
-  { value: 'phd-honorary', label: 'PhD - Honorary Doctorate' },
-  { value: 'phd-professorship', label: 'PhD - Professorship' },
+  { value: 'bachelors', label: "Bachelor's Degree" },
+  { value: 'masters', label: "Master's Degree" },
+  { value: 'phd', label: 'Doctor of Philosophy (PhD)' },
+  { value: 'phd-honorary', label: 'Honorary Doctorate (Honoris Causa)' },
+  { value: 'phd-professorship', label: 'Honorary Professorship' },
 ] as const;
 
 export const PROGRAM_NAMES: Record<string, string> = {
   bachelors: 'Bachelor of Business Administration (BBA)',
   masters: 'Master of Business Administration (MBA)',
+  phd: '',  // PhD uses specialization dropdown instead
   'phd-honorary': 'Honorary Doctorate (Honoris Causa)',
   'phd-professorship': 'Honorary Professorship',
 };
+
+export const PHD_SPECIALIZATIONS = [
+  'Doctor of Philosophy in Business Administration',
+  'Doctor of Philosophy in Public Administration',
+  'Doctor of Philosophy in Social Sciences',
+  'Doctor of Philosophy in Technology & Innovation',
+  'Doctor of Philosophy in Education Leadership',
+  'Doctor of Philosophy in Health Sciences',
+] as const;
 
 export const APPLICATION_STATUSES = [
   'pending',

@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit } from 'lucide-react';
 import { revalidatePath } from 'next/cache';
+import { DeleteButton } from '@/components/admin/DeleteButton';
 
 export default async function AdminLegalPage() {
   const pages = await prisma.legalPage.findMany({
@@ -52,11 +53,7 @@ export default async function AdminLegalPage() {
                       </Link>
                       <form action={deletePage}>
                         <input type="hidden" name="id" value={page.id} />
-                        <button type="submit" className="p-1.5 text-error hover:bg-error/10 rounded" onClick={(e) => {
-                          if (!confirm('Are you sure you want to delete this page?')) e.preventDefault();
-                        }}>
-                          <Trash2 size={16} />
-                        </button>
+                        <DeleteButton confirmMessage="Are you sure you want to delete this page?" />
                       </form>
                     </div>
                   </td>

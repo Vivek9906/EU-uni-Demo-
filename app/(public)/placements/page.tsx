@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Briefcase, TrendingUp, Building2 } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Placements', description: 'Career placement statistics, top recruiters, and success stories at AMU.' };
 
@@ -9,9 +10,11 @@ const recruiters = ['McKinsey & Company', 'Deloitte', 'Google', 'KPMG', 'World B
 export default function PlacementsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><span className="section-label">Careers</span><h1 className="text-4xl font-heading font-bold mb-4">Career Placements</h1><p className="text-lg text-foreground-secondary">AMU graduates are employed at leading organizations worldwide.</p></div>
-      </section>
+      <PageHero
+        title="Career Placements"
+        subtitle="AMU graduates are employed at leading organizations worldwide."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Career Placements' }]}
+      />
       <section className="section-padding">
         <div className="container-main">
           <div className="grid md:grid-cols-3 gap-6 mb-12">

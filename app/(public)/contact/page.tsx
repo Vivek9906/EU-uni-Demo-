@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Metadata } from 'next';
 import { Send, Loader2, CheckCircle, MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
@@ -23,9 +24,11 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Get in Touch</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Contact Us</h1><p className="text-lg text-foreground-secondary">Have questions? We&apos;re here to help. Reach out to our team.</p></div></div>
-      </section>
+      <PageHero
+        title="Contact Us"
+        subtitle="Have questions? We&apos;re here to help. Reach out to our team."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Contact Us' }]}
+      />
       <section className="section-padding">
         <div className="container-main">
           <div className="grid lg:grid-cols-2 gap-12">

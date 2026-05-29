@@ -13,32 +13,39 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email and password are required');
+          return null;
         }
 
-        const user = await prisma.adminUser.findUnique({
-          where: { email: credentials.email },
-        });
+        try {
+          const user = await prisma.adminUser.findUnique({
+            where: { email: credentials.email.toLowerCase().trim() },
+          });
 
-        if (!user || !user.isActive) {
-          throw new Error('Invalid credentials');
+          if (!user || !user.isActive) {
+            return null;
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          console.log("Login attempt:", { email: credentials.email, foundUser: !!user, isPasswordValid });
+
+          if (!isPasswordValid) {
+            return null;
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error('Auth error:', error);
+          return null;
         }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isPasswordValid) {
-          throw new Error('Invalid credentials');
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
       },
     }),
   ],

@@ -28,6 +28,44 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
     const updated = await prisma.application.update({ where: { id: params.id }, data: updateData });
 
+    if (status === 'accepted') {
+      const existingStudent = await prisma.student.findFirst({
+        where: { applicationId: params.id }
+      });
+
+      if (!existingStudent) {
+        const year = new Date().getFullYear();
+        let enrollmentId = '';
+        let attempts = 0;
+        let isUnique = false;
+        
+        while (!isUnique && attempts < 10) {
+          const random = Math.floor(10000 + Math.random() * 90000);
+          enrollmentId = `EUAU-${year}-${random}`;
+          attempts++;
+          const existing = await prisma.student.findUnique({ where: { enrollmentId } });
+          if (!existing) isUnique = true;
+        }
+        
+        if (!isUnique) throw new Error('Could not generate unique enrollment ID');
+
+        await prisma.student.create({
+          data: {
+            enrollmentId,
+            applicationId: updated.id,
+            fullName: updated.fullName,
+            email: updated.email,
+            programName: updated.programName,
+            programLevel: updated.programLevel,
+            enrollmentYear: year,
+            intendedStartDate: updated.intendedStart,
+            status: 'enrolled',
+            isPubliclyVisible: true,
+          }
+        });
+      }
+    }
+
     if (status && status !== application.status) {
       sendStatusUpdateEmail(updated.email, updated.fullName, updated.referenceNumber, status, updated.programName).catch(console.error);
     }

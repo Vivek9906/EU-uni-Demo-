@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Globe, Award, BookOpen, GraduationCap } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: 'Honorary Programs',
@@ -34,18 +35,11 @@ const programs = [
 export default function HonoraryPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main">
-          <div className="max-w-3xl">
-            <Link href="/academics" className="text-sm text-primary hover:text-primary-light mb-4 inline-flex items-center gap-1">← Back to Programs</Link>
-            <span className="section-label">Recognition & Distinction</span>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">Honorary Programs</h1>
-            <p className="text-lg text-foreground-secondary leading-relaxed">
-              EU American University&apos;s honorary programs recognize individuals who have demonstrated exceptional professional achievement, academic distinction, and significant contributions to their communities and fields of expertise.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Honorary Programs"
+        subtitle="EU American University&apos;s honorary programs recognize individuals who have demonstrated exceptional professional achievement, academic distinction, and significant contributions to their communities and fields of expertise."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Honorary Programs' }]}
+      />
 
       <section className="section-padding">
         <div className="container-main">

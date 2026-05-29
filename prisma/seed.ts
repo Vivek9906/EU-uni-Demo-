@@ -19,7 +19,7 @@ async function main() {
   await prisma.adminUser.deleteMany();
 
   // 1. Super Admin User
-  const hashedPassword = await bcrypt.hash('ChangeMe@123!', 12);
+  const hashedPassword = await bcrypt.hash('Admin@EU2025!', 12);
   await prisma.adminUser.upsert({
     where: { email: 'info@euamericanuniversity.us' },
     update: {},
@@ -37,6 +37,7 @@ async function main() {
     {
       enrollmentId: 'EUAU-2024-00001',
       fullName: 'Sarah Mitchell',
+      email: 'sarah.mitchell@example.com',
       programName: 'Master of Business Administration',
       programLevel: 'masters',
       enrollmentYear: 2024,
@@ -47,6 +48,7 @@ async function main() {
     {
       enrollmentId: 'EUAU-2024-00002',
       fullName: 'James Okoye',
+      email: 'james.okoye@example.com',
       programName: 'Honorary Doctorate (Honoris Causa)',
       programLevel: 'honorary',
       enrollmentYear: 2024,
@@ -56,6 +58,7 @@ async function main() {
     {
       enrollmentId: 'EUAU-2023-00145',
       fullName: 'Maria Fernandez',
+      email: 'maria.fernandez@example.com',
       programName: 'Bachelor of Business Administration',
       programLevel: 'bachelors',
       enrollmentYear: 2023,

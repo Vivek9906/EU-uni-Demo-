@@ -1,15 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, CreditCard, Clock, HelpCircle } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Financial Aid', description: 'Financial aid options, payment plans, and tuition assistance at AMU.' };
 
 export default function FinancialAidPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Admissions</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Financial Aid</h1><p className="text-lg text-foreground-secondary">AMU is committed to making quality education accessible. Explore our financial aid options.</p></div></div>
-      </section>
+      <PageHero
+        title="Financial Aid"
+        subtitle="AMU is committed to making quality education accessible. Explore our financial aid options."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Financial Aid' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl">
           <div className="grid md:grid-cols-3 gap-6 mb-12">

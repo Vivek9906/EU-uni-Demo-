@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit } from 'lucide-react';
 import { revalidatePath } from 'next/cache';
+import { DeleteButton } from '@/components/admin/DeleteButton';
 
 export default async function AdminCertificationsPage() {
   const certifications = await prisma.certification.findMany({
@@ -54,11 +55,7 @@ export default async function AdminCertificationsPage() {
                       </Link>
                       <form action={deleteCert}>
                         <input type="hidden" name="id" value={cert.id} />
-                        <button type="submit" className="p-1.5 text-error hover:bg-error/10 rounded" onClick={(e) => {
-                          if (!confirm('Are you sure you want to delete this certification?')) e.preventDefault();
-                        }}>
-                          <Trash2 size={16} />
-                        </button>
+                        <DeleteButton confirmMessage="Are you sure you want to delete this certification?" />
                       </form>
                     </div>
                   </td>

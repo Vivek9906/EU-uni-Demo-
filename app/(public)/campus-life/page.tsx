@@ -1,14 +1,17 @@
 import type { Metadata } from 'next';
 import { Heart, Users, Trophy, Home } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Campus Life', description: 'Student life, clubs, sports, housing, and international student support at AMU.' };
 
 export default function CampusLifePage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><span className="section-label">Student Experience</span><h1 className="text-4xl font-heading font-bold mb-4">Campus Life</h1><p className="text-lg text-foreground-secondary">Life at AMU extends beyond the classroom, offering a vibrant and supportive community.</p></div>
-      </section>
+      <PageHero
+        title="Campus Life"
+        subtitle="Life at AMU extends beyond the classroom, offering a vibrant and supportive community."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Campus Life' }]}
+      />
       <section className="section-padding">
         <div className="container-main">
           <div className="grid md:grid-cols-2 gap-6 mb-12">

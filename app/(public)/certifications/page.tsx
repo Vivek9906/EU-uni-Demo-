@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, ArrowRight, Award, Globe } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 type Category = 'all' | 'technology' | 'business' | 'engineering' | 'research' | 'personal' | 'bundle';
 
@@ -81,17 +82,11 @@ export default function CertificationsPage() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main">
-          <div className="max-w-3xl">
-            <span className="section-label">Professional Development</span>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">Professional Certifications</h1>
-            <p className="text-lg text-foreground-secondary leading-relaxed">
-              Advance your career with 30 industry-relevant certification programs from EU American University. Each program is designed to provide focused, practical skills recognized by employers worldwide.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Professional Certifications"
+        subtitle="Advance your career with 30 industry-relevant certification programs from EU American University. Each program is designed to provide focused, practical skills recognized by employers worldwide."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Professional Certifications' }]}
+      />
 
       {/* Bundle Banner */}
       {bundle && activeCategory === 'all' && !searchQuery && (
@@ -133,8 +128,8 @@ export default function CertificationsPage() {
                   onClick={() => setActiveCategory(cat.key)}
                   className={`px-4 py-2 rounded-full text-xs font-medium transition-all ${
                     activeCategory === cat.key
-                      ? 'bg-primary text-white'
-                      : 'bg-background-subtle text-foreground-secondary hover:bg-primary/10'
+                      ? 'bg-[#E09900] text-white'
+                      : 'bg-background-subtle text-foreground-secondary hover:bg-[#E09900]/10'
                   }`}
                 >
                   {cat.label}

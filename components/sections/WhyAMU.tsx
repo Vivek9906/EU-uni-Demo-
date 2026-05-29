@@ -57,12 +57,12 @@ export default function WhyAMU() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.15 }}
-              className="card p-6 text-center group hover:border-primary/20"
+              className="bg-white border border-border rounded-card p-6 text-center group hover:border-[#E09900]/30 hover:shadow-gold hover:-translate-y-1 transition-all duration-200"
             >
-              <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
-                <pillar.icon className="w-7 h-7 text-primary" />
+              <div className="w-14 h-14 bg-[#FFF8E6] rounded-xl flex items-center justify-center mx-auto mb-4 border border-[#E09900]/20 group-hover:border-[#E09900]/40 transition-colors">
+                <pillar.icon className="w-7 h-7 text-[#E09900]" />
               </div>
-              <h3 className="font-heading text-lg font-bold mb-2">
+              <h3 className="text-lg font-bold mb-2">
                 {pillar.title}
               </h3>
               <p className="text-sm text-foreground-secondary leading-relaxed">

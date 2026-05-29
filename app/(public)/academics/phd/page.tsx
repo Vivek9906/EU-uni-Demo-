@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Award, CheckCircle, AlertCircle, Star, Globe } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: 'PhD Programs — Honorary Doctorate & Professorship',
@@ -10,20 +11,11 @@ export const metadata: Metadata = {
 export default function PhdPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main">
-          <div className="max-w-3xl">
-            <Link href="/academics" className="text-sm text-primary hover:text-primary-light mb-4 inline-flex items-center gap-1">← Back to Programs</Link>
-            <span className="badge-accent mb-3 block w-fit">Doctoral Programs</span>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">
-              Honorary Doctorate & Professorship
-            </h1>
-            <p className="text-lg text-foreground-secondary leading-relaxed">
-              AMU&apos;s doctoral programs recognize individuals who have demonstrated exceptional leadership, professional achievement, and meaningful contributions to their communities and fields of expertise.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Honorary Doctorate & Professorship"
+        subtitle="AMU&apos;s doctoral programs recognize individuals who have demonstrated exceptional leadership, professional achievement, and meaningful contributions to their communities and fields of expertise."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Honorary Doctorate & Professorship' }]}
+      />
 
       {/* Honorary Doctorate */}
       <section className="section-padding" id="honorary-doctorate">

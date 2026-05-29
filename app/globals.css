@@ -1,36 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --primary:        #1B3A6B;
-  --primary-hover:  #14305A;
-  --accent:         #C8A951;
-  --accent-dark:    #A88B3A;
+  /* === BRAND COLORS === */
+  --navy:           #1B3A6B;
+  --navy-dark:      #0F2347;
+  --navy-light:     #2C5282;
+  --gold:           #E09900;
+  --gold-dark:      #B87C00;
+  --gold-light:     #F5C842;
+  --gold-tint:      #FFF8E6;
+
+  /* === BACKGROUNDS === */
   --bg:             #FFFFFF;
-  --bg-subtle:      #F5F6F8;
+  --bg-subtle:      #F7F8FA;
+  --bg-navy:        #1B3A6B;
+  --bg-gold-tint:   #FFF8E6;
   --bg-card:        #FFFFFF;
+
+  /* === TEXT === */
   --text-heading:   #0F1C35;
   --text-body:      #3D4A5C;
   --text-muted:     #6B7685;
+  --text-on-navy:   #FFFFFF;
+  --text-on-gold:   #0F1C35;
+
+  /* === BORDERS & DIVIDERS === */
   --border:         #DDE3EC;
-  --nav-bg:         #FFFFFF;
-  --nav-text:       #1B3A6B;
-  --btn-primary-bg: #1B3A6B;
-  --btn-primary-txt:#FFFFFF;
-  --btn-outline-border: #1B3A6B;
-  --btn-outline-txt:#1B3A6B;
-  --footer-bg:      #0F1C35;
+  --border-gold:    #E09900;
+
+  /* === BUTTONS === */
+  --btn-primary-bg:       #1B3A6B;
+  --btn-primary-text:     #FFFFFF;
+  --btn-primary-hover-bg: #0F2347;
+  --btn-gold-bg:          #E09900;
+  --btn-gold-text:        #FFFFFF;
+  --btn-gold-hover-bg:    #B87C00;
+
+  /* === UTILITY === */
+  --shadow-sm:      0 1px 3px rgba(27, 58, 107, 0.08);
+  --shadow-md:      0 4px 16px rgba(27, 58, 107, 0.12);
+  --shadow-lg:      0 8px 32px rgba(27, 58, 107, 0.16);
+  --shadow-gold:    0 4px 16px rgba(224, 153, 0, 0.25);
+  --radius:         8px;
+  --radius-lg:      12px;
+  --transition:     all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* legacy compat */
+  --primary:        #1B3A6B;
+  --primary-hover:  #0F2347;
+  --accent:         #E09900;
+  --accent-dark:    #B87C00;
+  --footer-bg:      #0F2347;
   --footer-text:    #C8D3E0;
+  --success:        #276749;
+  --error:          #C53030;
   --shadow-card:    0 2px 12px rgba(27,58,107,0.08);
-  --success: #276749;
-  --error: #C53030;
-  --shadow-sm: 0 1px 3px rgba(27,58,107,0.06);
-  --shadow-md: 0 4px 16px rgba(27,58,107,0.08);
-  --shadow-lg: 0 8px 32px rgba(27,58,107,0.10);
 }
+
+/* ───────────────────────── BASE ───────────────────────── */
 
 @layer base {
   * {
@@ -45,7 +74,8 @@
   }
 
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-open-sans, 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+    font-weight: 400;
     color: var(--text-body);
     background-color: var(--bg);
     line-height: 1.7;
@@ -54,24 +84,32 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'EB Garamond', Georgia, serif;
-    line-height: 1.3;
+    font-family: var(--font-open-sans, 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+    font-weight: 800;
+    letter-spacing: -0.01em;
     color: var(--text-heading);
   }
 
-  h1 { font-size: 2.5rem; font-weight: 700; }
-  h2 { font-size: 2rem; font-weight: 700; }
-  h3 { font-size: 1.5rem; font-weight: 700; }
-  h4 { font-size: 1.25rem; font-weight: 700; }
+  h1 { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.15; }
+  h2 { font-size: clamp(1.6rem, 3vw, 2.5rem); line-height: 1.2; }
+  h3 { font-size: clamp(1.2rem, 2vw, 1.6rem); line-height: 1.3; }
+  h4 { font-size: 1.25rem; line-height: 1.4; }
+
+  p, li, td, input, textarea, select, label {
+    font-weight: 400;
+  }
+
+  .font-semibold, strong, b {
+    font-weight: 700;
+  }
 
   a {
-    color: var(--primary);
+    color: var(--navy);
     text-decoration: none;
     transition: color 0.2s ease;
   }
-
   a:hover {
-    color: var(--primary-hover);
+    color: var(--navy-dark);
   }
 
   img {
@@ -83,7 +121,20 @@
     background: rgba(27, 58, 107, 0.15);
     color: var(--text-heading);
   }
+
+  nav a {
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.01em;
+  }
+
+  button, .btn {
+    font-family: var(--font-open-sans, 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+    font-weight: 700;
+  }
 }
+
+/* ───────────────────────── COMPONENTS ───────────────────────── */
 
 @layer components {
   .container-main {
@@ -94,72 +145,295 @@
     @apply py-section-mobile lg:py-section;
   }
 
+  .page-header {
+    @apply pt-10 pb-8 lg:pt-16 lg:pb-12 border-b border-border;
+  }
+
+  /* Section Labels — gold with accent line */
   .section-label {
-    @apply font-body text-xs font-semibold tracking-[0.2em] uppercase text-accent mb-3;
+    display: inline-block;
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+    margin-right: 8px;
+    vertical-align: middle;
   }
 
   .section-title {
-    @apply font-heading text-3xl lg:text-4xl font-bold text-foreground mb-4;
+    @apply text-3xl lg:text-4xl font-bold text-foreground mb-4;
   }
 
   .section-subtitle {
     @apply text-lg text-foreground-secondary max-w-2xl;
   }
 
+  /* ─── Primary Button (Navy) ─── */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-body font-semibold text-sm rounded-card
-    transition-all duration-200 hover:bg-primary-light hover:shadow-md active:scale-[0.98]
-    focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-7 py-3 text-white text-sm rounded-card
+    focus:outline-none focus:ring-2 focus:ring-offset-2;
+    background: var(--navy);
+    border: 2px solid var(--navy);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: var(--transition);
+    gap: 8px;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    background: var(--navy-dark);
+    border-color: var(--navy-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: #fff;
+  }
+  .btn-primary:active {
+    transform: translateY(0);
   }
 
+  /* ─── Gold / CTA Button ─── */
+  .btn-gold, .btn-cta, .btn-accent {
+    @apply inline-flex items-center justify-center px-7 py-3 text-white text-sm rounded-card
+    focus:outline-none focus:ring-2 focus:ring-offset-2;
+    background: var(--gold);
+    border: 2px solid var(--gold);
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    gap: 8px;
+    text-decoration: none;
+  }
+  .btn-gold:hover, .btn-cta:hover, .btn-accent:hover {
+    background: var(--gold-dark);
+    border-color: var(--gold-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+    color: #fff;
+  }
+
+  /* ─── Outline Button (Navy) ─── */
   .btn-ghost {
-    @apply inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary font-body font-semibold text-sm rounded-card
-    transition-all duration-200 hover:bg-primary hover:text-white active:scale-[0.98]
-    focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+    @apply inline-flex items-center justify-center px-7 py-3 text-sm rounded-card
+    focus:outline-none focus:ring-2 focus:ring-offset-2;
+    background: transparent;
+    color: var(--navy);
+    border: 2px solid var(--navy);
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    gap: 8px;
+    text-decoration: none;
   }
-
-  .btn-accent {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-accent text-white font-body font-semibold text-sm rounded-card
-    transition-all duration-200 hover:bg-accent-dark hover:shadow-md active:scale-[0.98]
-    focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+  .btn-ghost:hover {
+    background: var(--navy);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   .btn-sm {
     @apply px-4 py-2 text-xs;
   }
 
+  /* ─── Card ─── */
   .card {
-    @apply bg-background-card border border-border rounded-card shadow-sm
-    transition-all duration-200 hover:shadow-md;
+    @apply bg-background-card border border-border rounded-card;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(224, 153, 0, 0.25);
   }
 
   .input-field {
     @apply w-full px-4 py-3 border border-border rounded-card bg-white text-foreground
-    font-body text-sm placeholder:text-foreground-muted
+    text-sm placeholder:text-foreground-muted
     transition-all duration-200
     focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary;
   }
 
   .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-body font-medium;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
   }
+  .badge-primary { @apply badge bg-primary/10 text-primary; }
+  .badge-accent  { @apply badge bg-accent/10 text-accent; }
+  .badge-success { @apply badge bg-success/10 text-success; }
+  .badge-error   { @apply badge bg-error/10 text-error; }
+}
 
-  .badge-primary {
-    @apply badge bg-primary/10 text-primary;
-  }
+/* ───────────────────────── STATS BAR ───────────────────────── */
 
-  .badge-accent {
-    @apply badge bg-accent/10 text-accent;
-  }
+.stat-number {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 4px;
+}
+.stats-bar {
+  background: var(--navy);
+  padding: 48px 0;
+}
+.stats-bar .stat-label {
+  color: rgba(255,255,255,0.7);
+}
 
-  .badge-success {
-    @apply badge bg-success/10 text-success;
-  }
+/* ───────────────────────── TESTIMONIALS CAROUSEL ───────────────────────── */
 
-  .badge-error {
-    @apply badge bg-error/10 text-error;
+.testimonials-section {
+  padding: 80px 0;
+  background: var(--bg-subtle);
+  overflow: hidden;
+}
+
+.testimonials-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.testimonials-track {
+  display: flex;
+  gap: 24px;
+}
+
+.testimonial-card {
+  flex: 0 0 calc((100% - 48px) / 3);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
+}
+.testimonial-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+  border-color: rgba(224, 153, 0, 0.3);
+}
+
+.testimonial-text {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--text-body);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.author-avatar {
+  width: 44px;
+  height: 44px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.testimonial-author strong {
+  display: block;
+  color: var(--text-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.testimonial-author span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* Testimonials Controls */
+.testimonials-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.carousel-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--navy);
+  transition: var(--transition);
+}
+.carousel-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: var(--shadow-sm);
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.carousel-dot.active {
+  background: var(--gold);
+  transform: scale(1.25);
+}
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    flex: 0 0 85vw;
+    max-width: none;
   }
 }
+
+/* ───────────────────────── FOOTER ───────────────────────── */
+
+.footer-heading {
+  color: var(--gold) !important;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+/* ───────────────────────── UTILITIES ───────────────────────── */
 
 @layer utilities {
   .text-balance {
@@ -194,39 +468,39 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* ───────────────────────── LOADING SPINNER ───────────────────────── */
+
+.loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #E5E7EB;
+  border-top-color: #E09900;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-subtle);
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
+/* ───────────────────────── SCROLLBAR ───────────────────────── */
 
-/* Focus visible styles for accessibility */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-subtle); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
 :focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--navy);
   outline-offset: 2px;
 }
 
-/* Print styles */
 @media print {
-  nav, footer, .no-print {
-    display: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-  h1 { font-size: 1.875rem; }
-  h2 { font-size: 1.5rem; }
-  h3 { font-size: 1.25rem; }
+  nav, footer, .no-print { display: none !important; }
 }
