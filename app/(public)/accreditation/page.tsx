@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import { Award, Shield, CheckCircle } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Accreditation', description: 'AMU accreditations, memberships, and quality assurance credentials.' };
+export const metadata: Metadata = { title: 'Accreditation', description: 'EU American University accreditations, memberships, and quality assurance credentials.' };
 
 const accreditations = [
-  { name: 'IARC', fullName: 'International Accreditation & Recognition Council', desc: 'IARC accreditation validates AMU\'s commitment to quality education standards and continuous improvement.' },
-  { name: 'QAHE', fullName: 'Quality Assurance in Higher Education', desc: 'QAHE accreditation ensures AMU meets international benchmarks for higher education quality.' },
-  { name: 'ACBSP', fullName: 'Accreditation Council for Business Schools & Programs', desc: 'ACBSP membership recognizes AMU\'s business programs for teaching excellence and student outcomes.' },
-  { name: 'IACBE', fullName: 'International Accreditation Council for Business Education', desc: 'IACBE membership affirms the quality of AMU\'s business education programs globally.' },
-  { name: 'ASIC UK', fullName: 'Accreditation Service for International Schools, Colleges & Universities', desc: 'ASIC UK membership validates AMU\'s operations against UK quality standards for international education.' },
+  { name: 'IARC', fullName: 'International Accreditation & Recognition Council', desc: 'IARC accreditation validates EUAU\'s commitment to quality education standards and continuous improvement.' },
+  { name: 'QAHE', fullName: 'Quality Assurance in Higher Education', desc: 'QAHE accreditation ensures EU American University meets international benchmarks for higher education quality.' },
+  { name: 'ACBSP', fullName: 'Accreditation Council for Business Schools & Programs', desc: 'ACBSP membership recognizes EUAU\'s business programs for teaching excellence and student outcomes.' },
+  { name: 'IACBE', fullName: 'International Accreditation Council for Business Education', desc: 'IACBE membership affirms the quality of EUAU\'s business education programs globally.' },
+  { name: 'ASIC UK', fullName: 'Accreditation Service for International Schools, Colleges & Universities', desc: 'ASIC UK membership validates EUAU\'s operations against UK quality standards for international education.' },
   { name: 'French Ministry', fullName: 'Approved by the French Ministry\'s Rector of the Paris Academy', desc: 'Official approval as a distance learning establishment by the French education authority.' },
 ];
 
@@ -18,7 +18,7 @@ export default function AccreditationPage() {
     <>
       <PageHero
         title="Accreditation & Memberships"
-        subtitle="AMU maintains the highest standards through internationally recognized accreditations."
+        subtitle="EU American University maintains the highest standards through internationally recognized accreditations."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Accreditation & Memberships' }]}
       />
       <section className="section-padding">

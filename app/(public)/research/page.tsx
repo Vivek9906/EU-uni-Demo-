@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { FlaskConical, Globe, BookOpen, Users, ArrowRight } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Research', description: 'Research centers, projects, and publications at AMU. Driving innovation and knowledge creation.' };
+export const metadata: Metadata = { title: 'Research', description: 'Research centers, projects, and publications at EU American University. Driving innovation and knowledge creation.' };
 
 const centers = [
   { name: 'Center for Global Business Strategy', focus: 'International trade, cross-border investments, and global market dynamics.' },
@@ -17,7 +17,7 @@ export default function ResearchPage() {
     <>
       <PageHero
         title="Research & Innovation"
-        subtitle="AMU is committed to advancing knowledge through cutting-edge research across 50+ centers worldwide."
+        subtitle="EU American University is committed to advancing knowledge through cutting-edge research across 50+ centers worldwide."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Research & Innovation' }]}
       />
       <section className="section-padding">

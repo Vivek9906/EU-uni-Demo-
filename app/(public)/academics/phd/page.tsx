@@ -5,7 +5,7 @@ import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: 'PhD Programs — Honorary Doctorate & Professorship',
-  description: 'AMU Honorary Doctorate (Honoris Causa) and Honorary Professorship programs. Recognition for lifetime achievement and contributions.',
+  description: 'EU American University Honorary Doctorate (Honoris Causa) and Honorary Professorship programs. Recognition for lifetime achievement and contributions.',
 };
 
 export default function PhdPage() {
@@ -13,7 +13,7 @@ export default function PhdPage() {
     <>
       <PageHero
         title="Honorary Doctorate & Professorship"
-        subtitle="AMU&apos;s doctoral programs recognize individuals who have demonstrated exceptional leadership, professional achievement, and meaningful contributions to their communities and fields of expertise."
+        subtitle="EU American University's doctoral programs recognize individuals who have demonstrated exceptional leadership, professional achievement, and meaningful contributions to their communities and fields of expertise."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Honorary Doctorate & Professorship' }]}
       />
 
@@ -25,7 +25,7 @@ export default function PhdPage() {
             <h2 className="section-title mb-0">Honorary Doctorate (Honoris Causa)</h2>
           </div>
           <p className="text-foreground-secondary leading-relaxed mb-6">
-            The Honorary Doctorate from American Management University is a prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society at large. This distinction recognizes a lifetime of professional excellence and service.
+            The Honorary Doctorate from EU American University is a prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society at large. This distinction recognizes a lifetime of professional excellence and service.
           </p>
 
           <h3 className="font-heading text-xl font-bold mb-4">Eligibility Criteria</h3>
@@ -49,12 +49,12 @@ export default function PhdPage() {
             <div className="card p-4 text-center">
               <Award className="w-6 h-6 text-accent mx-auto mb-2" />
               <span className="text-sm font-medium">Official Letter</span>
-              <p className="text-xs text-foreground-muted mt-1">From the AMU Chancellor</p>
+              <p className="text-xs text-foreground-muted mt-1">From the EUAU Chancellor</p>
             </div>
             <div className="card p-4 text-center">
               <Globe className="w-6 h-6 text-accent mx-auto mb-2" />
               <span className="text-sm font-medium">Alumni Listing</span>
-              <p className="text-xs text-foreground-muted mt-1">Listed on AMU alumni page</p>
+              <p className="text-xs text-foreground-muted mt-1">Listed on EU American University alumni page</p>
             </div>
           </div>
 
@@ -62,7 +62,7 @@ export default function PhdPage() {
           <div className="space-y-4 mb-8">
             {[
               { step: '1', title: 'Submit Application', desc: 'Complete the online application form with all required documents and your statement of purpose.' },
-              { step: '2', title: 'Committee Review', desc: 'Your application is reviewed by the AMU Academic Committee, which evaluates your qualifications and contributions.' },
+              { step: '2', title: 'Committee Review', desc: 'Your application is reviewed by the EUAU Academic Committee, which evaluates your qualifications and contributions.' },
               { step: '3', title: 'Notification', desc: 'You will be notified of the committee\'s decision via email. Successful candidates will receive details about the conferral process.' },
               { step: '4', title: 'Conferral', desc: 'Upon acceptance, your Honorary Doctorate certificate is prepared and issued with your exact program name as submitted.' },
             ].map((item) => (
@@ -88,7 +88,7 @@ export default function PhdPage() {
             <h2 className="section-title mb-0">Honorary Professorship</h2>
           </div>
           <p className="text-foreground-secondary leading-relaxed mb-6">
-            The Honorary Professorship is an academic distinction that recognizes individuals who have made outstanding contributions to education, research, or their professional field. Recipients gain the academic title and are listed among AMU&apos;s distinguished faculty.
+            The Honorary Professorship is an academic distinction that recognizes individuals who have made outstanding contributions to education, research, or their professional field. Recipients gain the academic title and are listed among EU American University's distinguished faculty.
           </p>
 
           <h3 className="font-heading text-xl font-bold mb-4">Eligibility & Nomination</h3>
@@ -103,7 +103,7 @@ export default function PhdPage() {
 
           <h3 className="font-heading text-xl font-bold mb-4">Academic Recognition</h3>
           <p className="text-foreground-secondary leading-relaxed mb-6">
-            Honorary Professors are recognized globally and are listed among AMU&apos;s distinguished academic community. The title confers academic prestige and is verifiable through AMU&apos;s official certificate verification system.
+            Honorary Professors are recognized globally and are listed among EU American University's distinguished academic community. The title confers academic prestige and is verifiable through our official certificate verification system.
           </p>
         </div>
       </section>

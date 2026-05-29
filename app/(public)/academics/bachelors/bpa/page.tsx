@@ -34,7 +34,7 @@ export default function BPAPage() {
           <Link href="/academics/bachelors" className="text-sm text-white/70 hover:text-white mb-4 inline-flex items-center gap-1">← Bachelor&apos;s Programs</Link>
           <div className="flex items-center gap-3 mb-3">
             <span className="badge-accent">Bachelor&apos;s Program</span>
-            <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-full"><Globe size={12} />Online</span>
+            
           </div>
           <h1 className="text-3xl lg:text-4xl font-heading font-bold text-white">Bachelor of Public Administration (BPA)</h1>
         </div>

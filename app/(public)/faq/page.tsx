@@ -7,30 +7,30 @@ import { PageHero } from '@/components/ui/PageHero';
 const faqData: Record<string, { question: string; answer: string }[]> = {
   Admissions: [
     { question: 'What are the admission requirements for the MBA program?', answer: 'Applicants must hold a recognized bachelor\'s degree from an accredited institution. Professional experience is valued but not mandatory for the Bachelor\'s level MBA. For the Master\'s level MBA, a minimum of 2 years of professional experience is preferred.' },
-    { question: 'How do I apply to AMU?', answer: 'You can apply online through our application portal at /admissions/apply. Complete all required sections, upload documents, and submit. You will receive a confirmation email with your unique Application Reference Number.' },
-    { question: 'What is the application deadline?', answer: 'AMU operates on a rolling admissions basis. We recommend applying at least 8 weeks before your intended start date.' },
-    { question: 'Can international students apply?', answer: 'Absolutely. AMU welcomes students from all countries. We have students from over 100 countries worldwide.' },
-    { question: 'Are there scholarships available?', answer: 'Yes, AMU offers merit-based, need-based, and international student scholarships. Visit our Scholarships page for details.' },
+    { question: 'How do I apply to EU American University?', answer: 'You can apply online through our application portal at /admissions/apply. Complete all required sections, upload documents, and submit. You will receive a confirmation email with your unique Application Reference Number.' },
+    { question: 'What is the application deadline?', answer: 'EU American University operates on a rolling admissions basis. We recommend applying at least 8 weeks before your intended start date.' },
+    { question: 'Can international students apply?', answer: 'Absolutely. EU American University welcomes students from all countries. We have students from over 100 countries worldwide.' },
+    { question: 'Are there scholarships available?', answer: 'Yes, EU American University offers merit-based, need-based, and international student scholarships. Visit our Scholarships page for details.' },
   ],
   Programs: [
-    { question: 'What programs does AMU offer?', answer: 'AMU offers MBA programs at both Bachelor\'s and Master\'s levels, plus Honorary Doctorate and Honorary Professorship programs.' },
+    { question: 'What programs does EU American University offer?', answer: 'EU American University offers MBA programs at both Bachelor\'s and Master\'s levels, plus Honorary Doctorate and Honorary Professorship programs.' },
     { question: 'What is the difference between Bachelor\'s and Master\'s MBA?', answer: 'The Bachelor\'s MBA (BBA) provides foundational business education. The Master\'s MBA builds on this with advanced coursework in strategic leadership and global strategy.' },
     { question: 'What is an Honorary Doctorate?', answer: 'An Honorary Doctorate is a prestigious recognition for individuals with exceptional achievement and significant contributions to their field. The program name on the certificate matches exactly what you submit.' },
-    { question: 'Are programs available online?', answer: 'Yes, AMU offers fully online, hybrid, and on-campus delivery modes using state-of-the-art learning platforms.' },
+    { question: 'Are programs available online?', answer: 'Yes, EU American University offers fully online, hybrid, and on-campus delivery modes using state-of-the-art learning platforms.' },
   ],
   Fees: [
     { question: 'What are the tuition fees?', answer: 'Tuition varies by program. Contact admissions@euamericanuniversity.us for the current fee schedule.' },
-    { question: 'Are payment plans available?', answer: 'Yes, AMU offers flexible installment plans. Contact our finance office for details.' },
+    { question: 'Are payment plans available?', answer: 'Yes, EU American University offers flexible installment plans. Contact our finance office for details.' },
     { question: 'What does tuition include?', answer: 'Tuition covers all instruction, platform access, digital library resources, and credential issuance upon completion.' },
   ],
   'Campus Life': [
-    { question: 'Where is AMU located?', answer: 'AMU headquarters are at 11 rue Magdebourg, Paris, France 75016, with a US office in Upland, California.' },
-    { question: 'What student support services are available?', answer: 'AMU provides academic advising, career counseling, library access, technical support, and international student services.' },
+    { question: 'Where is EU American University located?', answer: 'EU American University headquarters are at 11 rue Magdebourg, Paris, France 75016, with a US office in Upland, California.' },
+    { question: 'What student support services are available?', answer: 'EU American University provides academic advising, career counseling, library access, technical support, and international student services.' },
   ],
   Certificates: [
-    { question: 'How can I verify my certificate?', answer: 'Use our Certificate Verification page at /verify-certificate. Enter your Certificate ID for instant verification.' },
+    { question: 'How can I verify my student status or certificate?', answer: 'Use our Student Verification page at /student-verification. Enter your Enrollment ID for instant verification.' },
     { question: 'What appears on the certificate?', answer: 'The certificate displays the exact program name submitted during application. Please ensure accuracy when applying.' },
-    { question: 'Is my AMU degree recognized internationally?', answer: 'AMU is accredited by IARC, QAHE, and is a member of ACBSP, IACBE, and ASIC UK. Check with your country\'s credential body for specifics.' },
+    { question: 'Is my EU American University degree recognized internationally?', answer: 'EU American University is accredited by IARC, QAHE, and is a member of ACBSP, IACBE, and ASIC UK. Check with your country\'s credential body for specifics.' },
   ],
 };
 
@@ -55,7 +55,7 @@ export default function FAQPage() {
     <>
       <PageHero
         title="Frequently Asked Questions"
-        subtitle="Find answers to common questions about AMU programs, admissions, and more."
+        subtitle="Find answers to common questions about EU American University programs, admissions, and more."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Frequently Asked Questions' }]}
       />
       <section className="section-padding">

@@ -35,7 +35,7 @@ export function formatDateTime(date: Date | string): string {
   });
 }
 
-export function generateReferenceNumber(prefix: string = 'AMU'): string {
+export function generateReferenceNumber(prefix: string = 'EUAU'): string {
   const year = new Date().getFullYear();
   const random = Math.floor(10000 + Math.random() * 90000);
   return `${prefix}-${year}-${random}`;
@@ -44,7 +44,13 @@ export function generateReferenceNumber(prefix: string = 'AMU'): string {
 export function generateCertificateId(): string {
   const year = new Date().getFullYear();
   const random = Math.floor(10000 + Math.random() * 90000);
-  return `AMU-CERT-${year}-${random}`;
+  return `EUAU-CERT-${year}-${random}`;
+}
+
+export function generateEnrollmentId(year?: number): string {
+  const y = year ?? new Date().getFullYear();
+  const n = Math.floor(10000 + Math.random() * 90000);
+  return `EUAU-${y}-${n}`;
 }
 
 export function sanitizeInput(input: string): string {
@@ -93,16 +99,40 @@ export const PROGRAM_LEVELS = [
   { value: 'bachelors', label: "Bachelor's Degree" },
   { value: 'masters', label: "Master's Degree" },
   { value: 'phd', label: 'Doctor of Philosophy (PhD)' },
-  { value: 'phd-honorary', label: 'Honorary Doctorate (Honoris Causa)' },
-  { value: 'phd-professorship', label: 'Honorary Professorship' },
+  { value: 'honorary', label: 'Honorary Program' },
 ] as const;
 
+export const PROGRAMS_BY_LEVEL: Record<string, string[]> = {
+  bachelors: [
+    'Bachelor of Business Administration (BBA)',
+    'Bachelor of Public Administration (BPA)',
+    'Bachelor of Social Work (BSW)',
+  ],
+  masters: [
+    'Master of Business Administration (MBA)',
+    'Master of Public Administration (MPA)',
+    'Master of Social Work (MSW)',
+  ],
+  phd: [
+    'Doctor of Philosophy in Business Administration',
+    'Doctor of Philosophy in Public Administration',
+    'Doctor of Philosophy in Social Sciences',
+    'Doctor of Philosophy in Technology & Innovation',
+    'Doctor of Philosophy in Education Leadership',
+    'Doctor of Philosophy in Health Sciences',
+  ],
+  honorary: [
+    'Honorary Doctorate (Honoris Causa)',
+    'Honorary Professorship',
+  ],
+};
+
+// Legacy compat — single default name per level (used for auto-fill fallback)
 export const PROGRAM_NAMES: Record<string, string> = {
-  bachelors: 'Bachelor of Business Administration (BBA)',
-  masters: 'Master of Business Administration (MBA)',
-  phd: '',  // PhD uses specialization dropdown instead
-  'phd-honorary': 'Honorary Doctorate (Honoris Causa)',
-  'phd-professorship': 'Honorary Professorship',
+  bachelors: '',
+  masters: '',
+  phd: '',
+  honorary: '',
 };
 
 export const PHD_SPECIALIZATIONS = [

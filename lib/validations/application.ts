@@ -17,7 +17,7 @@ export const applicationSchema = z.object({
   mailingAddress: z.string().max(500).optional().default(''),
   
   // Section 3: Program Selection
-  programLevel: z.enum(['bachelors', 'masters', 'phd', 'phd-honorary', 'phd-professorship'], {
+  programLevel: z.enum(['bachelors', 'masters', 'phd', 'honorary'], {
     required_error: 'Program level is required',
   }),
   programName: z.string().min(1, 'Program name is required'),
@@ -57,7 +57,7 @@ export const applicationSchema = z.object({
     errorMap: () => ({ message: 'You must agree to the Privacy Policy and Terms' }),
   }),
   consentContact: z.literal(true, {
-    errorMap: () => ({ message: 'You must consent to being contacted by AMU' }),
+    errorMap: () => ({ message: 'You must consent to being contacted by EU American University' }),
   }),
 });
 

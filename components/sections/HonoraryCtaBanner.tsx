@@ -31,7 +31,7 @@ export default function HonoraryCtaBanner() {
             their fields and communities worldwide.
           </p>
           <Link
-            href="/honorary-doctorate"
+            href="/academics/honorary"
             className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-white font-semibold px-8 py-4 rounded-card transition-all hover:shadow-lg"
           >
             Discover Honorary Programs

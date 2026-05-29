@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   Facebook,
@@ -9,6 +11,7 @@ import {
   Phone,
   MapPin,
 } from 'lucide-react';
+import { useState } from 'react';
 
 function EUAULogoSmall({ className }: { className?: string }) {
   return (
@@ -41,7 +44,6 @@ const footerLinks = {
     { label: 'Contact Us', href: '/contact' },
     { label: 'FAQ', href: '/faq' },
     { label: 'Student Verification', href: '/student-verification' },
-    { label: 'Verify Certificate', href: '/verify-certificate' },
     { label: 'News', href: '/news' },
     { label: 'Events', href: '/events' },
   ],
@@ -54,6 +56,29 @@ const socialLinks = [
   { icon: Instagram, href: 'https://instagram.com/euamericanuniversity', label: 'Instagram' },
   { icon: Youtube, href: 'https://youtube.com/euamericanuniversity', label: 'YouTube' },
 ];
+
+function SocialIcon({ social }: { social: typeof socialLinks[number] }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <a
+      key={social.label}
+      href={social.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+      style={{
+        border: '1.5px solid ' + (hovered ? '#E09900' : 'rgba(255,255,255,0.35)'),
+        background: hovered ? '#E09900' : 'rgba(255,255,255,0.08)',
+        color: hovered ? '#fff' : 'rgba(255,255,255,0.85)',
+      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      aria-label={social.label}
+    >
+      <social.icon size={15} />
+    </a>
+  );
+}
 
 export default function Footer() {
   return (
@@ -144,16 +169,7 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-3">
             {socialLinks.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
-                aria-label={social.label}
-              >
-                <social.icon size={14} />
-              </a>
+              <SocialIcon key={social.label} social={social} />
             ))}
           </div>
         </div>

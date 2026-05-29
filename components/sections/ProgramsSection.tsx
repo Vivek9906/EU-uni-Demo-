@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 type ProgramLevel = 'bachelors' | 'masters' | 'honorary' | 'phd';
 
@@ -13,7 +13,6 @@ type ProgramCard = {
   href: string;
   imageUrl: string;
   badge: string;
-  mode: string;
 };
 
 const programs: Record<ProgramLevel, ProgramCard[]> = {
@@ -24,8 +23,7 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
         'Build foundational business skills in management, finance, marketing, and entrepreneurship with a global perspective.',
       href: '/academics/bachelors/bba',
       imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
-      badge: 'Bachelor’s Program',
-      mode: '🌐 Online',
+      badge: "Bachelor\u2019s Program",
     },
     {
       name: 'Bachelor of Public Administration (BPA)',
@@ -33,8 +31,7 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
         'Prepare for leadership roles in government and nonprofit organizations through the study of public policy, governance, and civic leadership.',
       href: '/academics/bachelors/bpa',
       imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
-      badge: 'Bachelor’s Program',
-      mode: '🌐 Online',
+      badge: "Bachelor\u2019s Program",
     },
     {
       name: 'Bachelor of Social Work (BSW)',
@@ -42,8 +39,7 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
         'Develop the skills needed to support individuals and communities through counseling, advocacy, and social welfare programs.',
       href: '/academics/bachelors/bsw',
       imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80',
-      badge: 'Bachelor’s Program',
-      mode: '🌐 Online',
+      badge: "Bachelor\u2019s Program",
     },
   ],
   masters: [
@@ -53,8 +49,7 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
         'An advanced program for professionals seeking senior leadership positions through strategic thinking and executive decision-making.',
       href: '/academics/masters/mba',
       imageUrl: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80',
-      badge: 'Master’s Program',
-      mode: '🌐 Online',
+      badge: "Master\u2019s Program",
     },
     {
       name: 'Master of Public Administration (MPA)',
@@ -62,8 +57,7 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
         'Advance your career in public service with graduate-level expertise in policy analysis, organizational management, and governance.',
       href: '/academics/masters/mpa',
       imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
-      badge: 'Master’s Program',
-      mode: '🌐 Online',
+      badge: "Master\u2019s Program",
     },
     {
       name: 'Master of Social Work (MSW)',
@@ -71,8 +65,7 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
         'Deepen your expertise in clinical practice, community organization, and social policy to make a meaningful impact on society.',
       href: '/academics/masters/msw',
       imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
-      badge: 'Master’s Program',
-      mode: '🌐 Online',
+      badge: "Master\u2019s Program",
     },
   ],
   honorary: [
@@ -83,16 +76,6 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
       href: '/academics/honorary',
       imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
       badge: 'Honorary Recognition',
-      mode: '🎖️ Distinction',
-    },
-    {
-      name: 'Doctor of Philosophy (PhD Recognition)',
-      description:
-        'An honorary recognition awarded to distinguished scholars whose contributions have significantly advanced their field of expertise.',
-      href: '/academics/honorary',
-      imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
-      badge: 'Honorary Recognition',
-      mode: '🎖️ Distinction',
     },
     {
       name: 'Honorary Professorship',
@@ -101,7 +84,6 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
       href: '/academics/honorary',
       imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
       badge: 'Honorary Recognition',
-      mode: '🎖️ Distinction',
     },
   ],
   phd: [
@@ -112,7 +94,6 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
       href: '/academics/phd/doctor-of-philosophy',
       imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
       badge: 'PhD Program',
-      mode: '🌐 Online',
     },
   ],
 };
@@ -137,7 +118,7 @@ export default function ProgramsSection() {
             viewport={{ once: true }}
           >
             <span className="section-label">Explore Programs</span>
-            <h2 className="section-title">Bachelor's • Master's • Honorary • PhD</h2>
+            <h2 className="section-title">Bachelor&apos;s &bull; Master&apos;s &bull; Honorary &bull; PhD</h2>
             <p className="section-subtitle mx-auto">
               Discover programs designed to elevate your career and make a global impact.
             </p>
@@ -182,12 +163,6 @@ export default function ProgramsSection() {
                   <div className="absolute top-3 left-3">
                     <span className="inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-primary text-xs font-semibold px-2.5 py-1 rounded-full">
                       {program.badge}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 left-3">
-                    <span className="inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-2.5 py-1 rounded-full">
-                      <Globe size={12} />
-                      {program.mode}
                     </span>
                   </div>
                 </div>

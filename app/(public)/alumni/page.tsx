@@ -3,14 +3,14 @@ import Link from 'next/link';
 import { Users, Globe, ArrowRight } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Alumni', description: 'AMU alumni network — connecting graduates across 100+ countries.' };
+export const metadata: Metadata = { title: 'Alumni', description: 'EU American University alumni network — connecting graduates across 100+ countries.' };
 
 export default function AlumniPage() {
   return (
     <>
       <PageHero
         title="Alumni Network"
-        subtitle="Join a global community of AMU graduates making an impact worldwide."
+        subtitle="Join a global community of EU American University graduates making an impact worldwide."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Alumni Network' }]}
       />
       <section className="section-padding">
@@ -23,7 +23,7 @@ export default function AlumniPage() {
           <div className="card p-8 text-center max-w-xl mx-auto">
             <Users className="w-10 h-10 text-primary mx-auto mb-4" />
             <h2 className="font-heading text-xl font-bold mb-3">Join Our Alumni Network</h2>
-            <p className="text-sm text-foreground-secondary mb-6">Honorary Doctorate and Professorship recipients are automatically listed among AMU&apos;s distinguished alumni community.</p>
+            <p className="text-sm text-foreground-secondary mb-6">Honorary Doctorate and Professorship recipients are automatically listed among EU American University&apos;s distinguished alumni community.</p>
             <Link href="/contact" className="btn-primary gap-2">Register as Alumni <ArrowRight size={16} /></Link>
           </div>
         </div>

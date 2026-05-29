@@ -82,7 +82,7 @@ export default function ContactPage() {
                 </div>
               </div>
               <div className="rounded-card overflow-hidden border border-border h-64">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.999!2d2.2875!3d48.8648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66fef846de9e7%3A0x2a42!2s11+Rue+de+Magdebourg%2C+75016+Paris!5e0!3m2!1sen!2sfr!4v1700000000000!5m2!1sen!2sfr" width="100%" height="100%" style={{border: 0}} allowFullScreen loading="lazy" title="AMU Location" />
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.999!2d2.2875!3d48.8648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66fef846de9e7%3A0x2a42!2s11+Rue+de+Magdebourg%2C+75016+Paris!5e0!3m2!1sen!2sfr!4v1700000000000!5m2!1sen!2sfr" width="100%" height="100%" style={{border: 0}} allowFullScreen loading="lazy" title="EU American University Location" />
               </div>
             </div>
           </div>

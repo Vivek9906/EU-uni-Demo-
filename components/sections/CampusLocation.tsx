@@ -84,7 +84,7 @@ export default function CampusLocation() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="AMU Campus Location"
+                title="EU American University Campus"
               />
             </div>
           </motion.div>

@@ -30,7 +30,7 @@ const pillars = [
   },
 ];
 
-export default function WhyAMU() {
+export default function WhyEUAU() {
   return (
     <section className="section-padding">
       <div className="container-main">

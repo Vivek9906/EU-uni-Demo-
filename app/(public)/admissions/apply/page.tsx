@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { applicationSchema, type ApplicationFormData } from '@/lib/validations/application';
-import { PROGRAM_LEVELS, PROGRAM_NAMES, PHD_SPECIALIZATIONS, countWords } from '@/lib/utils';
+import { PROGRAM_LEVELS, PROGRAMS_BY_LEVEL, countWords } from '@/lib/utils';
 import { ArrowRight, ArrowLeft, CheckCircle, AlertCircle, Upload, Loader2 } from 'lucide-react';
 
 const countries = [
@@ -72,13 +72,7 @@ export default function ApplyPage() {
 
   const handleProgramLevelChange = (value: string) => {
     setValue('programLevel', value as ApplicationFormData['programLevel']);
-    if (value === 'phd') {
-      // PhD uses a specialization dropdown, clear the auto-fill
-      setValue('programName', '');
-    } else {
-      const programName = PROGRAM_NAMES[value] || '';
-      setValue('programName', programName);
-    }
+    setValue('programName', '');
   };
 
   const totalSections = 8;
@@ -139,7 +133,7 @@ export default function ApplyPage() {
           <CheckCircle className="w-16 h-16 text-success mx-auto mb-6" />
           <h1 className="text-3xl font-heading font-bold mb-4">Application Submitted Successfully</h1>
           <p className="text-foreground-secondary mb-6">
-            Thank you for applying to American Management University. Your application has been received and is being processed.
+            Thank you for applying to EU American University. Your application has been received and is being processed.
           </p>
           <div className="bg-background-subtle border border-border rounded-card p-6 mb-8">
             <p className="text-sm text-foreground-muted mb-1">Your Application Reference Number</p>
@@ -160,7 +154,7 @@ export default function ApplyPage() {
         <div className="container-main">
           <span className="section-label">Admissions</span>
           <h1 className="text-3xl lg:text-4xl font-heading font-bold text-foreground mb-4">Application Form</h1>
-          <p className="text-foreground-secondary">Complete all sections to submit your application to AMU.</p>
+          <p className="text-foreground-secondary">Complete all sections to submit your application to EU American University.</p>
         </div>
       </section>
 
@@ -282,7 +276,7 @@ export default function ApplyPage() {
                 </div>
                 <div>
                   <label htmlFor="programName" className="block text-sm font-medium mb-1.5">Program Name *</label>
-                  {programLevel === 'phd' ? (
+                  {programLevel ? (
                     <>
                       <select
                         id="programName"
@@ -290,9 +284,9 @@ export default function ApplyPage() {
                         value={watch('programName') || ''}
                         onChange={(e) => setValue('programName', e.target.value)}
                       >
-                        <option value="">Select PhD specialization</option>
-                        {PHD_SPECIALIZATIONS.map((spec) => (
-                          <option key={spec} value={spec}>{spec}</option>
+                        <option value="">Select program</option>
+                        {PROGRAMS_BY_LEVEL[programLevel]?.map((prog) => (
+                          <option key={prog} value={prog}>{prog}</option>
                         ))}
                       </select>
                       <p className="text-xs text-accent mt-1.5 flex items-center gap-1">
@@ -302,31 +296,23 @@ export default function ApplyPage() {
                     </>
                   ) : (
                     <>
-                      <input id="programName" {...register('programName')} className="input-field bg-background-subtle" readOnly />
-                      <p className="text-xs text-accent mt-1.5 flex items-center gap-1">
-                        <AlertCircle size={12} />
-                        This program name will appear exactly as shown on your official certificate.
-                      </p>
+                      <select disabled className="input-field bg-background-subtle">
+                        <option>Select a program level first</option>
+                      </select>
                     </>
                   )}
                   {errors.programName && <p className="text-sm text-error mt-1">{errors.programName.message}</p>}
                 </div>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="modeOfStudy" className="block text-sm font-medium mb-1.5">Mode of Study *</label>
-                    <input id="modeOfStudy" {...register('modeOfStudy')} className="input-field bg-background-subtle" readOnly value="Online" />
-                    {errors.modeOfStudy && <p className="text-sm text-error mt-1">{errors.modeOfStudy.message}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="intendedStart" className="block text-sm font-medium mb-1.5">Intended Start Date *</label>
-                    <select id="intendedStart" {...register('intendedStart')} className="input-field">
-                      <option value="">Select semester</option>
-                      {futureSemesters.map((sem) => (
-                        <option key={sem} value={sem}>{sem}</option>
-                      ))}
-                    </select>
-                    {errors.intendedStart && <p className="text-sm text-error mt-1">{errors.intendedStart.message}</p>}
-                  </div>
+                <div>
+                  <input type="hidden" id="modeOfStudy" {...register('modeOfStudy')} value="Online" />
+                  <label htmlFor="intendedStart" className="block text-sm font-medium mb-1.5">Intended Start Date *</label>
+                  <select id="intendedStart" {...register('intendedStart')} className="input-field">
+                    <option value="">Select semester</option>
+                    {futureSemesters.map((sem) => (
+                      <option key={sem} value={sem}>{sem}</option>
+                    ))}
+                  </select>
+                  {errors.intendedStart && <p className="text-sm text-error mt-1">{errors.intendedStart.message}</p>}
                 </div>
               </div>
             )}
@@ -480,13 +466,13 @@ export default function ApplyPage() {
 
                   <label className="flex items-start gap-3 cursor-pointer p-4 border border-border rounded-card hover:border-primary/20 transition-colors">
                     <input type="checkbox" {...register('agreeTerms')} className="w-5 h-5 mt-0.5 text-primary rounded" />
-                    <span className="text-sm text-foreground-secondary">I agree to the Privacy Policy and Terms of Use of American Management University. *</span>
+                    <span className="text-sm text-foreground-secondary">I agree to the Privacy Policy and Terms of Use of EU American University. *</span>
                   </label>
                   {errors.agreeTerms && <p className="text-sm text-error ml-8">{errors.agreeTerms.message}</p>}
 
                   <label className="flex items-start gap-3 cursor-pointer p-4 border border-border rounded-card hover:border-primary/20 transition-colors">
                     <input type="checkbox" {...register('consentContact')} className="w-5 h-5 mt-0.5 text-primary rounded" />
-                    <span className="text-sm text-foreground-secondary">I consent to being contacted by AMU regarding my application and related academic programs. *</span>
+                    <span className="text-sm text-foreground-secondary">I consent to being contacted by EU American University regarding my application and related academic programs. *</span>
                   </label>
                   {errors.consentContact && <p className="text-sm text-error ml-8">{errors.consentContact.message}</p>}
                 </div>

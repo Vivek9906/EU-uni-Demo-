@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { ArrowRight, Calendar, DollarSign } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Scholarships', description: 'Merit-based, need-based, and international scholarships at AMU.' };
+export const metadata: Metadata = { title: 'Scholarships', description: 'Merit-based, need-based, and international scholarships at EU American University.' };
 
 const scholarships = [
-  { name: 'AMU Merit Excellence Scholarship', type: 'Merit-Based', amount: 'Up to 50% tuition reduction', eligibility: 'Outstanding academic records (GPA 3.5+), leadership, community involvement.', deadline: 'December 31, 2025' },
+  { name: 'EU American University Merit Excellence Scholarship', type: 'Merit-Based', amount: 'Up to 50% tuition reduction', eligibility: 'Outstanding academic records (GPA 3.5+), leadership, community involvement.', deadline: 'December 31, 2025' },
   { name: 'Global Leaders Financial Aid Grant', type: 'Need-Based', amount: 'Up to 40% tuition assistance', eligibility: 'Students from developing nations or demonstrating financial need.', deadline: 'November 30, 2025' },
   { name: 'International Diversity Scholarship', type: 'International', amount: 'Up to 30% tuition reduction', eligibility: 'International students from underrepresented regions.', deadline: 'March 31, 2026' },
 ];
@@ -16,7 +16,7 @@ export default function ScholarshipsPage() {
     <>
       <PageHero
         title="Scholarships"
-        subtitle="AMU offers multiple scholarship opportunities to make quality education accessible."
+        subtitle="EU American University offers multiple scholarship opportunities to make quality education accessible."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Scholarships' }]}
       />
       <section className="section-padding">

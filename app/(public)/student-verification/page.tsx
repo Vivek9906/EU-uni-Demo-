@@ -35,8 +35,8 @@ export default function StudentVerificationSearchPage() {
           className="bg-white border border-border rounded-xl shadow-lg overflow-hidden"
         >
           <div className="bg-primary p-6 md:p-8 text-center text-white">
-            <h1 className="font-heading text-2xl md:text-3xl font-bold mb-2">Student Verification Portal</h1>
-            <p className="text-white/80 text-sm">
+            <h1 className="font-heading text-2xl md:text-3xl font-bold mb-2" style={{ color: '#FFFFFF' }}>Student Verification Portal</h1>
+            <p className="text-white/80 text-sm" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               Verify the enrollment status and academic details of EU American University students.
             </p>
           </div>
