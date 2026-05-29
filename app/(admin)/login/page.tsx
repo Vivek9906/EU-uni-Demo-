@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
 
     try {
       const res = await signIn('credentials', {
-        email,
+        email: email.trim().toLowerCase(),
         password,
         redirect: false,
       });
@@ -45,7 +45,7 @@ export default function AdminLoginPage() {
             <Shield className="w-8 h-8 text-white" />
           </div>
           <h1 className="font-heading text-2xl font-bold text-primary mb-2">Admin Portal</h1>
-          <p className="text-sm text-foreground-secondary">Sign in to manage AMU applications and content</p>
+          <p className="text-sm text-foreground-secondary">Sign in to manage EU American University admin portal</p>
         </div>
 
         {error && (

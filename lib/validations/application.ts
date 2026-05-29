@@ -17,12 +17,12 @@ export const applicationSchema = z.object({
   mailingAddress: z.string().max(500).optional().default(''),
   
   // Section 3: Program Selection
-  programLevel: z.enum(['bachelors', 'masters', 'phd-honorary', 'phd-professorship'], {
+  programLevel: z.enum(['bachelors', 'masters', 'phd', 'phd-honorary', 'phd-professorship'], {
     required_error: 'Program level is required',
   }),
   programName: z.string().min(1, 'Program name is required'),
-  modeOfStudy: z.enum(['Online', 'Hybrid', 'On-Campus'], {
-    required_error: 'Mode of study is required',
+  modeOfStudy: z.literal('Online', {
+    errorMap: () => ({ message: 'Mode of study must be Online' }),
   }),
   intendedStart: z.string().min(1, 'Intended start date is required'),
   
@@ -30,6 +30,9 @@ export const applicationSchema = z.object({
   highestQualification: z.string().min(1, 'Highest qualification is required'),
   institutionName: z.string().min(1, 'Institution name is required'),
   graduationYear: z.string().min(4, 'Graduation year is required'),
+  transcriptsUploaded: z.boolean().refine((val) => val === true, {
+    message: 'You must upload your transcripts',
+  }),
   
   // Section 5: Professional Background
   currentJobTitle: z.string().max(200).optional().default(''),

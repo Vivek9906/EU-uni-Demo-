@@ -15,13 +15,13 @@ export default function AboutPreview() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="section-label">About AMU</span>
+            <span className="section-label">About Us</span>
             <h2 className="section-title">Excellence Rooted in Purpose</h2>
             <p className="text-foreground-secondary leading-relaxed mb-4">
-              American Management University is an internationally operating
+              EU American University is an internationally operating
               institution focused on providing flexible, career-driven academic
               programs. With a European foundation and a U.S. administrative
-              presence, AMU serves students and professionals across multiple
+              presence, we serve students and professionals across multiple
               regions.
             </p>
             <p className="text-foreground-secondary leading-relaxed mb-8">
@@ -43,39 +43,31 @@ export default function AboutPreview() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className="aspect-[4/3] bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl overflow-hidden relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-10 h-10 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M22 10v6M2 10l10-5 10 5-10 5z" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M6 12v5c3 3 9 3 12 0v-5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </div>
-                  <h3 className="font-heading text-xl font-bold text-primary mb-2">
-                    Since 1924
-                  </h3>
-                  <p className="text-sm text-foreground-muted">
-                    A century of shaping global leaders
-                  </p>
-                </div>
-              </div>
+            {/* Decorative gold accent border */}
+            <div className="absolute -top-3 -right-3 w-full h-full border-[3px] border-[#E09900] rounded-2xl z-0 hidden lg:block" />
+
+            <div className="relative z-10 rounded-2xl overflow-hidden shadow-lg">
+              <img
+                src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=900&q=85"
+                alt="Professional university lecture at EU American University"
+                className="w-full h-[480px] object-cover"
+              />
             </div>
 
             {/* Floating stat cards */}
-            <div className="absolute -bottom-4 -left-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
-              <div className="text-xl font-heading font-bold text-primary">#1</div>
-              <div className="text-xs text-foreground-muted font-accent">For Innovation</div>
+            <div className="absolute -bottom-4 -left-4 bg-white rounded-card shadow-lg border border-border p-4 z-20">
+              <div className="text-xl font-bold text-[#1B3A6B]">#1</div>
+              <div className="text-xs text-foreground-muted">For Innovation</div>
             </div>
 
-            <div className="absolute top-4 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
-              <div className="text-xl font-heading font-bold text-accent">100+</div>
-              <div className="text-xs text-foreground-muted font-accent">Countries</div>
+            <div className="absolute top-4 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-20 hidden lg:block">
+              <div className="text-xl font-bold text-[#E09900]">100+</div>
+              <div className="text-xs text-foreground-muted">Countries</div>
             </div>
 
-            <div className="absolute bottom-12 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-10">
-              <div className="text-xl font-heading font-bold text-success">250+</div>
-              <div className="text-xs text-foreground-muted font-accent">Alumni Network</div>
+            <div className="absolute bottom-12 -right-4 bg-white rounded-card shadow-lg border border-border p-4 z-20 hidden lg:block">
+              <div className="text-xl font-bold text-success">250+</div>
+              <div className="text-xs text-foreground-muted">Alumni Network</div>
             </div>
           </motion.div>
         </div>

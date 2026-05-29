@@ -1,32 +1,117 @@
 import type { Metadata } from 'next';
-import { Quote } from 'lucide-react';
+import { prisma } from '@/lib/db';
+import { PageHero } from '@/components/ui/PageHero';
+import { Quote, PlusCircle } from 'lucide-react';
+import Link from 'next/link';
 
-export const metadata: Metadata = { title: 'Testimonials', description: 'Hear from AMU graduates about their experience.' };
+export const metadata: Metadata = { 
+  title: 'Testimonials', 
+  description: 'Hear from EU American University graduates about their transformative experiences.' 
+};
 
-const testimonials = [
-  { name: 'Dr. James Okoye', program: 'Honorary Doctorate in Business Leadership', content: 'Receiving the Honorary Doctorate from AMU was a defining moment in my career. The recognition validated decades of work in community development across West Africa. AMU\'s commitment to recognizing global leaders is truly commendable.' },
-  { name: 'Maria Fernandez', program: 'Master of Business Administration (MBA)', content: 'The MBA program at AMU transformed my approach to business leadership. The flexible online format allowed me to continue working while pursuing my degree, and the curriculum was directly applicable to my role as a marketing director.' },
-  { name: 'Prof. Ahmed Al-Rashid', program: 'Honorary Professorship', content: 'Being awarded an Honorary Professorship by AMU recognized my contributions to education in the Middle East. The process was thorough and professional. AMU\'s dedication to academic excellence sets it apart.' },
-];
+export default async function TestimonialsPage({
+  searchParams,
+}: {
+  searchParams: { page?: string; program?: string };
+}) {
+  const page = parseInt(searchParams?.page ?? '1');
+  const programFilter = searchParams?.program ?? 'all';
+  const limit = 12;
 
-export default function TestimonialsPage() {
+  const where: any = { isApproved: true };
+  if (programFilter !== 'all') {
+    where.program = { contains: programFilter };
+  }
+
+  const [testimonials, total] = await prisma.$transaction([
+    prisma.testimonial.findMany({
+      where,
+      orderBy: { submittedAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    prisma.testimonial.count({ where }),
+  ]);
+
+  const totalPages = Math.ceil(total / limit);
+
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><span className="section-label">Student Voices</span><h1 className="text-4xl font-heading font-bold mb-4">Testimonials</h1><p className="text-lg text-foreground-secondary">Hear from AMU graduates about their transformative experiences.</p></div>
-      </section>
-      <section className="section-padding">
-        <div className="container-main max-w-4xl space-y-6">
-          {testimonials.map((t) => (
-            <div key={t.name} className="card p-8">
-              <Quote className="w-8 h-8 text-accent/30 mb-4" />
-              <p className="text-foreground-secondary leading-relaxed mb-6 italic">&ldquo;{t.content}&rdquo;</p>
-              <div className="flex items-center gap-3 border-t border-border pt-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center"><span className="text-sm font-bold text-primary">{t.name.split(' ').map(n => n[0]).join('')}</span></div>
-                <div><div className="font-semibold">{t.name}</div><div className="text-xs text-foreground-muted">{t.program}</div></div>
-              </div>
+      <PageHero
+        title="Student Testimonials"
+        subtitle="Hear directly from our global community of graduates and professionals."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Testimonials' }]}
+      />
+      <section className="section-padding bg-background-subtle min-h-[50vh]">
+        <div className="container-main">
+          
+          <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+            <div className="flex items-center gap-2">
+              <Link href="/testimonials?program=all" className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${programFilter === 'all' ? 'bg-primary text-white' : 'bg-white text-foreground hover:bg-gray-100 border border-border'}`}>
+                All
+              </Link>
+              <Link href="/testimonials?program=Business" className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${programFilter === 'Business' ? 'bg-primary text-white' : 'bg-white text-foreground hover:bg-gray-100 border border-border'}`}>
+                Business
+              </Link>
+              <Link href="/testimonials?program=Honorary" className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${programFilter === 'Honorary' ? 'bg-primary text-white' : 'bg-white text-foreground hover:bg-gray-100 border border-border'}`}>
+                Honorary
+              </Link>
+              <Link href="/testimonials?program=Technology" className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${programFilter === 'Technology' ? 'bg-primary text-white' : 'bg-white text-foreground hover:bg-gray-100 border border-border'}`}>
+                Technology
+              </Link>
             </div>
-          ))}
+            
+            <Link href="/testimonials/submit" className="btn-primary gap-2">
+              <PlusCircle size={18} /> Submit Yours
+            </Link>
+          </div>
+
+          {testimonials.length === 0 ? (
+            <div className="text-center py-20 bg-white rounded-2xl border border-border shadow-sm">
+              <h3 className="text-xl font-bold text-foreground mb-2">No testimonials found.</h3>
+              <p className="text-foreground-secondary">Be the first to share your experience!</p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {testimonials.map((t) => (
+                <div key={t.id} className="bg-white p-8 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow flex flex-col h-full relative group">
+                  <Quote className="w-10 h-10 text-[#E09900]/20 absolute top-6 right-6 group-hover:text-[#E09900]/40 transition-colors" />
+                  <p className="text-foreground-secondary leading-relaxed mb-8 italic flex-1 relative z-10 text-sm">
+                    "{t.content}"
+                  </p>
+                  <div className="flex items-center gap-4 mt-auto">
+                    {t.photo ? (
+                      <img src={t.photo} alt={t.name} className="w-12 h-12 rounded-full object-cover border-2 border-background-subtle" />
+                    ) : (
+                      <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+                        {t.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-bold text-foreground text-sm">{t.name}</div>
+                      <div className="text-xs text-primary font-medium">{t.program}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-12">
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <Link
+                  key={i}
+                  href={`/testimonials?page=${i + 1}&program=${programFilter}`}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-bold transition-colors ${
+                    page === i + 1 ? 'bg-primary text-white' : 'bg-white text-foreground border border-border hover:bg-gray-50'
+                  }`}
+                >
+                  {i + 1}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

@@ -10,14 +10,14 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#1A3C6E',
+          DEFAULT: '#1B3A6B',
           light: '#2C5282',
-          dark: '#142E54',
+          dark: '#0F2347',
         },
         accent: {
-          DEFAULT: '#B8860B',
-          light: '#D4A017',
-          dark: '#8B6508',
+          DEFAULT: '#E09900',
+          light: '#F5C842',
+          dark: '#B87C00',
         },
         background: {
           DEFAULT: '#FFFFFF',
@@ -25,23 +25,24 @@ const config: Config = {
           card: '#FFFFFF',
         },
         foreground: {
-          DEFAULT: '#1A1A2E',
-          secondary: '#4A5568',
-          muted: '#718096',
+          DEFAULT: '#0F1C35',
+          secondary: '#3D4A5C',
+          muted: '#6B7685',
         },
-        border: '#E2E8F0',
+        border: '#DDE3EC',
         success: '#276749',
         error: '#C53030',
       },
       fontFamily: {
-        heading: ['Merriweather', 'Georgia', 'serif'],
-        body: ['Source Sans 3', 'system-ui', 'sans-serif'],
-        accent: ['Outfit', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-open-sans)', 'Open Sans', 'system-ui', 'sans-serif'],
+        body: ['var(--font-open-sans)', 'Open Sans', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        sm: '0 1px 3px rgba(0,0,0,0.08)',
-        md: '0 4px 16px rgba(0,0,0,0.10)',
-        lg: '0 8px 32px rgba(0,0,0,0.12)',
+        sm: '0 1px 3px rgba(27,58,107,0.08)',
+        md: '0 4px 16px rgba(27,58,107,0.12)',
+        lg: '0 8px 32px rgba(27,58,107,0.16)',
+        card: '0 2px 12px rgba(27,58,107,0.08)',
+        gold: '0 4px 16px rgba(224, 153, 0, 0.25)',
       },
       maxWidth: {
         content: '1200px',

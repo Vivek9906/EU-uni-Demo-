@@ -8,6 +8,23 @@ const nextConfig = {
       },
     ],
   },
+
+  // Compress responses
+  compress: true,
+
+  // Remove console.log in production (keep console.error)
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === 'production'
+        ? { exclude: ['error'] }
+        : false,
+  },
+
+  // Tree-shake heavy packages for smaller bundles
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
+  },
+
   async headers() {
     return [
       {
@@ -40,3 +57,4 @@ const nextConfig = {
 };
 
 export default nextConfig;
+

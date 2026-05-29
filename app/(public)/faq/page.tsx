@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, ChevronDown, ChevronUp } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 const faqData: Record<string, { question: string; answer: string }[]> = {
   Admissions: [
@@ -18,7 +19,7 @@ const faqData: Record<string, { question: string; answer: string }[]> = {
     { question: 'Are programs available online?', answer: 'Yes, AMU offers fully online, hybrid, and on-campus delivery modes using state-of-the-art learning platforms.' },
   ],
   Fees: [
-    { question: 'What are the tuition fees?', answer: 'Tuition varies by program. Contact admissions@amu.edu.eu for the current fee schedule.' },
+    { question: 'What are the tuition fees?', answer: 'Tuition varies by program. Contact admissions@euamericanuniversity.us for the current fee schedule.' },
     { question: 'Are payment plans available?', answer: 'Yes, AMU offers flexible installment plans. Contact our finance office for details.' },
     { question: 'What does tuition include?', answer: 'Tuition covers all instruction, platform access, digital library resources, and credential issuance upon completion.' },
   ],
@@ -52,9 +53,11 @@ export default function FAQPage() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Support</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Frequently Asked Questions</h1><p className="text-lg text-foreground-secondary">Find answers to common questions about AMU programs, admissions, and more.</p></div></div>
-      </section>
+      <PageHero
+        title="Frequently Asked Questions"
+        subtitle="Find answers to common questions about AMU programs, admissions, and more."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Frequently Asked Questions' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl">
           <div className="relative mb-8">

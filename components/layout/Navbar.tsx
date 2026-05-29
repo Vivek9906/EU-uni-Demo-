@@ -4,19 +4,20 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Menu,
-  X,
-  ChevronDown,
-  GraduationCap,
-  Phone,
-  Mail,
-} from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { NavbarNotificationBell } from '../navigation/NavbarNotificationBell';
+
+interface NavChild {
+  label: string;
+  href: string;
+  description?: string;
+}
 
 interface NavItem {
   label: string;
   href: string;
-  children?: { label: string; href: string; description?: string }[];
+  children?: NavChild[];
+  megaMenu?: { title: string; items: NavChild[] }[];
 }
 
 const navItems: NavItem[] = [
@@ -25,22 +26,48 @@ const navItems: NavItem[] = [
     label: 'About',
     href: '/about',
     children: [
-      { label: 'About AMU', href: '/about', description: 'Our history and mission' },
+      { label: 'About Us', href: '/about', description: 'Our history and mission' },
       { label: 'Accreditation', href: '/accreditation', description: 'Accrediting bodies & recognition' },
-      { label: 'Faculty', href: '/faculty', description: 'Meet our distinguished faculty' },
-      { label: 'Campus Life', href: '/campus-life', description: 'Student life at AMU' },
+      { label: 'Campus Life', href: '/campus-life', description: 'Student life at EU American University' },
       { label: 'Alumni', href: '/alumni', description: 'Our global alumni network' },
     ],
   },
   {
     label: 'Programs',
     href: '/academics',
-    children: [
-      { label: "Bachelor's — MBA", href: '/academics/bachelors', description: 'Bachelor of Business Administration' },
-      { label: "Master's — MBA", href: '/academics/masters', description: 'Master of Business Administration' },
-      { label: 'Honorary Doctorate', href: '/academics/phd', description: 'Honorary Doctorate (Honoris Causa)' },
-      { label: 'Professorship', href: '/academics/phd', description: 'Honorary Professorship' },
-      { label: 'All Programs', href: '/academics', description: 'View all academic programs' },
+    megaMenu: [
+      {
+        title: "Bachelor's",
+        items: [
+          { label: 'BBA', href: '/academics/bachelors/bba', description: 'Business Administration' },
+          { label: 'BPA', href: '/academics/bachelors/bpa', description: 'Public Administration' },
+          { label: 'BSW', href: '/academics/bachelors/bsw', description: 'Social Work' },
+        ],
+      },
+      {
+        title: "Master's",
+        items: [
+          { label: 'MBA', href: '/academics/masters/mba', description: 'Business Administration' },
+          { label: 'MPA', href: '/academics/masters/mpa', description: 'Public Administration' },
+          { label: 'MSW', href: '/academics/masters/msw', description: 'Social Work' },
+        ],
+      },
+      {
+        title: 'Honorary',
+        items: [
+          { label: 'Honorary Doctorate', href: '/academics/honorary', description: 'Honoris Causa' },
+          { label: 'Honorary Professorship', href: '/academics/honorary', description: 'Honorary Professorship' },
+          { label: 'View Honorary Programs', href: '/academics/honorary', description: 'All honorary recognitions' },
+        ],
+      },
+      {
+        title: 'PhD',
+        items: [
+          { label: 'Doctor of Philosophy', href: '/academics/phd/doctor-of-philosophy', description: 'Doctoral research program' },
+          { label: 'PhD Overview', href: '/academics/phd', description: 'Doctoral programs overview' },
+          { label: 'Apply for PhD', href: '/admissions/apply', description: 'Start your doctoral application' },
+        ],
+      },
     ],
   },
   {
@@ -53,22 +80,25 @@ const navItems: NavItem[] = [
       { label: 'Scholarships', href: '/admissions/scholarships', description: 'Financial aid options' },
     ],
   },
-  { label: 'Research', href: '/research' },
   {
     label: 'More',
     href: '#',
     children: [
-      { label: 'News', href: '/news', description: 'Latest news from AMU' },
+      { label: 'Certifications', href: '/certifications', description: 'Professional certification programs' },
+      { label: 'Student Verification', href: '/student-verification', description: 'Verify enrollment status' },
+      { label: 'News', href: '/news', description: 'Latest news' },
       { label: 'Events', href: '/events', description: 'Upcoming events' },
-      { label: 'Notices', href: '/notices', description: 'Official announcements' },
-      { label: 'Gallery', href: '/gallery', description: 'Photo gallery' },
-      { label: 'Placements', href: '/placements', description: 'Career placements' },
+      { label: 'Research', href: '/research', description: 'Research initiatives' },
       { label: 'Testimonials', href: '/testimonials', description: 'Student voices' },
       { label: 'FAQ', href: '/faq', description: 'Frequently asked questions' },
       { label: 'Contact', href: '/contact', description: 'Get in touch' },
     ],
   },
 ];
+
+function EUAULogo({ className }: { className?: string }) {
+  return <img src="/logo.png" alt="EU American University Logo" className={className} />;
+}
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -90,235 +120,246 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <>
-      {/* Top bar */}
-      <div className="hidden lg:block bg-primary text-white">
-        <div className="container-main flex items-center justify-between py-2 text-xs">
-          <div className="flex items-center gap-6">
-            <a
-              href="mailto:info@amu.edu.eu"
-              className="flex items-center gap-1.5 text-white/80 hover:text-white transition-colors"
-              aria-label="Email AMU"
-            >
-              <Mail size={13} />
-              info@amu.edu.eu
-            </a>
-            <a
-              href="tel:+33189370004"
-              className="flex items-center gap-1.5 text-white/80 hover:text-white transition-colors"
-              aria-label="Call AMU"
-            >
-              <Phone size={13} />
-              +33 1 89 37 00 04
-            </a>
+    <nav
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white shadow-sm'
+      }`}
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      <div className="container-main">
+        <div className="flex items-center justify-between h-16 lg:h-20">
+          <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="EU American University Home">
+            <EUAULogo className="w-10 h-10" />
+            <div className="hidden sm:block">
+              <div className="font-heading text-sm font-bold text-primary leading-tight tracking-wide uppercase">
+                EU American
+              </div>
+              <div className="font-heading text-[10px] text-primary/70 leading-tight tracking-[0.2em] uppercase">
+                University
+              </div>
+            </div>
+          </Link>
+
+          <div className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => (
+              <div
+                key={item.label}
+                className="relative group"
+                onMouseEnter={() => (item.children || item.megaMenu) && setOpenDropdown(item.label)}
+                onMouseLeave={() => setOpenDropdown(null)}
+              >
+                <Link
+                  href={item.href}
+                  className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-md ${
+                    pathname === item.href
+                      ? 'text-primary bg-primary/5'
+                      : 'text-foreground-secondary hover:text-primary hover:bg-primary/5'
+                  }`}
+                >
+                  {item.label}
+                  {(item.children || item.megaMenu) && (
+                    <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
+                  )}
+                </Link>
+
+                {item.children && (
+                  <AnimatePresence>
+                    {openDropdown === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full left-0 mt-1 w-72 bg-white rounded-card shadow-lg border border-border overflow-hidden"
+                      >
+                        <div className="py-2">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.href + child.label}
+                              href={child.href}
+                              className="flex flex-col px-4 py-3 hover:bg-background-subtle transition-colors"
+                            >
+                              <span className="text-sm font-medium text-foreground">{child.label}</span>
+                              {child.description && (
+                                <span className="text-xs text-foreground-muted mt-0.5">
+                                  {child.description}
+                                </span>
+                              )}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
+
+                {item.megaMenu && (
+                  <AnimatePresence>
+                    {openDropdown === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-white rounded-card shadow-lg border border-border overflow-hidden"
+                        style={{ width: '820px' }}
+                      >
+                        <div className="grid grid-cols-4 gap-0 divide-x divide-border">
+                          {item.megaMenu.map((group) => (
+                            <div key={group.title} className="py-4 px-5">
+                              <h4 className="text-xs font-semibold tracking-wider uppercase text-foreground-muted mb-3">
+                                {group.title}
+                              </h4>
+                              <div className="space-y-1">
+                                {group.items.map((sub) => (
+                                  <Link
+                                    key={sub.href + sub.label}
+                                    href={sub.href}
+                                    className="block px-2 py-2 rounded-md hover:bg-background-subtle transition-colors"
+                                  >
+                                    <span className="text-sm font-medium text-foreground">{sub.label}</span>
+                                    {sub.description && (
+                                      <span className="block text-xs text-foreground-muted">{sub.description}</span>
+                                    )}
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="border-t border-border px-5 py-3 bg-background-subtle">
+                          <Link
+                            href="/academics"
+                            className="text-sm font-medium text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1"
+                          >
+                            View All Programs →
+                          </Link>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
+              </div>
+            ))}
           </div>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/verify-certificate"
-              className="text-white/80 hover:text-white transition-colors"
-            >
-              Verify Certificate
+
+          <div className="hidden lg:flex items-center gap-3">
+            <NavbarNotificationBell />
+            <Link href="/contact" className="text-sm font-medium text-foreground-secondary hover:text-primary transition-colors">
+              Contact
             </Link>
-            <Link
-              href="/admissions/apply"
-              className="bg-accent hover:bg-accent-dark text-white px-4 py-1 rounded text-xs font-semibold transition-colors"
-            >
+            <Link href="/admissions/apply" className="btn-primary btn-sm">
               Apply Now
             </Link>
           </div>
+
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="lg:hidden p-2 rounded-md hover:bg-background-subtle transition-colors"
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
 
-      {/* Main navbar */}
-      <nav
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md'
-            : 'bg-white shadow-sm'
-        }`}
-        role="navigation"
-        aria-label="Main navigation"
-      >
-        <div className="container-main">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="American Management University Home">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
-              <div className="hidden sm:block">
-                <div className="font-heading text-sm font-bold text-primary leading-tight">
-                  American Management
-                </div>
-                <div className="font-heading text-xs text-primary/70 leading-tight">
-                  University
-                </div>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden overflow-hidden border-t border-border bg-white"
+          >
+            <div className="container-main py-4 space-y-1">
               {navItems.map((item) => (
-                <div
-                  key={item.label}
-                  className="relative group"
-                  onMouseEnter={() => item.children && setOpenDropdown(item.label)}
-                  onMouseLeave={() => setOpenDropdown(null)}
-                >
-                  <Link
-                    href={item.href}
-                    className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-md
-                      ${
+                <div key={item.label}>
+                  {item.children || item.megaMenu ? (
+                    <div>
+                      <button
+                        onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+                        className="flex items-center justify-between w-full px-3 py-3 text-sm font-medium text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
+                        aria-expanded={openDropdown === item.label}
+                      >
+                        {item.label}
+                        <ChevronDown
+                          size={16}
+                          className={`transition-transform ${
+                            openDropdown === item.label ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {openDropdown === item.label && (
+                          <motion.div
+                            initial={{ height: 0 }}
+                            animate={{ height: 'auto' }}
+                            exit={{ height: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-4 space-y-1 pb-2">
+                              {item.children?.map((child) => (
+                                <Link
+                                  key={child.href + child.label}
+                                  href={child.href}
+                                  className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
+                                >
+                                  {child.label}
+                                </Link>
+                              ))}
+                              {item.megaMenu?.map((group) => (
+                                <div key={group.title}>
+                                  <span className="block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
+                                    {group.title}
+                                  </span>
+                                  {group.items.map((sub) => (
+                                    <Link
+                                      key={sub.href + sub.label}
+                                      href={sub.href}
+                                      className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
+                                    >
+                                      {sub.label}
+                                    </Link>
+                                  ))}
+                                </div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className={`block px-3 py-3 text-sm font-medium rounded-md transition-colors ${
                         pathname === item.href
                           ? 'text-primary bg-primary/5'
                           : 'text-foreground-secondary hover:text-primary hover:bg-primary/5'
                       }`}
-                  >
-                    {item.label}
-                    {item.children && <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />}
-                  </Link>
-
-                  {/* Dropdown */}
-                  {item.children && (
-                    <AnimatePresence>
-                      {openDropdown === item.label && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 8 }}
-                          transition={{ duration: 0.15 }}
-                          className="absolute top-full left-0 mt-1 w-72 bg-white rounded-card shadow-lg border border-border overflow-hidden"
-                        >
-                          <div className="py-2">
-                            {item.children.map((child) => (
-                              <Link
-                                key={child.href + child.label}
-                                href={child.href}
-                                className="flex flex-col px-4 py-3 hover:bg-background-subtle transition-colors"
-                              >
-                                <span className="text-sm font-medium text-foreground">
-                                  {child.label}
-                                </span>
-                                {child.description && (
-                                  <span className="text-xs text-foreground-muted mt-0.5">
-                                    {child.description}
-                                  </span>
-                                )}
-                              </Link>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    >
+                      {item.label}
+                    </Link>
                   )}
                 </div>
               ))}
-            </div>
-
-            {/* Desktop CTA */}
-            <div className="hidden lg:flex items-center gap-3">
-              <Link href="/contact" className="text-sm font-medium text-foreground-secondary hover:text-primary transition-colors">
-                Contact
-              </Link>
-              <Link href="/admissions/apply" className="btn-primary btn-sm">
-                Apply Now
-              </Link>
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 rounded-md hover:bg-background-subtle transition-colors"
-              aria-label={isOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={isOpen}
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="lg:hidden overflow-hidden border-t border-border bg-white"
-            >
-              <div className="container-main py-4 space-y-1">
-                {navItems.map((item) => (
-                  <div key={item.label}>
-                    {item.children ? (
-                      <div>
-                        <button
-                          onClick={() =>
-                            setOpenDropdown(
-                              openDropdown === item.label ? null : item.label
-                            )
-                          }
-                          className="flex items-center justify-between w-full px-3 py-3 text-sm font-medium text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
-                          aria-expanded={openDropdown === item.label}
-                        >
-                          {item.label}
-                          <ChevronDown
-                            size={16}
-                            className={`transition-transform ${
-                              openDropdown === item.label ? 'rotate-180' : ''
-                            }`}
-                          />
-                        </button>
-                        <AnimatePresence>
-                          {openDropdown === item.label && (
-                            <motion.div
-                              initial={{ height: 0 }}
-                              animate={{ height: 'auto' }}
-                              exit={{ height: 0 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="pl-4 space-y-1 pb-2">
-                                {item.children.map((child) => (
-                                  <Link
-                                    key={child.href + child.label}
-                                    href={child.href}
-                                    className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
-                                  >
-                                    {child.label}
-                                  </Link>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        className={`block px-3 py-3 text-sm font-medium rounded-md transition-colors ${
-                          pathname === item.href
-                            ? 'text-primary bg-primary/5'
-                            : 'text-foreground-secondary hover:text-primary hover:bg-primary/5'
-                        }`}
-                      >
-                        {item.label}
-                      </Link>
-                    )}
-                  </div>
-                ))}
-                <div className="pt-4 border-t border-border space-y-2">
-                  <Link href="/verify-certificate" className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary">
-                    Verify Certificate
-                  </Link>
-                  <Link href="/admissions/apply" className="btn-primary w-full text-center">
-                    Apply Now
-                  </Link>
-                </div>
+              <div className="pt-4 border-t border-border space-y-2">
+                <Link href="/student-verification" className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary">
+                  Student Verification
+                </Link>
+                <Link href="/verify-certificate" className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary">
+                  Verify Certificate
+                </Link>
+                <Link href="/admissions/apply" className="btn-primary w-full text-center">
+                  Apply Now
+                </Link>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-    </>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 }

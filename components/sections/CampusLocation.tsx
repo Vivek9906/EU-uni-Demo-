@@ -41,7 +41,7 @@ export default function CampusLocation() {
                 </div>
                 <div className="flex items-center gap-3 text-sm text-foreground-secondary">
                   <Mail size={16} className="text-primary shrink-0" />
-                  info@amu.edu.eu
+                  info@euamericanuniversity.us
                 </div>
                 <div className="flex items-center gap-3 text-sm text-foreground-secondary">
                   <Clock size={16} className="text-primary shrink-0" />

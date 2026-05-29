@@ -1,15 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Users, Globe, ArrowRight } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Alumni', description: 'AMU alumni network — connecting graduates across 100+ countries.' };
 
 export default function AlumniPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><span className="section-label">Community</span><h1 className="text-4xl font-heading font-bold mb-4">Alumni Network</h1><p className="text-lg text-foreground-secondary">Join a global community of AMU graduates making an impact worldwide.</p></div>
-      </section>
+      <PageHero
+        title="Alumni Network"
+        subtitle="Join a global community of AMU graduates making an impact worldwide."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Alumni Network' }]}
+      />
       <section className="section-padding">
         <div className="container-main">
           <div className="grid md:grid-cols-3 gap-6 mb-12">

@@ -1,8 +1,8 @@
 {
-  "name": "amu-university",
-  "version": "1.0.0",
+  "name": "euau-university",
+  "version": "2.0.0",
   "private": true,
-  "description": "American Management University — Complete University Website",
+  "description": "EU American University — Complete University Website",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

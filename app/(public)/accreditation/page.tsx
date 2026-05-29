@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Award, Shield, CheckCircle } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Accreditation', description: 'AMU accreditations, memberships, and quality assurance credentials.' };
 
@@ -15,9 +16,11 @@ const accreditations = [
 export default function AccreditationPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><span className="section-label">Quality Assurance</span><h1 className="text-4xl font-heading font-bold mb-4">Accreditation & Memberships</h1><p className="text-lg text-foreground-secondary">AMU maintains the highest standards through internationally recognized accreditations.</p></div>
-      </section>
+      <PageHero
+        title="Accreditation & Memberships"
+        subtitle="AMU maintains the highest standards through internationally recognized accreditations."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Accreditation & Memberships' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl space-y-6">
           {accreditations.map((a) => (

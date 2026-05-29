@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Mail, BookOpen } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Faculty', description: 'Meet the distinguished faculty of American Management University.' };
 
@@ -14,9 +15,11 @@ const faculty = [
 export default function FacultyPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Our People</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Faculty & Staff</h1><p className="text-lg text-foreground-secondary">AMU has some of the finest and highly qualified faculty-practitioners, ensuring our students learn the skills to excel.</p></div></div>
-      </section>
+      <PageHero
+        title="Faculty & Staff"
+        subtitle="AMU has some of the finest and highly qualified faculty-practitioners, ensuring our students learn the skills to excel."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Faculty & Staff' }]}
+      />
       <section className="section-padding">
         <div className="container-main">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -30,7 +33,7 @@ export default function FacultyPage() {
                 <p className="text-xs text-foreground-muted mb-3">{f.department} · {f.specialization}</p>
                 <p className="text-sm text-foreground-secondary leading-relaxed mb-4">{f.bio}</p>
                 <div className="flex gap-3">
-                  <a href={`mailto:${f.name.split(' ')[0].toLowerCase()[0]}.${f.name.split(' ').pop()?.toLowerCase()}@amu.edu.eu`} className="text-xs text-primary flex items-center gap-1"><Mail size={12} />Email</a>
+                  <a href={`mailto:${f.name.split(' ')[0].toLowerCase()[0]}.${f.name.split(' ').pop()?.toLowerCase()}@euamericanuniversity.us`} className="text-xs text-primary flex items-center gap-1"><Mail size={12} />Email</a>
                   <span className="text-xs text-primary flex items-center gap-1"><BookOpen size={12} />Publications</span>
                 </div>
               </div>

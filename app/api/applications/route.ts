@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       highestQualification: sanitizeInput(data.highestQualification),
       institutionName: sanitizeInput(data.institutionName),
       graduationYear: sanitizeInput(data.graduationYear),
-      transcriptsUrls: [],
+      transcriptsUrls: "{}",
       currentJobTitle: data.currentJobTitle ? sanitizeInput(data.currentJobTitle) : '',
       employer: data.employer ? sanitizeInput(data.employer) : '',
       yearsExperience: data.yearsExperience || '',

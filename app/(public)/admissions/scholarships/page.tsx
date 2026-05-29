@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Calendar, DollarSign } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Scholarships', description: 'Merit-based, need-based, and international scholarships at AMU.' };
 
@@ -13,9 +14,11 @@ const scholarships = [
 export default function ScholarshipsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Financial Support</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Scholarships</h1><p className="text-lg text-foreground-secondary">AMU offers multiple scholarship opportunities to make quality education accessible.</p></div></div>
-      </section>
+      <PageHero
+        title="Scholarships"
+        subtitle="AMU offers multiple scholarship opportunities to make quality education accessible."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Scholarships' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl space-y-6">
           {scholarships.map((s) => (

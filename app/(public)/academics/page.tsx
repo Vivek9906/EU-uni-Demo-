@@ -1,111 +1,166 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Clock, Globe, Award, BookOpen } from 'lucide-react';
+import { ArrowRight, Globe } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: 'Academic Programs',
-  description: 'Explore AMU\'s academic programs: Bachelor\'s MBA, Master\'s MBA, Honorary Doctorate, and Honorary Professorship.',
+  description:
+    'Explore EU American University\'s academic programs: Bachelor\'s (BBA, BPA, BSW), Master\'s (MBA, MPA, MSW), Doctoral research programs, and Honorary programs.',
 };
 
 const programs = [
   {
     level: "Bachelor's",
-    name: 'Bachelor of Business Administration (BBA)',
-    description: 'A comprehensive undergraduate program developing foundational business skills in management, finance, marketing, and entrepreneurship with a global perspective.',
-    duration: '3-4 Years',
-    mode: 'Online / Hybrid / On-Campus',
-    href: '/academics/bachelors',
-    icon: BookOpen,
+    items: [
+      {
+        name: 'Bachelor of Business Administration (BBA)',
+        href: '/academics/bachelors/bba',
+        imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
+        description:
+          'Build foundational business skills in management, finance, marketing, and entrepreneurship with a global perspective.',
+      },
+      {
+        name: 'Bachelor of Public Administration (BPA)',
+        href: '/academics/bachelors/bpa',
+        imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
+        description:
+          'Prepare for leadership roles in government and nonprofit organizations through the study of public policy and governance.',
+      },
+      {
+        name: 'Bachelor of Social Work (BSW)',
+        href: '/academics/bachelors/bsw',
+        imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80',
+        description:
+          'Develop the skills needed to support individuals and communities through counseling, advocacy, and social welfare programs.',
+      },
+    ],
   },
   {
     level: "Master's",
-    name: 'Master of Business Administration (MBA)',
-    description: 'An advanced graduate program for aspiring leaders, combining strategic management, global business strategy, and practical leadership development for senior roles.',
-    duration: '1-2 Years',
-    mode: 'Online / Hybrid / On-Campus',
-    href: '/academics/masters',
-    icon: Award,
+    items: [
+      {
+        name: 'Master of Business Administration (MBA)',
+        href: '/academics/masters/mba',
+        imageUrl: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80',
+        description:
+          'An advanced program for professionals seeking senior leadership positions through strategic thinking and executive decision-making.',
+      },
+      {
+        name: 'Master of Public Administration (MPA)',
+        href: '/academics/masters/mpa',
+        imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
+        description:
+          'Advance your career in public service with graduate-level expertise in policy analysis and organizational management.',
+      },
+      {
+        name: 'Master of Social Work (MSW)',
+        href: '/academics/masters/msw',
+        imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
+        description:
+          'Deepen your expertise in clinical practice, community organization, and social policy to make a meaningful impact on society.',
+      },
+    ],
   },
   {
-    level: 'PhD',
-    name: 'Honorary Doctorate (Honoris Causa)',
-    description: 'A prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society.',
-    duration: 'Recognition-Based',
-    mode: 'Application & Nomination',
-    href: '/academics/phd',
-    icon: Award,
+    level: 'Doctoral',
+    items: [
+      {
+        name: 'Doctor of Philosophy (PhD)',
+        href: '/academics/phd/doctor-of-philosophy',
+        imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
+        description:
+          'A fully online doctoral research program designed for scholars and professionals seeking advanced academic inquiry and global recognition.',
+      },
+    ],
   },
   {
-    level: 'PhD',
-    name: 'Honorary Professorship',
-    description: 'An academic distinction recognizing individuals who have made outstanding contributions to education, research, or their professional field at the highest level.',
-    duration: 'Recognition-Based',
-    mode: 'Application & Nomination',
-    href: '/academics/phd',
-    icon: Globe,
+    level: 'Honorary',
+    items: [
+      {
+        name: 'Honorary Doctorate (Honoris Causa)',
+        href: '/academics/honorary',
+        imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
+        description:
+          'A prestigious recognition for individuals who have demonstrated exceptional leadership and contributions to their field.',
+      },
+      {
+        name: 'Honorary Professorship',
+        href: '/academics/honorary',
+        imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
+        description:
+          'An academic distinction recognizing outstanding contributions to education, research, or professional excellence.',
+      },
+    ],
   },
 ];
 
 export default function AcademicsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main">
-          <div className="max-w-3xl">
-            <span className="section-label">Academics</span>
-            <h1 className="text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">
-              Academic Programs
-            </h1>
-            <p className="text-lg text-foreground-secondary leading-relaxed">
-              AMU offers carefully designed programs across Bachelor&apos;s, Master&apos;s, and Doctoral levels, each crafted to develop leaders who can make a meaningful global impact.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        title="Academic Programs"
+        subtitle="EU American University offers carefully designed programs across Bachelor's, Master's, Doctoral, and Honorary levels, each crafted to develop leaders who can make a meaningful global impact."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Academic Programs' }]}
+      />
 
-      <section className="section-padding">
-        <div className="container-main">
-          <div className="grid gap-6 max-w-4xl mx-auto">
-            {programs.map((program) => (
-              <div key={program.name} className="card p-8 hover:border-primary/20 group">
-                <div className="flex flex-col md:flex-row md:items-start gap-6">
-                  <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
-                    <program.icon className="w-7 h-7 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <span className="badge-primary mb-2">{program.level}</span>
-                    <h2 className="font-heading text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                      {program.name}
-                    </h2>
-                    <p className="text-foreground-secondary mb-4">{program.description}</p>
-                    <div className="flex flex-wrap gap-4 mb-4">
-                      <div className="flex items-center gap-1.5 text-sm text-foreground-muted">
-                        <Clock size={14} />
-                        {program.duration}
-                      </div>
-                      <div className="flex items-center gap-1.5 text-sm text-foreground-muted">
-                        <Globe size={14} />
-                        {program.mode}
-                      </div>
+      {programs.map((group) => (
+        <section key={group.level} className="section-padding border-b border-border last:border-b-0">
+          <div className="container-main">
+            <h2 className="section-title mb-8">{group.level} Programs</h2>
+            <div className={`grid gap-6 ${group.level === 'Doctoral' ? 'md:grid-cols-1 max-w-3xl' : 'md:grid-cols-3'}`}>
+              {group.items.map((program) => (
+                <div
+                  key={program.name}
+                  className="bg-background-card border border-border rounded-card shadow-sm transition-all duration-200 hover:shadow-md overflow-hidden group"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                      style={{ backgroundImage: `url(${program.imageUrl})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    <div className="absolute bottom-3 left-3">
+                      <span className="inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-2.5 py-1 rounded-full">
+                        <Globe size={12} />
+                        Online
+                      </span>
                     </div>
-                    <Link
-                      href={program.href}
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary-light transition-colors"
-                    >
-                      Learn More <ArrowRight size={14} />
-                    </Link>
+                  </div>
+                  <div className="p-5">
+                    <span className="badge-primary mb-2">{group.level}</span>
+                    <h3 className="font-heading text-lg font-bold mb-2 group-hover:text-primary transition-colors leading-tight">
+                      {program.name}
+                    </h3>
+                    <p className="text-sm text-foreground-secondary leading-relaxed mb-4">{program.description}</p>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={program.href}
+                        className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary-light transition-colors"
+                      >
+                        View Details <ArrowRight size={14} />
+                      </Link>
+                      <Link
+                        href="/admissions/apply"
+                        className="text-sm font-medium text-accent hover:text-accent-dark transition-colors"
+                      >
+                        Apply Now
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+        </section>
+      ))}
 
-          <div className="text-center mt-12 p-8 bg-background-subtle rounded-card border border-border max-w-2xl mx-auto">
-            <h3 className="font-heading text-xl font-bold mb-3">Important Note About Certificates</h3>
-            <p className="text-sm text-foreground-secondary">
-              The program name you select during your application is <strong>exactly</strong> what will appear on your official certificate. Please ensure accuracy when selecting your program during the application process.
-            </p>
-          </div>
+      <section className="section-padding bg-background-subtle">
+        <div className="container-main text-center max-w-2xl mx-auto">
+          <h3 className="font-heading text-xl font-bold mb-3">Important Note About Certificates</h3>
+          <p className="text-sm text-foreground-secondary">
+            The program name you select during your application is <strong>exactly</strong> what will appear on your official certificate. Please ensure accuracy when selecting your program during the application process.
+          </p>
         </div>
       </section>
     </>

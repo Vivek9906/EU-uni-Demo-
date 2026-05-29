@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Image as ImageIcon } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Gallery', description: 'Photo gallery showcasing AMU campus, events, and student life.' };
 
@@ -10,9 +11,11 @@ const albums = [
 export default function GalleryPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><span className="section-label">Media</span><h1 className="text-4xl font-heading font-bold mb-4">Photo Gallery</h1><p className="text-lg text-foreground-secondary">Explore moments from AMU&apos;s campus, events, and academic life.</p></div>
-      </section>
+      <PageHero
+        title="Photo Gallery"
+        subtitle="Explore moments from AMU&apos;s campus, events, and academic life."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Photo Gallery' }]}
+      />
       <section className="section-padding">
         <div className="container-main">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

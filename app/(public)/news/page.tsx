@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'News', description: 'Latest news and updates from American Management University.' };
 
@@ -13,9 +14,11 @@ const news = [
 export default function NewsPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><span className="section-label">News</span><h1 className="text-4xl font-heading font-bold mb-4">Latest News</h1><p className="text-lg text-foreground-secondary">Stay updated with the latest news from AMU.</p></div>
-      </section>
+      <PageHero
+        title="Latest News"
+        subtitle="Stay updated with the latest news from AMU."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Latest News' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl space-y-6">
           {news.map((n) => (

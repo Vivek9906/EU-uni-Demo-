@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { applicationSchema, type ApplicationFormData } from '@/lib/validations/application';
-import { PROGRAM_LEVELS, PROGRAM_NAMES, countWords } from '@/lib/utils';
+import { PROGRAM_LEVELS, PROGRAM_NAMES, PHD_SPECIALIZATIONS, countWords } from '@/lib/utils';
 import { ArrowRight, ArrowLeft, CheckCircle, AlertCircle, Upload, Loader2 } from 'lucide-react';
 
 const countries = [
@@ -22,6 +22,28 @@ const countries = [
   'United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan','Venezuela','Vietnam','Yemen','Zambia','Zimbabwe',
 ];
 
+function generateFutureSemesters() {
+  const semesters = [];
+  const now = new Date();
+  let year = now.getFullYear();
+  let month = now.getMonth(); // 0-11
+
+  // Determine starting point
+  let nextSeason = month >= 6 ? 'Spring' : 'Fall';
+  if (nextSeason === 'Spring') year++;
+
+  for (let i = 0; i < 3; i++) {
+    semesters.push(`${nextSeason} ${year}`);
+    if (nextSeason === 'Spring') {
+      nextSeason = 'Fall';
+    } else {
+      nextSeason = 'Spring';
+      year++;
+    }
+  }
+  return semesters;
+}
+
 export default function ApplyPage() {
   const [currentSection, setCurrentSection] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,17 +59,26 @@ export default function ApplyPage() {
   } = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
     mode: 'onBlur',
+    defaultValues: {
+      modeOfStudy: 'Online',
+    },
   });
+
+  const futureSemesters = generateFutureSemesters();
 
   const programLevel = watch('programLevel');
   const statementOfPurpose = watch('statementOfPurpose') || '';
   const wordCount = countWords(statementOfPurpose);
 
-  // Auto-fill program name when level changes
   const handleProgramLevelChange = (value: string) => {
     setValue('programLevel', value as ApplicationFormData['programLevel']);
-    const programName = PROGRAM_NAMES[value] || '';
-    setValue('programName', programName);
+    if (value === 'phd') {
+      // PhD uses a specialization dropdown, clear the auto-fill
+      setValue('programName', '');
+    } else {
+      const programName = PROGRAM_NAMES[value] || '';
+      setValue('programName', programName);
+    }
   };
 
   const totalSections = 8;
@@ -56,7 +87,7 @@ export default function ApplyPage() {
     1: ['fullName', 'dateOfBirth', 'gender', 'nationality', 'passportNumber'],
     2: ['email', 'phone', 'currentAddress'],
     3: ['programLevel', 'programName', 'modeOfStudy', 'intendedStart'],
-    4: ['highestQualification', 'institutionName', 'graduationYear'],
+    4: ['highestQualification', 'institutionName', 'graduationYear', 'transcriptsUploaded'],
     5: [],
     6: ['statementOfPurpose'],
     7: [],
@@ -251,32 +282,48 @@ export default function ApplyPage() {
                 </div>
                 <div>
                   <label htmlFor="programName" className="block text-sm font-medium mb-1.5">Program Name *</label>
-                  <input id="programName" {...register('programName')} className="input-field bg-background-subtle" readOnly />
-                  <p className="text-xs text-accent mt-1.5 flex items-center gap-1">
-                    <AlertCircle size={12} />
-                    This program name will appear exactly as shown on your official certificate.
-                  </p>
+                  {programLevel === 'phd' ? (
+                    <>
+                      <select
+                        id="programName"
+                        className="input-field"
+                        value={watch('programName') || ''}
+                        onChange={(e) => setValue('programName', e.target.value)}
+                      >
+                        <option value="">Select PhD specialization</option>
+                        {PHD_SPECIALIZATIONS.map((spec) => (
+                          <option key={spec} value={spec}>{spec}</option>
+                        ))}
+                      </select>
+                      <p className="text-xs text-accent mt-1.5 flex items-center gap-1">
+                        <AlertCircle size={12} />
+                        This program name will appear exactly as shown on your official certificate.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <input id="programName" {...register('programName')} className="input-field bg-background-subtle" readOnly />
+                      <p className="text-xs text-accent mt-1.5 flex items-center gap-1">
+                        <AlertCircle size={12} />
+                        This program name will appear exactly as shown on your official certificate.
+                      </p>
+                    </>
+                  )}
                   {errors.programName && <p className="text-sm text-error mt-1">{errors.programName.message}</p>}
                 </div>
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="modeOfStudy" className="block text-sm font-medium mb-1.5">Mode of Study *</label>
-                    <select id="modeOfStudy" {...register('modeOfStudy')} className="input-field">
-                      <option value="">Select mode</option>
-                      <option value="Online">Online</option>
-                      <option value="Hybrid">Hybrid</option>
-                      <option value="On-Campus">On-Campus</option>
-                    </select>
+                    <input id="modeOfStudy" {...register('modeOfStudy')} className="input-field bg-background-subtle" readOnly value="Online" />
                     {errors.modeOfStudy && <p className="text-sm text-error mt-1">{errors.modeOfStudy.message}</p>}
                   </div>
                   <div>
                     <label htmlFor="intendedStart" className="block text-sm font-medium mb-1.5">Intended Start Date *</label>
                     <select id="intendedStart" {...register('intendedStart')} className="input-field">
                       <option value="">Select semester</option>
-                      <option value="Fall 2025">Fall 2025</option>
-                      <option value="Spring 2026">Spring 2026</option>
-                      <option value="Fall 2026">Fall 2026</option>
-                      <option value="Spring 2027">Spring 2027</option>
+                      {futureSemesters.map((sem) => (
+                        <option key={sem} value={sem}>{sem}</option>
+                      ))}
                     </select>
                     {errors.intendedStart && <p className="text-sm text-error mt-1">{errors.intendedStart.message}</p>}
                   </div>
@@ -315,13 +362,23 @@ export default function ApplyPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">Upload Transcripts (PDF, max 5MB each)</label>
+                  <label className="block text-sm font-medium mb-1.5">Upload Transcripts (PDF, max 5MB each) *</label>
                   <div className="border-2 border-dashed border-border rounded-card p-6 text-center">
                     <Upload className="w-8 h-8 text-foreground-muted mx-auto mb-2" />
                     <p className="text-sm text-foreground-muted">Drag and drop or click to upload</p>
                     <p className="text-xs text-foreground-muted mt-1">PDF files only, up to 3 files, max 5MB each</p>
-                    <input type="file" accept=".pdf" multiple className="mt-2" />
+                    <input 
+                      type="file" 
+                      accept=".pdf" 
+                      multiple 
+                      className="mt-2" 
+                      onChange={(e) => {
+                        setValue('transcriptsUploaded', e.target.files !== null && e.target.files.length > 0);
+                        trigger('transcriptsUploaded');
+                      }} 
+                    />
                   </div>
+                  {errors.transcriptsUploaded && <p className="text-sm text-error mt-1">{errors.transcriptsUploaded.message}</p>}
                 </div>
               </div>
             )}

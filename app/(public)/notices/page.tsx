@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Bell, FileText, Calendar } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Notices', description: 'Official university notices and announcements from AMU.' };
 
@@ -16,9 +17,11 @@ const categoryColors: Record<string, string> = { academic: 'badge-primary', admi
 export default function NoticesPage() {
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><span className="section-label">Announcements</span><h1 className="text-4xl font-heading font-bold mb-4">Official Notices</h1><p className="text-lg text-foreground-secondary">Important announcements from American Management University.</p></div>
-      </section>
+      <PageHero
+        title="Official Notices"
+        subtitle="Important announcements from American Management University."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Official Notices' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-4xl space-y-4">
           {notices.map((n) => (

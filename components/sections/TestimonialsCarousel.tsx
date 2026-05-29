@@ -1,74 +1,132 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Quote } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
 const testimonials = [
   {
     name: 'Dr. James Okoye',
     program: 'Honorary Doctorate in Business Leadership',
-    content: "Receiving the Honorary Doctorate from American Management University was a defining moment in my career. The recognition validated decades of work in community development across West Africa.",
+    content: "Receiving the Honorary Doctorate from EU American University was a defining moment in my career. The recognition validated decades of work in community development across West Africa.",
   },
   {
     name: 'Maria Fernandez',
     program: 'Master of Business Administration (MBA)',
-    content: "The MBA program at AMU transformed my approach to business leadership. The flexible online format allowed me to continue working while pursuing my degree.",
+    content: "The MBA program at EU American University transformed my approach to business leadership. The flexible online format allowed me to continue working while pursuing my degree.",
   },
   {
     name: 'Prof. Ahmed Al-Rashid',
     program: 'Honorary Professorship',
-    content: "Being awarded an Honorary Professorship by AMU was an incredible honor that recognized my contributions to education in the Middle East.",
+    content: "Being awarded an Honorary Professorship by EU American University was an incredible honor that recognized my contributions to education in the Middle East.",
+  },
+  {
+    name: 'Sarah Chen',
+    program: 'Bachelor of Business Administration (BBA)',
+    content: "The BBA program gave me the confidence and skills to launch my startup. The global perspective and practical curriculum at EU American University made all the difference.",
+  },
+  {
+    name: 'Dr. Elena Vasquez',
+    program: 'Master of Public Administration (MPA)',
+    content: "EU American University's MPA program connected me with like-minded professionals from around the world. The coursework was directly applicable to my role in government.",
   },
 ];
 
 export default function TestimonialsCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const next = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentIndex((i) => (i + 1) % testimonials.length);
+    setTimeout(() => setIsAnimating(false), 400);
+  }, [isAnimating]);
+
+  const prev = useCallback(() => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentIndex((i) => (i - 1 + testimonials.length) % testimonials.length);
+    setTimeout(() => setIsAnimating(false), 400);
+  }, [isAnimating]);
+
+  useEffect(() => {
+    const timer = setInterval(next, 4000);
+    return () => clearInterval(timer);
+  }, [next]);
+
+  // Get 3 visible cards based on currentIndex
+  const getVisibleTestimonials = () => {
+    const items = [];
+    for (let i = 0; i < 3; i++) {
+      items.push(testimonials[(currentIndex + i) % testimonials.length]);
+    }
+    return items;
+  };
+
+  const visible = getVisibleTestimonials();
+
   return (
-    <section className="section-padding">
+    <section className="testimonials-section">
       <div className="container-main">
         <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="section-label">Student Voices</span>
-            <h2 className="section-title">What Our Graduates Say</h2>
-          </motion.div>
+          <span className="section-label">Student Voices</span>
+          <h2 className="section-title">What Our Graduates Say</h2>
+          <p className="section-subtitle mx-auto">
+            Hear from professionals, leaders, and innovators who chose EU American University
+            to shape their careers and legacies.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15 }}
-              className="card p-6"
-            >
-              <Quote className="w-8 h-8 text-accent/30 mb-4" />
-              <p className="text-sm text-foreground-secondary leading-relaxed mb-6 italic">
-                &ldquo;{testimonial.content}&rdquo;
-              </p>
-              <div className="border-t border-border pt-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-bold text-primary">
-                      {testimonial.name.split(' ').map(n => n[0]).join('')}
-                    </span>
+        {/* Carousel track */}
+        <div className="testimonials-viewport">
+          <div
+            className="testimonials-track"
+            style={{
+              transition: isAnimating ? 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+            }}
+          >
+            {visible.map((t, i) => (
+              <div key={`${currentIndex}-${i}`} className="testimonial-card">
+                <Quote style={{ color: '#E09900', width: 32, height: 32, marginBottom: 16 }} />
+                <p className="testimonial-text">
+                  &ldquo;{t.content}&rdquo;
+                </p>
+                <div className="testimonial-author">
+                  <div className="author-avatar">
+                    {t.name.split(' ').map((n) => n[0]).join('')}
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-foreground">
-                      {testimonial.name}
-                    </div>
-                    <div className="text-xs text-foreground-muted">
-                      {testimonial.program}
-                    </div>
+                    <strong>{t.name}</strong>
+                    <span>{t.program}</span>
                   </div>
                 </div>
               </div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div className="testimonials-controls">
+          <button onClick={prev} className="carousel-btn" aria-label="Previous testimonial">
+            <ChevronLeft size={20} />
+          </button>
+          <div className="carousel-dots">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                className={`carousel-dot ${i === currentIndex ? 'active' : ''}`}
+                onClick={() => {
+                  setIsAnimating(true);
+                  setCurrentIndex(i);
+                  setTimeout(() => setIsAnimating(false), 400);
+                }}
+                aria-label={`Go to testimonial ${i + 1}`}
+              />
+            ))}
+          </div>
+          <button onClick={next} className="carousel-btn" aria-label="Next testimonial">
+            <ChevronRight size={20} />
+          </button>
         </div>
       </div>
     </section>

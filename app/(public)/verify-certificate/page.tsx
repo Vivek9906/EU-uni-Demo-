@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, Shield, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export default function VerifyCertificatePage() {
   const [certificateId, setCertificateId] = useState('');
@@ -23,9 +24,11 @@ export default function VerifyCertificatePage() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main text-center"><Shield className="w-12 h-12 text-primary mx-auto mb-4" /><h1 className="text-4xl font-heading font-bold mb-4">Certificate Verification</h1><p className="text-lg text-foreground-secondary max-w-xl mx-auto">Verify the authenticity of any certificate issued by American Management University.</p></div>
-      </section>
+      <PageHero
+        title="Certificate Verification"
+        subtitle="Verify the authenticity of any certificate issued by American Management University."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Certificate Verification' }]}
+      />
       <section className="section-padding">
         <div className="container-main max-w-xl">
           <form onSubmit={handleVerify} className="space-y-4 mb-8">
@@ -48,7 +51,7 @@ export default function VerifyCertificatePage() {
               )}
             </div>
           )}
-          <p className="text-xs text-foreground-muted text-center mt-6">Rate limit: 10 verifications per hour. For bulk verification, contact records@amu.edu.eu.</p>
+          <p className="text-xs text-foreground-muted text-center mt-6">Rate limit: 10 verifications per hour. For bulk verification, contact records@euamericanuniversity.us.</p>
         </div>
       </section>
     </>

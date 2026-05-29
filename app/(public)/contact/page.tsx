@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Metadata } from 'next';
 import { Send, Loader2, CheckCircle, MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { PageHero } from '@/components/ui/PageHero';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
@@ -23,9 +24,11 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 section-padding">
-        <div className="container-main"><div className="max-w-3xl"><span className="section-label">Get in Touch</span><h1 className="text-4xl lg:text-5xl font-heading font-bold mb-6">Contact Us</h1><p className="text-lg text-foreground-secondary">Have questions? We&apos;re here to help. Reach out to our team.</p></div></div>
-      </section>
+      <PageHero
+        title="Contact Us"
+        subtitle="Have questions? We&apos;re here to help. Reach out to our team."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Contact Us' }]}
+      />
       <section className="section-padding">
         <div className="container-main">
           <div className="grid lg:grid-cols-2 gap-12">
@@ -58,7 +61,7 @@ export default function ContactPage() {
                 <div className="space-y-3 text-sm text-foreground-secondary">
                   <div className="flex items-start gap-3"><MapPin size={16} className="text-primary shrink-0 mt-0.5" />11 rue Magdebourg, Paris, France 75016</div>
                   <div className="flex items-center gap-3"><Phone size={16} className="text-primary shrink-0" />+33 1 89 37 00 04</div>
-                  <div className="flex items-center gap-3"><Mail size={16} className="text-primary shrink-0" />info@amu.edu.eu</div>
+                  <div className="flex items-center gap-3"><Mail size={16} className="text-primary shrink-0" />info@euamericanuniversity.us</div>
                   <div className="flex items-center gap-3"><Clock size={16} className="text-primary shrink-0" />Mon–Fri: 9:00 AM – 5:00 PM (CET)</div>
                 </div>
               </div>
@@ -72,10 +75,10 @@ export default function ContactPage() {
               <div className="card p-6">
                 <h3 className="font-heading text-base font-bold mb-4">Department Contacts</h3>
                 <div className="space-y-2 text-sm text-foreground-secondary">
-                  <p><strong>Admissions:</strong> admissions@amu.edu.eu</p>
-                  <p><strong>Academic Affairs:</strong> academics@amu.edu.eu</p>
-                  <p><strong>Finance:</strong> finance@amu.edu.eu</p>
-                  <p><strong>Student Records:</strong> records@amu.edu.eu</p>
+                  <p><strong>Admissions:</strong> admissions@euamericanuniversity.us</p>
+                  <p><strong>Academic Affairs:</strong> academics@euamericanuniversity.us</p>
+                  <p><strong>Finance:</strong> finance@euamericanuniversity.us</p>
+                  <p><strong>Student Records:</strong> records@euamericanuniversity.us</p>
                 </div>
               </div>
               <div className="rounded-card overflow-hidden border border-border h-64">
