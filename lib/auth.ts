@@ -30,11 +30,15 @@ export const authOptions: NextAuthOptions = {
             user.password
           );
 
-          console.log("Login attempt:", { email: credentials.email, foundUser: !!user, isPasswordValid });
-
           if (!isPasswordValid) {
             return null;
           }
+
+          // Update last login (non-fatal)
+          await prisma.adminUser.update({
+            where: { id: user.id },
+            data: { updatedAt: new Date() },
+          }).catch(() => {});
 
           return {
             id: user.id,
@@ -43,7 +47,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
           };
         } catch (error) {
-          console.error('Auth error:', error);
+          console.error('[AUTH ERROR]', error);
           return null;
         }
       },
@@ -51,13 +55,14 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 4 * 60 * 60, // 4 hours
+    maxAge: 8 * 60 * 60, // 8 hours
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = (user as any).role;
+        token.name = user.name;
       }
       return token;
     },
@@ -65,6 +70,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         (session.user as any).id = token.id as string;
         (session.user as any).role = token.role as string;
+        session.user.name = token.name as string;
       }
       return session;
     },
@@ -74,4 +80,5 @@ export const authOptions: NextAuthOptions = {
     error: '/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
 };

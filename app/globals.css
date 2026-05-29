@@ -148,6 +148,11 @@
   .page-header {
     @apply pt-10 pb-8 lg:pt-16 lg:pb-12 border-b border-border;
   }
+  
+  .page-hero h1,
+  .hero-section h1 {
+    color: #FFFFFF !important;
+  }
 
   /* Section Labels — gold with accent line */
   .section-label {

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Briefcase, TrendingUp, Building2 } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Placements', description: 'Career placement statistics, top recruiters, and success stories at AMU.' };
+export const metadata: Metadata = { title: 'Placements', description: 'Career placement statistics, top recruiters, and success stories at EU American University.' };
 
 const stats = [{ value: '95%', label: 'Employment Rate' }, { value: '120+', label: 'Recruiting Partners' }, { value: '50+', label: 'Countries Placed' }];
 const recruiters = ['McKinsey & Company', 'Deloitte', 'Google', 'KPMG', 'World Bank', 'United Nations', 'PwC', 'Ernst & Young', 'Goldman Sachs', 'Amazon', 'Microsoft', 'Accenture'];
@@ -12,7 +12,7 @@ export default function PlacementsPage() {
     <>
       <PageHero
         title="Career Placements"
-        subtitle="AMU graduates are employed at leading organizations worldwide."
+        subtitle="EU American University graduates are employed at leading organizations worldwide."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Career Placements' }]}
       />
       <section className="section-padding">

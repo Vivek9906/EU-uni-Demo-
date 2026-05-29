@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Mail, BookOpen } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Faculty', description: 'Meet the distinguished faculty of American Management University.' };
+export const metadata: Metadata = { title: 'Faculty', description: 'Meet the distinguished faculty of EU American University.' };
 
 const faculty = [
   { name: 'Dr. Eleanor Whitfield', designation: 'Professor & Dean of Business', department: 'Business Administration', specialization: 'Strategic Management & Corporate Governance', bio: 'Dr. Whitfield brings over 25 years of academic and industry experience in strategic management, having served as a consultant to Fortune 500 companies.' },
@@ -17,7 +17,7 @@ export default function FacultyPage() {
     <>
       <PageHero
         title="Faculty & Staff"
-        subtitle="AMU has some of the finest and highly qualified faculty-practitioners, ensuring our students learn the skills to excel."
+        subtitle="EU American University has some of the finest and highly qualified faculty-practitioners, ensuring our students learn the skills to excel."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Faculty & Staff' }]}
       />
       <section className="section-padding">

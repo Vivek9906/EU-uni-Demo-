@@ -8,30 +8,30 @@ const newsItems = [
   {
     date: 'March 15, 2025',
     category: 'Partnerships',
-    title: 'AMU Launches New Partnership with European Business Schools Network',
-    excerpt: 'AMU partners with EBSN to offer expanded international opportunities for students and faculty.',
-    slug: 'amu-european-partnership-2025',
+    title: 'EU American University Launches New Partnership with European Business Schools Network',
+    excerpt: 'EU American University partners with EBSN to offer expanded international opportunities for students and faculty.',
+    slug: 'euau-european-partnership-2025',
   },
   {
     date: 'February 20, 2025',
     category: 'Rankings',
-    title: 'AMU Ranked Among Top 10 for Management Programs in Europe',
-    excerpt: "AMU earns a place among Europe's top 10 institutions for management and leadership education.",
-    slug: 'amu-top-10-management-ranking',
+    title: 'EU American University Ranked Among Top 10 for Management Programs in Europe',
+    excerpt: "EU American University earns a place among Europe's top 10 institutions for management and leadership education.",
+    slug: 'euau-top-10-management-ranking',
   },
   {
     date: 'January 10, 2025',
     category: 'Awards',
     title: 'Honorary Doctorate Recipients Make Global Impact in 2025',
-    excerpt: "AMU's 2025 Honorary Doctorate recipients demonstrate the program's global reach and impact.",
+    excerpt: "EU American University's 2025 Honorary Doctorate recipients demonstrate the program's global reach and impact.",
     slug: 'honorary-doctorate-global-impact-2025',
   },
 ];
 
 const upcomingEvent = {
   date: 'June 15, 2027',
-  title: 'AMU Commencement Ceremony 2027',
-  venue: 'AMU Grand Hall, Paris, France',
+  title: 'EUAU Commencement Ceremony 2027',
+  venue: 'EU American Grand Hall, Paris, France',
   slug: 'commencement-ceremony-2027',
 };
 
@@ -48,7 +48,7 @@ export default function NewsEvents() {
             <span className="section-label">News & Events</span>
             <h2 className="section-title">Stay Informed</h2>
             <p className="section-subtitle mx-auto">
-              The latest news, events, and updates from American Management
+              The latest news, events, and updates from EU American
               University.
             </p>
           </motion.div>

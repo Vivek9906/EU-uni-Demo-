@@ -5,7 +5,7 @@ import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: 'Admissions',
-  description: 'Learn about the admissions process at AMU. Application timeline, requirements, and how to apply for MBA, Honorary Doctorate, and Professorship programs.',
+  description: 'Learn about the admissions process at EU American University. Application timeline, requirements, and how to apply for MBA, Honorary Doctorate, and Professorship programs.',
 };
 
 const steps = [
@@ -20,7 +20,7 @@ export default function AdmissionsPage() {
     <>
       <PageHero
         title="Your Journey Begins Here"
-        subtitle="AMU operates on a rolling admissions basis. We welcome applications from qualified candidates worldwide. Begin your application today and take the next step in your career."
+        subtitle="EU American University operates on a rolling admissions basis. We welcome applications from qualified candidates worldwide. Begin your application today and take the next step in your career."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Your Journey Begins Here' }]}
       />
 

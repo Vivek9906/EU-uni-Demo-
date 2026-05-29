@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Image as ImageIcon } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Gallery', description: 'Photo gallery showcasing AMU campus, events, and student life.' };
+export const metadata: Metadata = { title: 'Gallery', description: 'Photo gallery showcasing EU American University campus, events, and student life.' };
 
 const albums = [
   { name: 'Campus Life', count: 12 }, { name: 'Commencement Ceremonies', count: 8 }, { name: 'Leadership Summits', count: 6 }, { name: 'Student Activities', count: 10 },
@@ -13,7 +13,7 @@ export default function GalleryPage() {
     <>
       <PageHero
         title="Photo Gallery"
-        subtitle="Explore moments from AMU&apos;s campus, events, and academic life."
+        subtitle="Explore moments from EU American University's campus, events, and academic life."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Photo Gallery' }]}
       />
       <section className="section-padding">

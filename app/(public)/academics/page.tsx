@@ -120,12 +120,7 @@ export default function AcademicsPage() {
                       style={{ backgroundImage: `url(${program.imageUrl})` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                    <div className="absolute bottom-3 left-3">
-                      <span className="inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-primary text-xs font-medium px-2.5 py-1 rounded-full">
-                        <Globe size={12} />
-                        Online
-                      </span>
-                    </div>
+
                   </div>
                   <div className="p-5">
                     <span className="badge-primary mb-2">{group.level}</span>

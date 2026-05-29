@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 const emailHeader = `
 <div style="background: #1A3C6E; padding: 24px; text-align: center;">
   <h1 style="color: #FFFFFF; font-family: 'Merriweather', Georgia, serif; margin: 0; font-size: 24px;">
-    American Management University
+    EU American University
   </h1>
   <p style="color: #B8860B; font-family: 'Source Sans 3', Arial, sans-serif; margin: 4px 0 0; font-size: 14px;">
     A leader's choice in education
@@ -24,7 +24,7 @@ const emailHeader = `
 const emailFooter = `
 <div style="background: #F7F8FA; padding: 24px; text-align: center; border-top: 1px solid #E2E8F0;">
   <p style="color: #718096; font-family: 'Source Sans 3', Arial, sans-serif; font-size: 13px; margin: 0;">
-    © ${new Date().getFullYear()} American Management University. All rights reserved.
+    © ${new Date().getFullYear()} EU American University. All rights reserved.
   </p>
   <p style="color: #718096; font-family: 'Source Sans 3', Arial, sans-serif; font-size: 13px; margin: 8px 0 0;">
     11 rue Magdebourg, Paris, France 75016
@@ -67,7 +67,7 @@ export async function sendApplicationConfirmation(
       Dear ${name},
     </p>
     <p style="color: #4A5568; line-height: 1.7;">
-      Thank you for submitting your application to American Management University. We have received your application and it is currently being reviewed by our admissions team.
+      Thank you for submitting your application to EU American University. We have received your application and it is currently being reviewed by our admissions team.
     </p>
     <div style="background: #F7F8FA; border: 1px solid #E2E8F0; border-radius: 8px; padding: 20px; margin: 24px 0;">
       <p style="color: #718096; font-size: 13px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 1px;">
@@ -89,7 +89,7 @@ export async function sendApplicationConfirmation(
     </p>
     <p style="color: #4A5568; line-height: 1.7;">
       Best regards,<br>
-      <strong>AMU Admissions Office</strong>
+      <strong>EUAU Admissions Office</strong>
     </p>
   `;
 
@@ -97,7 +97,7 @@ export async function sendApplicationConfirmation(
     await transporter.sendMail({
       from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
-      subject: `Application Received — ${referenceNumber} | AMU`,
+      subject: `Application Received — ${referenceNumber} | EU American University`,
       html: wrapEmail(content),
     });
   } catch (error) {
@@ -114,7 +114,7 @@ export async function sendStatusUpdateEmail(
 ): Promise<void> {
   const statusMessages: Record<string, string> = {
     reviewing: 'Your application is now being reviewed by our academic committee.',
-    accepted: 'Congratulations! Your application has been accepted. Welcome to American Management University!',
+    accepted: 'Congratulations! Your application has been accepted. Welcome to EU American University!',
     rejected: 'After careful review, we regret to inform you that your application has not been successful at this time.',
   };
 
@@ -134,14 +134,14 @@ export async function sendStatusUpdateEmail(
     <p style="color: #4A5568; line-height: 1.7;">
       If you have any questions, please contact <a href="mailto:admissions@euamericanuniversity.us" style="color: #1A3C6E;">admissions@euamericanuniversity.us</a>.
     </p>
-    <p style="color: #4A5568; line-height: 1.7;">Best regards,<br><strong>AMU Admissions Office</strong></p>
+    <p style="color: #4A5568; line-height: 1.7;">Best regards,<br><strong>EUAU Admissions Office</strong></p>
   `;
 
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
-      subject: `Application Update: ${status.charAt(0).toUpperCase() + status.slice(1)} — ${referenceNumber} | AMU`,
+      subject: `Application Update: ${status.charAt(0).toUpperCase() + status.slice(1)} — ${referenceNumber} | EU American University`,
       html: wrapEmail(content),
     });
   } catch (error) {
@@ -159,16 +159,16 @@ export async function sendContactConfirmation(
     </h2>
     <p style="color: #4A5568; line-height: 1.7;">Dear ${name},</p>
     <p style="color: #4A5568; line-height: 1.7;">
-      Thank you for reaching out to American Management University. We have received your message and a member of our team will respond to your inquiry within 2-3 business days.
+      Thank you for reaching out to EU American University. We have received your message and a member of our team will respond to your inquiry within 2-3 business days.
     </p>
-    <p style="color: #4A5568; line-height: 1.7;">Best regards,<br><strong>AMU Student Services</strong></p>
+    <p style="color: #4A5568; line-height: 1.7;">Best regards,<br><strong>EUAU Student Services</strong></p>
   `;
 
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
-      subject: 'Your Inquiry Has Been Received | AMU',
+      subject: 'Your Inquiry Has Been Received | EU American University',
       html: wrapEmail(content),
     });
   } catch (error) {
@@ -192,7 +192,7 @@ export async function sendAdminNotification(
     await transporter.sendMail({
       from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to: adminEmail,
-      subject: `[AMU Admin] ${subject}`,
+      subject: `[EUAU Admin] ${subject}`,
       html: wrapEmail(content),
     });
   } catch (error) {
@@ -212,7 +212,7 @@ export async function sendCertificateNotification(
     </h2>
     <p style="color: #4A5568; line-height: 1.7;">Dear ${name},</p>
     <p style="color: #4A5568; line-height: 1.7;">
-      We are pleased to inform you that your certificate has been issued by American Management University.
+      We are pleased to inform you that your certificate has been issued by EU American University.
     </p>
     <div style="background: #F7F8FA; border: 1px solid #E2E8F0; border-radius: 8px; padding: 20px; margin: 24px 0;">
       <p style="color: #718096; font-size: 13px; margin: 0 0 4px;">Certificate ID</p>
@@ -222,14 +222,14 @@ export async function sendCertificateNotification(
     <p style="color: #4A5568; line-height: 1.7;">
       Your certificate can be verified at any time using the Certificate ID at our online verification portal.
     </p>
-    <p style="color: #4A5568; line-height: 1.7;">Congratulations!<br><strong>AMU Academic Affairs</strong></p>
+    <p style="color: #4A5568; line-height: 1.7;">Congratulations!<br><strong>EUAU Academic Affairs</strong></p>
   `;
 
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
-      subject: `Certificate Issued — ${certificateId} | AMU`,
+      subject: `Certificate Issued — ${certificateId} | EU American University`,
       html: wrapEmail(content),
     });
   } catch (error) {

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { CheckCircle } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Admission Requirements', description: 'Entry requirements for AMU programs including MBA, Honorary Doctorate, and Professorship.' };
+export const metadata: Metadata = { title: 'Admission Requirements', description: 'Entry requirements for EU American University programs including MBA, Honorary Doctorate, and Professorship.' };
 
 const requirements = [
   { level: "Bachelor's — MBA (BBA)", items: ['High school diploma or equivalent', 'Official transcripts', 'Statement of purpose (200–1000 words)', 'Valid passport or national ID', 'Passport-size photograph', 'English proficiency (if applicable)'] },
@@ -16,7 +16,7 @@ export default function RequirementsPage() {
     <>
       <PageHero
         title="Admission Requirements"
-        subtitle="Detailed entry requirements for each program level at AMU."
+        subtitle="Detailed entry requirements for each program level at EU American University."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Admission Requirements' }]}
       />
       <section className="section-padding">

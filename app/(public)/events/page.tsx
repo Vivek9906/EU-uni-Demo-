@@ -17,17 +17,52 @@ export default async function EventsPage({ searchParams }: { searchParams: { tab
   const activeTab = searchParams.tab === 'past' ? 'past' : 'upcoming';
   const now = new Date();
 
-  // Fetch events based on tab
-  const events = await prisma.event.findMany({
-    where: {
-      isPublished: true,
-      ...(activeTab === 'upcoming' ? { date: { gte: now } } : { date: { lt: now } })
-    },
-    orderBy: {
-      date: activeTab === 'upcoming' ? 'asc' : 'desc'
-    },
-    take: 10
-  });
+  let events: any[] = [];
+  let hasError = false;
+
+  try {
+    events = await prisma.event.findMany({
+      where: {
+        isPublished: true,
+        ...(activeTab === 'upcoming' ? { date: { gte: now } } : { date: { lt: now } })
+      },
+      orderBy: {
+        date: activeTab === 'upcoming' ? 'asc' : 'desc'
+      },
+      take: 10,
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        description: true,
+        date: true,
+        endDate: true,
+        venue: true,
+        category: true,
+        imageUrl: true,
+        attendees: true,
+      }
+    });
+  } catch (error) {
+    console.error('[EVENTS PAGE ERROR]', error);
+    hasError = true;
+  }
+
+  if (hasError) {
+    return (
+      <>
+        <PageHero
+          title="Events &amp; Conferences"
+          subtitle="Join the EU American University community at our global events, conferences, and networking opportunities."
+          breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Events &amp; Conferences' }]}
+        />
+        <div style={{ padding: '80px 24px', textAlign: 'center' }}>
+          <h2 className="font-heading text-xl font-bold mb-2">Events temporarily unavailable</h2>
+          <p className="text-foreground-secondary">Please try again in a moment.</p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

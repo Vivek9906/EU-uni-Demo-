@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import { Bell, FileText, Calendar } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Notices', description: 'Official university notices and announcements from AMU.' };
+export const metadata: Metadata = { title: 'Notices', description: 'Official university notices and announcements from EU American University.' };
 
 const notices = [
   { title: 'Fall 2025 Enrollment Now Open', category: 'academic', date: 'May 2025', content: 'Applications for the Fall 2025 semester are now being accepted across all programs.' },
   { title: 'Updated Academic Calendar 2025-2026', category: 'academic', date: 'April 2025', content: 'The academic calendar for 2025-2026 has been published with key dates including Fall semester start on September 15, 2025.' },
-  { title: 'Library Database Access Expanded', category: 'admin', date: 'March 2025', content: 'AMU has expanded digital library resources with access to JSTOR, ProQuest, and Emerald Insight.' },
+  { title: 'Library Database Access Expanded', category: 'admin', date: 'March 2025', content: 'EU American University has expanded digital library resources with access to JSTOR, ProQuest, and Emerald Insight.' },
   { title: 'Commencement 2027 Registration Opens Soon', category: 'general', date: 'March 2025', content: 'Eligible graduates for the Commencement Ceremony 2027 should begin registration. Ceremony scheduled for June 15, 2027.' },
-  { title: 'Scholarship Application Deadline Reminder', category: 'academic', date: 'February 2025', content: 'The AMU Merit Excellence Scholarship deadline is December 31, 2025.' },
+  { title: 'Scholarship Application Deadline Reminder', category: 'academic', date: 'February 2025', content: 'The EUAU Merit Excellence Scholarship deadline is December 31, 2025.' },
 ];
 
 const categoryColors: Record<string, string> = { academic: 'badge-primary', admin: 'badge-accent', exam: 'badge-error', general: 'badge-success' };
@@ -19,7 +19,7 @@ export default function NoticesPage() {
     <>
       <PageHero
         title="Official Notices"
-        subtitle="Important announcements from American Management University."
+        subtitle="Important announcements from EU American University."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Official Notices' }]}
       />
       <section className="section-padding">

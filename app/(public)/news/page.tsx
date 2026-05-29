@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'News', description: 'Latest news and updates from American Management University.' };
+export const metadata: Metadata = { title: 'News', description: 'Latest news and updates from EU American University.' };
 
 const news = [
-  { title: 'AMU Launches New Partnership with European Business Schools Network', date: 'March 15, 2025', category: 'Partnerships', excerpt: 'AMU partners with EBSN to offer expanded international opportunities for students and faculty.', slug: 'amu-european-partnership-2025' },
-  { title: 'AMU Ranked Among Top 10 for Management Programs in Europe', date: 'February 20, 2025', category: 'Rankings', excerpt: "AMU earns a place among Europe's top 10 institutions for management and leadership education.", slug: 'amu-top-10-management-ranking' },
-  { title: 'Honorary Doctorate Recipients Make Global Impact in 2025', date: 'January 10, 2025', category: 'Awards', excerpt: "AMU's 2025 Honorary Doctorate recipients demonstrate global reach across 30+ countries.", slug: 'honorary-doctorate-global-impact-2025' },
+  { title: 'EU American University Launches New Partnership with European Business Schools Network', date: 'March 15, 2025', category: 'Partnerships', excerpt: 'EU American University partners with EBSN to offer expanded international opportunities for students and faculty.', slug: 'euau-european-partnership-2025' },
+  { title: 'EU American University Ranked Among Top 10 for Management Programs in Europe', date: 'February 20, 2025', category: 'Rankings', excerpt: "EU American University earns a place among Europe's top 10 institutions for management and leadership education.", slug: 'euau-top-10-management-ranking' },
+  { title: 'Honorary Doctorate Recipients Make Global Impact in 2025', date: 'January 10, 2025', category: 'Awards', excerpt: "EU American University's 2025 Honorary Doctorate recipients demonstrate global reach across 30+ countries.", slug: 'honorary-doctorate-global-impact-2025' },
 ];
 
 export default function NewsPage() {
@@ -16,7 +16,7 @@ export default function NewsPage() {
     <>
       <PageHero
         title="Latest News"
-        subtitle="Stay updated with the latest news from AMU."
+        subtitle="Stay updated with the latest news from EU American University."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Latest News' }]}
       />
       <section className="section-padding">

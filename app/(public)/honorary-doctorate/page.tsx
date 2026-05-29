@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { ArrowRight, Award, CheckCircle, Star, Globe, Users } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
-export const metadata: Metadata = { title: 'Honorary Doctorate', description: 'Be recognized for a lifetime of achievement. Learn about AMU\'s Honorary Doctorate (Honoris Causa) program.' };
+export const metadata: Metadata = { title: 'Honorary Doctorate', description: 'Be recognized for a lifetime of achievement. Learn about EUAU\'s Honorary Doctorate (Honoris Causa) program.' };
 
 const faqs = [
   { q: 'Who is eligible for an Honorary Doctorate?', a: 'Individuals who have demonstrated exceptional leadership for at least 10 years and made significant contributions to their field, community, or society.' },
-  { q: 'What does the certificate look like?', a: 'The certificate is an official AMU document featuring the holder\'s name, the program title (exactly as submitted during application), the date of conferral, and AMU\'s official seal.' },
+  { q: 'What does the certificate look like?', a: 'The certificate is an official EU American University document featuring the holder\'s name, the program title (exactly as submitted during application), the date of conferral, and EUAU\'s official seal.' },
   { q: 'How long does the process take?', a: 'From application submission to conferral, the typical timeline is 4-8 weeks depending on the completeness of your application and the committee review schedule.' },
-  { q: 'Is the Honorary Doctorate recognized internationally?', a: 'Yes. AMU\'s Honorary Doctorate is backed by our IARC, QAHE accreditation and ACBSP, IACBE, ASIC UK memberships. Each certificate includes a unique verification ID.' },
+  { q: 'Is the Honorary Doctorate recognized internationally?', a: 'Yes. EUAU\'s Honorary Doctorate is backed by our IARC, QAHE accreditation and ACBSP, IACBE, ASIC UK memberships. Each certificate includes a unique verification ID.' },
   { q: 'Can I nominate someone else?', a: 'Yes. Nominations from third parties are welcome. The nominee will be contacted to complete the formal application process if they accept the nomination.' },
 ];
 
@@ -18,16 +18,16 @@ export default function HonoraryDoctoratePage() {
     <>
       <PageHero
         title="Be Recognized for a Lifetime of Achievement"
-        subtitle="The AMU Honorary Doctorate (Honoris Causa) program recognizes exceptional leaders who have made outstanding contributions to their profession, community, and the world."
+        subtitle="The EU American University Honorary Doctorate (Honoris Causa) program recognizes exceptional leaders who have made outstanding contributions to their profession, community, and the world."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Be Recognized for a Lifetime of Achievement' }]}
       />
       <section className="section-padding">
         <div className="container-main max-w-4xl">
           <div className="grid md:grid-cols-2 gap-8 mb-16">
-            <div><h2 className="section-title mb-4">What is an Honorary Doctorate?</h2><p className="text-foreground-secondary leading-relaxed mb-4">An Honorary Doctorate is the highest form of academic recognition, conferred upon individuals whose professional achievements and societal contributions merit distinction at the doctoral level. Unlike traditional doctoral programs, it is awarded based on proven accomplishment rather than coursework.</p><p className="text-foreground-secondary leading-relaxed">AMU&apos;s Honorary Doctorate carries the academic title and is verifiable through our official certificate verification system, providing credentialed recognition of your lifetime achievements.</p></div>
+            <div><h2 className="section-title mb-4">What is an Honorary Doctorate?</h2><p className="text-foreground-secondary leading-relaxed mb-4">An Honorary Doctorate is the highest form of academic recognition, conferred upon individuals whose professional achievements and societal contributions merit distinction at the doctoral level. Unlike traditional doctoral programs, it is awarded based on proven accomplishment rather than coursework.</p><p className="text-foreground-secondary leading-relaxed">EU American University&apos;s Honorary Doctorate carries the academic title and is verifiable through our official certificate verification system, providing credentialed recognition of your lifetime achievements.</p></div>
             <div className="space-y-4">
               <h2 className="section-title mb-4">What&apos;s Included</h2>
-              {[{icon: Star, title: 'Official Certificate', desc: 'Personalized certificate with your exact program name as submitted'}, {icon: Award, title: 'Chancellor\'s Letter', desc: 'Official letter from the AMU Chancellor acknowledging your achievement'}, {icon: Globe, title: 'Alumni Network Listing', desc: 'Listed among AMU\'s distinguished alumni community'}, {icon: Users, title: 'Verification Access', desc: 'Unique certificate ID for online verification by employers and institutions'}].map((item) => (
+              {[{icon: Star, title: 'Official Certificate', desc: 'Personalized certificate with your exact program name as submitted'}, {icon: Award, title: 'Chancellor\'s Letter', desc: 'Official letter from the EU American University Chancellor acknowledging your achievement'}, {icon: Globe, title: 'Alumni Network Listing', desc: 'Listed among EUAU\'s distinguished alumni community'}, {icon: Users, title: 'Verification Access', desc: 'Unique certificate ID for online verification by employers and institutions'}].map((item) => (
                 <div key={item.title} className="flex items-start gap-3"><item.icon className="w-5 h-5 text-accent shrink-0 mt-0.5" /><div><span className="text-sm font-medium">{item.title}</span><p className="text-xs text-foreground-muted">{item.desc}</p></div></div>
               ))}
             </div>

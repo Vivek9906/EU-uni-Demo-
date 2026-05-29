@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       confirmAccuracy: data.confirmAccuracy,
       agreeTerms: data.agreeTerms,
       consentContact: data.consentContact,
-      referenceNumber: generateReferenceNumber('AMU'),
+      referenceNumber: generateReferenceNumber('EUAU'),
     };
 
     // Create application in database

@@ -57,15 +57,12 @@ const navItems: NavItem[] = [
         items: [
           { label: 'Honorary Doctorate', href: '/academics/honorary', description: 'Honoris Causa' },
           { label: 'Honorary Professorship', href: '/academics/honorary', description: 'Honorary Professorship' },
-          { label: 'View Honorary Programs', href: '/academics/honorary', description: 'All honorary recognitions' },
         ],
       },
       {
         title: 'PhD',
         items: [
           { label: 'Doctor of Philosophy', href: '/academics/phd/doctor-of-philosophy', description: 'Doctoral research program' },
-          { label: 'PhD Overview', href: '/academics/phd', description: 'Doctoral programs overview' },
-          { label: 'Apply for PhD', href: '/admissions/apply', description: 'Start your doctoral application' },
         ],
       },
     ],
@@ -171,9 +168,9 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 mt-1 w-72 bg-white rounded-card shadow-lg border border-border overflow-hidden"
+                        className="absolute top-full left-0 pt-2 w-72"
                       >
-                        <div className="py-2">
+                        <div className="bg-white rounded-card shadow-lg border border-border overflow-hidden py-2">
                           {item.children.map((child) => (
                             <Link
                               key={child.href + child.label}
@@ -198,43 +195,45 @@ export default function Navbar() {
                   <AnimatePresence>
                     {openDropdown === item.label && (
                       <motion.div
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
+                        initial={{ opacity: 0, y: 8, x: "-50%" }}
+                        animate={{ opacity: 1, y: 0, x: "-50%" }}
+                        exit={{ opacity: 0, y: 8, x: "-50%" }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-white rounded-card shadow-lg border border-border overflow-hidden"
+                        className="absolute top-full left-1/2 pt-2"
                         style={{ width: '820px' }}
                       >
-                        <div className="grid grid-cols-4 gap-0 divide-x divide-border">
-                          {item.megaMenu.map((group) => (
-                            <div key={group.title} className="py-4 px-5">
-                              <h4 className="text-xs font-semibold tracking-wider uppercase text-foreground-muted mb-3">
-                                {group.title}
-                              </h4>
-                              <div className="space-y-1">
-                                {group.items.map((sub) => (
-                                  <Link
-                                    key={sub.href + sub.label}
-                                    href={sub.href}
-                                    className="block px-2 py-2 rounded-md hover:bg-background-subtle transition-colors"
-                                  >
-                                    <span className="text-sm font-medium text-foreground">{sub.label}</span>
-                                    {sub.description && (
-                                      <span className="block text-xs text-foreground-muted">{sub.description}</span>
-                                    )}
-                                  </Link>
-                                ))}
+                        <div className="bg-white rounded-card shadow-lg border border-border overflow-hidden">
+                          <div className="grid grid-cols-4 gap-0 divide-x divide-border">
+                            {item.megaMenu.map((group) => (
+                              <div key={group.title} className="py-4 px-5">
+                                <h4 className="text-xs font-semibold tracking-wider uppercase text-foreground-muted mb-3">
+                                  {group.title}
+                                </h4>
+                                <div className="space-y-1">
+                                  {group.items.map((sub) => (
+                                    <Link
+                                      key={sub.href + sub.label}
+                                      href={sub.href}
+                                      className="block px-2 py-2 rounded-md hover:bg-background-subtle transition-colors"
+                                    >
+                                      <span className="text-sm font-medium text-foreground">{sub.label}</span>
+                                      {sub.description && (
+                                        <span className="block text-xs text-foreground-muted">{sub.description}</span>
+                                      )}
+                                    </Link>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="border-t border-border px-5 py-3 bg-background-subtle">
-                          <Link
-                            href="/academics"
-                            className="text-sm font-medium text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1"
-                          >
-                            View All Programs →
-                          </Link>
+                            ))}
+                          </div>
+                          <div className="border-t border-border px-5 py-3 bg-background-subtle">
+                            <Link
+                              href="/academics"
+                              className="text-sm font-medium text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1"
+                            >
+                              View All Programs →
+                            </Link>
+                          </div>
                         </div>
                       </motion.div>
                     )}
@@ -348,9 +347,6 @@ export default function Navbar() {
               <div className="pt-4 border-t border-border space-y-2">
                 <Link href="/student-verification" className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary">
                   Student Verification
-                </Link>
-                <Link href="/verify-certificate" className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary">
-                  Verify Certificate
                 </Link>
                 <Link href="/admissions/apply" className="btn-primary w-full text-center">
                   Apply Now
