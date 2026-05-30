@@ -1,25 +1,92 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { NavbarNotificationBell } from '../navigation/NavbarNotificationBell';
 
+/* ─── Types ─── */
 interface NavChild {
   label: string;
   href: string;
   description?: string;
 }
 
+interface ProgramChild {
+  label: string;
+  href: string;
+}
+
+interface ProgramItem {
+  label: string;
+  href: string;
+  children: ProgramChild[] | null;
+  highlight?: boolean;
+}
+
 interface NavItem {
   label: string;
   href: string;
   children?: NavChild[];
-  megaMenu?: { title: string; items: NavChild[] }[];
+  programs?: true; // flag for the Programs dropdown
 }
 
+/* ─── Programs dropdown data ─── */
+const programsMenu: ProgramItem[] = [
+  {
+    label: "Bachelor's Programs",
+    href: '/academics/bachelors',
+    children: [
+      { label: 'BBA — Business Administration', href: '/academics/bachelors/bba' },
+      { label: 'BPA — Public Administration', href: '/academics/bachelors/bpa' },
+      { label: 'BSW — Social Work', href: '/academics/bachelors/bsw' },
+    ],
+  },
+  {
+    label: "Master's Programs",
+    href: '/academics/masters',
+    children: [
+      { label: 'MBA — Business Administration', href: '/academics/masters/mba' },
+      { label: 'MPA — Public Administration', href: '/academics/masters/mpa' },
+      { label: 'MSW — Social Work', href: '/academics/masters/msw' },
+    ],
+  },
+  {
+    label: 'Doctoral Programs (PhD)',
+    href: '/academics/phd',
+    children: [
+      { label: 'Doctor of Philosophy (PhD)', href: '/academics/phd/doctor-of-philosophy' },
+    ],
+  },
+  {
+    label: 'Honorary Programs',
+    href: '/academics/honorary',
+    children: [
+      { label: 'Honorary Doctorate (Honoris Causa)', href: '/academics/honorary/honorary-doctorate' },
+      { label: 'Honorary Professorship', href: '/academics/honorary/honorary-professorship' },
+    ],
+  },
+  {
+    label: 'Certifications',
+    href: '/certifications',
+    children: null,
+  },
+  {
+    label: 'Student Records & Verification',
+    href: '/student-verification',
+    children: null,
+  },
+  {
+    label: 'View All Programs →',
+    href: '/academics',
+    children: null,
+    highlight: true,
+  },
+];
+
+/* ─── Main nav items ─── */
 const navItems: NavItem[] = [
   { label: 'Home', href: '/' },
   {
@@ -35,37 +102,7 @@ const navItems: NavItem[] = [
   {
     label: 'Programs',
     href: '/academics',
-    megaMenu: [
-      {
-        title: "Bachelor's",
-        items: [
-          { label: 'BBA', href: '/academics/bachelors/bba', description: 'Business Administration' },
-          { label: 'BPA', href: '/academics/bachelors/bpa', description: 'Public Administration' },
-          { label: 'BSW', href: '/academics/bachelors/bsw', description: 'Social Work' },
-        ],
-      },
-      {
-        title: "Master's",
-        items: [
-          { label: 'MBA', href: '/academics/masters/mba', description: 'Business Administration' },
-          { label: 'MPA', href: '/academics/masters/mpa', description: 'Public Administration' },
-          { label: 'MSW', href: '/academics/masters/msw', description: 'Social Work' },
-        ],
-      },
-      {
-        title: 'Honorary',
-        items: [
-          { label: 'Honorary Doctorate', href: '/academics/honorary', description: 'Honoris Causa' },
-          { label: 'Honorary Professorship', href: '/academics/honorary', description: 'Honorary Professorship' },
-        ],
-      },
-      {
-        title: 'PhD',
-        items: [
-          { label: 'Doctor of Philosophy', href: '/academics/phd/doctor-of-philosophy', description: 'Doctoral research program' },
-        ],
-      },
-    ],
+    programs: true,
   },
   {
     label: 'Admissions',
@@ -74,15 +111,12 @@ const navItems: NavItem[] = [
       { label: 'How to Apply', href: '/admissions', description: 'Application process & timeline' },
       { label: 'Requirements', href: '/admissions/requirements', description: 'Entry requirements' },
       { label: 'Apply Now', href: '/admissions/apply', description: 'Start your application' },
-      { label: 'Scholarships', href: '/admissions/scholarships', description: 'Financial aid options' },
     ],
   },
   {
     label: 'More',
     href: '#',
     children: [
-      { label: 'Certifications', href: '/certifications', description: 'Professional certification programs' },
-      { label: 'Student Verification', href: '/student-verification', description: 'Verify enrollment status' },
       { label: 'News', href: '/news', description: 'Latest news' },
       { label: 'Events', href: '/events', description: 'Upcoming events' },
       { label: 'Research', href: '/research', description: 'Research initiatives' },
@@ -93,15 +127,221 @@ const navItems: NavItem[] = [
   },
 ];
 
+/* ─── Programs Dropdown (Desktop) ─── */
+function ProgramsDropdown({
+  open,
+  onMouseEnter,
+  onMouseLeave,
+}: {
+  open: boolean;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}) {
+  const [activeChild, setActiveChild] = useState<string | null>(null);
+
+  // Reset active child when dropdown closes
+  useEffect(() => {
+    if (!open) setActiveChild(null);
+  }, [open]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.15 }}
+          className="absolute top-full left-0 pt-1"
+          style={{ width: 290 }}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <div
+            className="bg-white rounded-b-xl shadow-lg border border-border overflow-visible"
+            style={{ borderTop: '3px solid #E09900' }}
+          >
+            <div className="py-1.5">
+              {programsMenu.map((item) => (
+                <div
+                  key={item.href}
+                  className="relative"
+                  onMouseEnter={() => item.children && setActiveChild(item.label)}
+                  onMouseLeave={() => item.children && setActiveChild(null)}
+                >
+                  <Link
+                    href={item.href}
+                    prefetch={item.href === '/academics' || item.href === '/certifications'}
+                    className="flex items-center justify-between px-4 py-2.5 text-sm transition-colors"
+                    style={{
+                      color: item.highlight ? '#E09900' : '#1B3A6B',
+                      fontWeight: item.highlight ? 700 : 500,
+                      background: activeChild === item.label ? '#F5F7FA' : 'transparent',
+                      borderTop: item.highlight ? '1px solid #F3F4F6' : 'none',
+                      marginTop: item.highlight ? 4 : 0,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!item.children) {
+                        (e.currentTarget as HTMLElement).style.background = '#F5F7FA';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!item.children) {
+                        (e.currentTarget as HTMLElement).style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    <span>{item.label}</span>
+                    {item.children && (
+                      <ChevronRight size={14} className="text-gray-400 shrink-0" />
+                    )}
+                  </Link>
+
+                  {/* Sub-menu flyout */}
+                  <AnimatePresence>
+                    {item.children && activeChild === item.label && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -4 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -4 }}
+                        transition={{ duration: 0.12 }}
+                        className="absolute top-0 left-full"
+                        style={{ marginLeft: 2, width: 280 }}
+                      >
+                        <div
+                          className="bg-white rounded-r-xl rounded-bl-xl shadow-lg border border-border overflow-hidden"
+                          style={{ borderTop: '3px solid #1B3A6B' }}
+                        >
+                          <div className="py-1.5">
+                            {item.children.map((child) => (
+                              <Link
+                                key={child.href}
+                                href={child.href}
+                                className="block px-4 py-2.5 text-[13.5px] font-medium text-gray-600 hover:text-[#1B3A6B] hover:bg-[#F5F7FA] hover:pl-5 transition-all duration-150"
+                              >
+                                {child.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/* ─── Mobile Programs Accordion ─── */
+function MobileProgramsAccordion({ onNavigate }: { onNavigate: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [openChild, setOpenChild] = useState<string | null>(null);
+
+  return (
+    <div>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center justify-between w-full px-3 py-3 text-sm font-medium text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
+        aria-expanded={open}
+      >
+        Programs
+        <ChevronDown
+          size={16}
+          className={`transition-transform ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: 'auto' }}
+            exit={{ height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="pl-4 space-y-0.5 pb-2">
+              {programsMenu.map((item) => (
+                <div key={item.href}>
+                  {item.children ? (
+                    <>
+                      <button
+                        onClick={() =>
+                          setOpenChild(openChild === item.label ? null : item.label)
+                        }
+                        className="flex items-center justify-between w-full px-3 py-2 text-sm text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
+                        aria-expanded={openChild === item.label}
+                      >
+                        {item.label}
+                        <ChevronDown
+                          size={14}
+                          className={`transition-transform ${
+                            openChild === item.label ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {openChild === item.label && (
+                          <motion.div
+                            initial={{ height: 0 }}
+                            animate={{ height: 'auto' }}
+                            exit={{ height: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-4 space-y-0.5 pb-1">
+                              {item.children.map((c) => (
+                                <Link
+                                  key={c.href}
+                                  href={c.href}
+                                  onClick={onNavigate}
+                                  className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
+                                >
+                                  {c.label}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={onNavigate}
+                      className={`block px-3 py-2 text-sm rounded-md transition-colors ${
+                        item.highlight
+                          ? 'text-[#E09900] font-semibold hover:bg-[#E09900]/5'
+                          : 'text-foreground-secondary hover:text-primary hover:bg-primary/5'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ─── Logo ─── */
 function EUAULogo({ className }: { className?: string }) {
   return <img src="/logo.png" alt="EU American University Logo" className={className} />;
 }
 
+/* ─── Main Navbar ─── */
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const pathname = usePathname();
+  const closeTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,6 +355,23 @@ export default function Navbar() {
     setIsOpen(false);
     setOpenDropdown(null);
   }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
+  }, []);
+
+  const handleDropdownEnter = (label: string) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpenDropdown(label);
+  };
+
+  const handleDropdownLeave = () => {
+    closeTimer.current = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 150);
+  };
 
   return (
     <nav
@@ -138,28 +395,54 @@ export default function Navbar() {
             </div>
           </Link>
 
+          {/* ─── Desktop Nav ─── */}
           <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
               <div
                 key={item.label}
                 className="relative group"
-                onMouseEnter={() => (item.children || item.megaMenu) && setOpenDropdown(item.label)}
-                onMouseLeave={() => setOpenDropdown(null)}
+                onMouseEnter={() =>
+                  (item.children || item.programs) && handleDropdownEnter(item.label)
+                }
+                onMouseLeave={handleDropdownLeave}
               >
                 <Link
                   href={item.href}
+                  prefetch={
+                    item.href === '/academics' ||
+                    item.href === '/admissions'
+                  }
                   className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-md ${
                     pathname === item.href
                       ? 'text-primary bg-primary/5'
                       : 'text-foreground-secondary hover:text-primary hover:bg-primary/5'
                   }`}
+                  style={{
+                    color: openDropdown === item.label ? '#E09900' : undefined,
+                  }}
                 >
                   {item.label}
-                  {(item.children || item.megaMenu) && (
-                    <ChevronDown size={14} className="transition-transform group-hover:rotate-180" />
+                  {(item.children || item.programs) && (
+                    <ChevronDown
+                      size={14}
+                      className="transition-transform"
+                      style={{
+                        transform: openDropdown === item.label ? 'rotate(180deg)' : 'none',
+                      }}
+                    />
                   )}
                 </Link>
 
+                {/* Programs dropdown — special component with flyouts */}
+                {item.programs && (
+                  <ProgramsDropdown
+                    open={openDropdown === item.label}
+                    onMouseEnter={() => handleDropdownEnter(item.label)}
+                    onMouseLeave={handleDropdownLeave}
+                  />
+                )}
+
+                {/* Standard dropdown for About, Admissions, More */}
                 {item.children && (
                   <AnimatePresence>
                     {openDropdown === item.label && (
@@ -168,71 +451,30 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 pt-2 w-72"
+                        className="absolute top-full left-0 pt-1"
+                        style={{ width: 290 }}
                       >
-                        <div className="bg-white rounded-card shadow-lg border border-border overflow-hidden py-2">
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.href + child.label}
-                              href={child.href}
-                              className="flex flex-col px-4 py-3 hover:bg-background-subtle transition-colors"
-                            >
-                              <span className="text-sm font-medium text-foreground">{child.label}</span>
-                              {child.description && (
-                                <span className="text-xs text-foreground-muted mt-0.5">
-                                  {child.description}
-                                </span>
-                              )}
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                )}
-
-                {item.megaMenu && (
-                  <AnimatePresence>
-                    {openDropdown === item.label && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, x: "-50%" }}
-                        animate={{ opacity: 1, y: 0, x: "-50%" }}
-                        exit={{ opacity: 0, y: 8, x: "-50%" }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute top-full left-1/2 pt-2"
-                        style={{ width: '820px' }}
-                      >
-                        <div className="bg-white rounded-card shadow-lg border border-border overflow-hidden">
-                          <div className="grid grid-cols-4 gap-0 divide-x divide-border">
-                            {item.megaMenu.map((group) => (
-                              <div key={group.title} className="py-4 px-5">
-                                <h4 className="text-xs font-semibold tracking-wider uppercase text-foreground-muted mb-3">
-                                  {group.title}
-                                </h4>
-                                <div className="space-y-1">
-                                  {group.items.map((sub) => (
-                                    <Link
-                                      key={sub.href + sub.label}
-                                      href={sub.href}
-                                      className="block px-2 py-2 rounded-md hover:bg-background-subtle transition-colors"
-                                    >
-                                      <span className="text-sm font-medium text-foreground">{sub.label}</span>
-                                      {sub.description && (
-                                        <span className="block text-xs text-foreground-muted">{sub.description}</span>
-                                      )}
-                                    </Link>
-                                  ))}
-                                </div>
-                              </div>
+                        <div
+                          className="bg-white rounded-b-xl shadow-lg border border-border overflow-hidden"
+                          style={{ borderTop: '3px solid #E09900' }}
+                        >
+                          <div className="py-1.5">
+                            {item.children.map((child) => (
+                              <Link
+                                key={child.href + child.label}
+                                href={child.href}
+                                prefetch={child.href === '/admissions/apply'}
+                                className="flex flex-col px-4 py-2.5 text-sm transition-colors hover:bg-[#F5F7FA]"
+                                style={{ color: '#1B3A6B', fontWeight: 500 }}
+                              >
+                                <span>{child.label}</span>
+                                {child.description && (
+                                  <span className="text-xs text-gray-500 mt-0.5 font-normal">
+                                    {child.description}
+                                  </span>
+                                )}
+                              </Link>
                             ))}
-                          </div>
-                          <div className="border-t border-border px-5 py-3 bg-background-subtle">
-                            <Link
-                              href="/academics"
-                              className="text-sm font-medium text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1"
-                            >
-                              View All Programs →
-                            </Link>
                           </div>
                         </div>
                       </motion.div>
@@ -243,16 +485,18 @@ export default function Navbar() {
             ))}
           </div>
 
+          {/* ─── Desktop Right Actions ─── */}
           <div className="hidden lg:flex items-center gap-3">
             <NavbarNotificationBell />
             <Link href="/contact" className="text-sm font-medium text-foreground-secondary hover:text-primary transition-colors">
               Contact
             </Link>
-            <Link href="/admissions/apply" className="btn-primary btn-sm">
+            <Link href="/admissions/apply" prefetch={true} className="btn-primary btn-sm">
               Apply Now
             </Link>
           </div>
 
+          {/* ─── Mobile Hamburger ─── */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="lg:hidden p-2 rounded-md hover:bg-background-subtle transition-colors"
@@ -264,6 +508,7 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* ─── Mobile Menu ─── */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -276,10 +521,16 @@ export default function Navbar() {
             <div className="container-main py-4 space-y-1">
               {navItems.map((item) => (
                 <div key={item.label}>
-                  {item.children || item.megaMenu ? (
+                  {/* Programs — special accordion component */}
+                  {item.programs ? (
+                    <MobileProgramsAccordion onNavigate={() => setIsOpen(false)} />
+                  ) : item.children ? (
+                    /* Standard accordion for About, Admissions, More */
                     <div>
                       <button
-                        onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+                        onClick={() =>
+                          setOpenDropdown(openDropdown === item.label ? null : item.label)
+                        }
                         className="flex items-center justify-between w-full px-3 py-3 text-sm font-medium text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
                         aria-expanded={openDropdown === item.label}
                       >
@@ -300,7 +551,7 @@ export default function Navbar() {
                             className="overflow-hidden"
                           >
                             <div className="pl-4 space-y-1 pb-2">
-                              {item.children?.map((child) => (
+                              {item.children.map((child) => (
                                 <Link
                                   key={child.href + child.label}
                                   href={child.href}
@@ -309,28 +560,13 @@ export default function Navbar() {
                                   {child.label}
                                 </Link>
                               ))}
-                              {item.megaMenu?.map((group) => (
-                                <div key={group.title}>
-                                  <span className="block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
-                                    {group.title}
-                                  </span>
-                                  {group.items.map((sub) => (
-                                    <Link
-                                      key={sub.href + sub.label}
-                                      href={sub.href}
-                                      className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary hover:bg-primary/5 rounded-md transition-colors"
-                                    >
-                                      {sub.label}
-                                    </Link>
-                                  ))}
-                                </div>
-                              ))}
                             </div>
                           </motion.div>
                         )}
                       </AnimatePresence>
                     </div>
                   ) : (
+                    /* Direct link items (Home) */
                     <Link
                       href={item.href}
                       className={`block px-3 py-3 text-sm font-medium rounded-md transition-colors ${
@@ -345,9 +581,6 @@ export default function Navbar() {
                 </div>
               ))}
               <div className="pt-4 border-t border-border space-y-2">
-                <Link href="/student-verification" className="block px-3 py-2 text-sm text-foreground-secondary hover:text-primary">
-                  Student Verification
-                </Link>
                 <Link href="/admissions/apply" className="btn-primary w-full text-center">
                   Apply Now
                 </Link>

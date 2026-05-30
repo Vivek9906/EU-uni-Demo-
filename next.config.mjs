@@ -4,13 +4,27 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'plus.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
       },
     ],
   },
 
   // Compress responses
   compress: true,
+
+  // Hide X-Powered-By header in production
+  poweredByHeader: false,
 
   // Remove console.log in production (keep console.error)
   compiler: {
@@ -57,4 +71,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-

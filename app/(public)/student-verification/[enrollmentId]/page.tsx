@@ -187,7 +187,7 @@ export default function StudentVerificationResultPage({ params }: { params: { en
                 </div>
                 <div>
                   <strong className="block text-foreground font-bold">EU American University</strong>
-                  <p className="text-xs text-foreground-secondary mt-0.5">Globally Accredited Institution | est. 1924</p>
+                  <p className="text-xs text-foreground-secondary mt-0.5">Globally Accredited Institution</p>
                 </div>
               </div>
             </div>

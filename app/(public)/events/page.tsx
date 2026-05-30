@@ -6,6 +6,8 @@ import { Calendar, MapPin, ArrowRight, Clock, Users } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
 
+import { getPublicEvents } from '@/lib/data';
+
 export const metadata: Metadata = {
   title: 'Events',
   description: 'Upcoming and past events at EU American University.',
@@ -15,34 +17,12 @@ export const revalidate = 3600; // Revalidate every hour
 
 export default async function EventsPage({ searchParams }: { searchParams: { tab?: string } }) {
   const activeTab = searchParams.tab === 'past' ? 'past' : 'upcoming';
-  const now = new Date();
 
   let events: any[] = [];
   let hasError = false;
 
   try {
-    events = await prisma.event.findMany({
-      where: {
-        isPublished: true,
-        ...(activeTab === 'upcoming' ? { date: { gte: now } } : { date: { lt: now } })
-      },
-      orderBy: {
-        date: activeTab === 'upcoming' ? 'asc' : 'desc'
-      },
-      take: 10,
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        description: true,
-        date: true,
-        endDate: true,
-        venue: true,
-        category: true,
-        imageUrl: true,
-        attendees: true,
-      }
-    });
+    events = await getPublicEvents(activeTab);
   } catch (error) {
     console.error('[EVENTS PAGE ERROR]', error);
     hasError = true;

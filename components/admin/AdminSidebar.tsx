@@ -1,170 +1,153 @@
-'use client'
-import { usePathname } from 'next/navigation'
-import { signOut, useSession } from 'next-auth/react'
-import Link from 'next/link'
+'use client';
+
+import { usePathname } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { 
+  LayoutDashboard, 
+  Users, 
+  FileText, 
+  MessageSquare, 
+  GraduationCap, 
+  Award, 
+  Medal, 
+  Newspaper, 
+  Calendar, 
+  Bell, 
+  Image as ImageIcon, 
+  Key, 
+  Scale, 
+  Settings, 
+  ClipboardList,
+  LogOut
+} from 'lucide-react';
+import { cn } from './ui/Button';
 
 const navGroups = [
   {
-    label: 'OVERVIEW',
+    label: 'Overview',
     items: [
-      { href: '/dashboard',           label: 'Dashboard',      icon: '▤' },
+      { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     ]
   },
   {
-    label: 'PEOPLE',
+    label: 'People',
     items: [
-      { href: '/dashboard/students',       label: 'Students',       icon: '👤' },
-      { href: '/dashboard/applications',   label: 'Applications',   icon: '📋', badge: 'new' },
-      { href: '/dashboard/inquiries',      label: 'Inquiries',      icon: '💬', badge: 'new' },
+      { href: '/dashboard/students', label: 'Students', icon: Users },
+      { href: '/dashboard/applications', label: 'Applications', icon: FileText, badge: 'new' },
+      { href: '/dashboard/inquiries', label: 'Inquiries', icon: MessageSquare, badge: 'new' },
     ]
   },
   {
-    label: 'ACADEMICS',
+    label: 'Academics',
     items: [
-      { href: '/dashboard/programs',       label: 'Programs',       icon: '🎓' },
-      { href: '/dashboard/certifications', label: 'Certifications', icon: '📜' },
-      { href: '/dashboard/certificates',   label: 'Certificates',   icon: '🏅' },
+      { href: '/dashboard/programs', label: 'Programs', icon: GraduationCap },
+      { href: '/dashboard/certifications', label: 'Certifications', icon: Award },
+      { href: '/dashboard/certificates', label: 'Certificates', icon: Medal },
     ]
   },
   {
-    label: 'CONTENT',
+    label: 'Content',
     items: [
-      { href: '/dashboard/news',           label: 'News & Media',   icon: '📰' },
-      { href: '/dashboard/events',         label: 'Events',         icon: '📅' },
-      { href: '/dashboard/notices',        label: 'Notices',        icon: '🔔' },
-      { href: '/dashboard/gallery',        label: 'Gallery',        icon: '🖼️' },
-      { href: '/dashboard/testimonials',   label: 'Testimonials',   icon: '💬' },
-      { href: '/dashboard/scholarships',   label: 'Scholarships',   icon: '💰' },
+      { href: '/dashboard/news', label: 'News & Media', icon: Newspaper },
+      { href: '/dashboard/events', label: 'Events', icon: Calendar },
+      { href: '/dashboard/notices', label: 'Notices', icon: Bell },
+      { href: '/dashboard/gallery', label: 'Gallery', icon: ImageIcon },
+      { href: '/dashboard/testimonials', label: 'Testimonials', icon: MessageSquare },
     ]
   },
   {
-    label: 'SYSTEM',
+    label: 'System',
     items: [
-      { href: '/dashboard/team',           label: 'Admin Team',     icon: '🔑' },
-      { href: '/dashboard/legal',          label: 'Legal Pages',    icon: '⚖️' },
-      { href: '/dashboard/settings',       label: 'Settings',       icon: '⚙️' },
-      { href: '/dashboard/audit-log',      label: 'Audit Log',      icon: '📋' },
+      { href: '/dashboard/team', label: 'Admin Team', icon: Key },
+      { href: '/dashboard/legal', label: 'Legal Pages', icon: Scale },
+      { href: '/dashboard/settings', label: 'Settings', icon: Settings },
+      { href: '/dashboard/audit-log', label: 'Audit Log', icon: ClipboardList },
     ]
   }
-]
+];
 
 export function AdminSidebar() {
-  const pathname = usePathname()
-  const { data: session } = useSession()
+  const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
-    <aside style={{
-      width: 'var(--admin-sidebar-width)',
-      background: 'var(--admin-sidebar-bg)',
-      height: '100vh',
-      position: 'fixed',
-      left: 0, top: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      overflowY: 'auto',
-      zIndex: 50,
-      borderRight: '1px solid rgba(255,255,255,0.05)',
-    }}>
+    <aside className="fixed left-0 top-0 z-50 flex h-screen w-64 flex-col bg-zinc-950 border-r border-zinc-800 overflow-y-auto">
       {/* Logo block */}
-      <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 32, height: 32,
-            background: '#E09900',
-            borderRadius: 6,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 900, fontSize: 14, color: '#111'
-          }}>EU</div>
-          <div>
-            <div style={{ color: '#FFF', fontWeight: 700, fontSize: 13, lineHeight: 1.2 }}>EU AMERICAN</div>
-            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, letterSpacing: '0.08em' }}>ADMIN PORTAL</div>
+      <div className="flex h-16 shrink-0 items-center px-6 border-b border-zinc-800/50">
+        <Link href="/dashboard" className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E09900] text-zinc-950 font-bold text-sm">
+            EU
           </div>
-        </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-bold leading-tight text-white">EU AMERICAN</span>
+            <span className="text-[10px] font-medium tracking-widest text-zinc-400">ADMIN PORTAL</span>
+          </div>
+        </Link>
       </div>
 
       {/* Nav groups */}
-      <nav style={{ flex: 1, padding: '12px 0', overflowY: 'auto' }}>
-        {navGroups.map(group => (
-          <div key={group.label} style={{ marginBottom: 8 }}>
-            <div style={{
-              padding: '8px 16px 4px',
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: '0.1em',
-              color: 'rgba(255,255,255,0.25)',
-              textTransform: 'uppercase'
-            }}>
+      <nav className="flex-1 space-y-6 px-3 py-6 overflow-y-auto custom-scrollbar">
+        {navGroups.map((group) => (
+          <div key={group.label} className="space-y-1">
+            <h4 className="px-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2">
               {group.label}
-            </div>
-            {group.items.map(item => {
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+            </h4>
+            {group.items.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    padding: '9px 16px',
-                    margin: '1px 8px',
-                    borderRadius: 6,
-                    color: isActive ? '#E09900' : 'rgba(255,255,255,0.65)',
-                    background: isActive ? 'rgba(224,153,0,0.12)' : 'transparent',
-                    fontWeight: isActive ? 600 : 400,
-                    fontSize: 13.5,
-                    textDecoration: 'none',
-                    transition: 'var(--admin-transition)',
-                  }}
+                  className={cn(
+                    "group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                    isActive 
+                      ? "bg-zinc-800/80 text-white" 
+                      : "text-zinc-400 hover:bg-zinc-900/80 hover:text-white"
+                  )}
                 >
-                  <span style={{ fontSize: 15, width: 20, textAlign: 'center' }}>{item.icon}</span>
-                  <span style={{ flex: 1 }}>{item.label}</span>
-                  {item.badge && <span style={{
-                    background: '#E09900', color: '#111',
-                    fontSize: 10, fontWeight: 700,
-                    padding: '2px 6px', borderRadius: 10
-                  }}>NEW</span>}
+                  <div className="flex items-center gap-3">
+                    <item.icon className={cn(
+                      "h-4 w-4 shrink-0 transition-colors",
+                      isActive ? "text-[#E09900]" : "text-zinc-500 group-hover:text-zinc-300"
+                    )} />
+                    {item.label}
+                  </div>
+                  {item.badge && (
+                    <span className="rounded-full bg-[#E09900]/20 px-2 py-0.5 text-[10px] font-bold text-[#E09900] uppercase tracking-wider">
+                      {item.badge}
+                    </span>
+                  )}
                 </Link>
-              )
+              );
             })}
           </div>
         ))}
       </nav>
 
       {/* User info + sign out */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '12px 16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-          <div style={{
-            width: 32, height: 32,
-            background: '#E09900',
-            borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 800, fontSize: 13, color: '#111'
-          }}>
+      <div className="mt-auto shrink-0 border-t border-zinc-800/50 p-4">
+        <div className="flex items-center gap-3 mb-4 px-2">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-800 text-sm font-medium text-white border border-zinc-700">
             {session?.user?.name?.[0]?.toUpperCase() ?? 'A'}
           </div>
-          <div>
-            <div style={{ color: '#FFF', fontSize: 12, fontWeight: 600 }}>{session?.user?.name}</div>
-            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>{(session?.user as any)?.role}</div>
+          <div className="flex flex-col min-w-0">
+            <span className="truncate text-sm font-medium text-white">
+              {session?.user?.name ?? 'Admin User'}
+            </span>
+            <span className="truncate text-xs text-zinc-500">
+              {(session?.user as any)?.role ?? 'Administrator'}
+            </span>
           </div>
         </div>
         <button
           onClick={() => signOut({ callbackUrl: '/login' })}
-          style={{
-            width: '100%',
-            padding: '7px 12px',
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: 6,
-            color: 'rgba(255,255,255,0.5)',
-            fontSize: 12,
-            cursor: 'pointer',
-            display: 'flex', alignItems: 'center', gap: 8,
-          }}
+          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-white"
         >
-          ← Sign Out
+          <LogOut className="h-4 w-4" />
+          Sign Out
         </button>
       </div>
     </aside>
-  )
+  );
 }

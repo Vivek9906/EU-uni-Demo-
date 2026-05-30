@@ -30,7 +30,6 @@ const footerLinks = {
   Admissions: [
     { label: 'How to Apply', href: '/admissions' },
     { label: 'Requirements', href: '/admissions/requirements' },
-    { label: 'Scholarships', href: '/admissions/scholarships' },
     { label: 'Apply Now', href: '/admissions/apply' },
   ],
   University: [

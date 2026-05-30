@@ -98,7 +98,7 @@ export default function NewsEvents() {
             <span className="text-xs font-accent font-semibold tracking-wider uppercase text-accent">
               Upcoming Event
             </span>
-            <h3 className="font-heading text-lg font-bold mt-3 mb-4">
+            <h3 className="font-heading text-lg font-bold text-slate-50 mt-3 mb-4">
               {upcomingEvent.title}
             </h3>
             <div className="space-y-2 mb-6">

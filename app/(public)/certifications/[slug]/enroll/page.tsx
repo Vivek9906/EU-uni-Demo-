@@ -17,11 +17,47 @@ const enrollmentSchema = z.object({
 
 type EnrollmentFormData = z.infer<typeof enrollmentSchema>;
 
+const certificationsList = [
+  { slug: 'complete-professional-bundle', title: 'The Complete Professional Certification Bundle' },
+  { slug: 'certified-ai-specialist', title: 'Certified Artificial Intelligence Specialist' },
+  { slug: 'certified-advanced-data-science-expert', title: 'Certified Advanced Data Science Expert' },
+  { slug: 'certified-data-science-practitioner', title: 'Certified Data Science Practitioner' },
+  { slug: 'certified-cloud-computing-specialist', title: 'Certified Cloud Computing Specialist' },
+  { slug: 'certified-blockchain-specialist', title: 'Certified Blockchain Specialist' },
+  { slug: 'certified-advanced-blockchain-developer', title: 'Certified Advanced Blockchain Developer' },
+  { slug: 'certified-iot-specialist', title: 'Certified Internet of Things Specialist' },
+  { slug: 'certified-cyber-defense-specialist', title: 'Certified Cyber Defense Specialist' },
+  { slug: 'certified-cyber-law-policy-expert', title: 'Certified Cyber Law and Policy Expert' },
+  { slug: 'certified-business-strategist', title: 'Certified Business Strategist' },
+  { slug: 'certified-project-management-professional', title: 'Certified Project Management Professional' },
+  { slug: 'certified-operations-management-expert', title: 'Certified Operations Management Expert' },
+  { slug: 'certified-leadership-excellence-specialist', title: 'Certified Leadership Excellence Specialist' },
+  { slug: 'certified-hr-manager', title: 'Certified Human Resources Manager' },
+  { slug: 'certified-financial-risk-manager', title: 'Certified Financial Risk Manager' },
+  { slug: 'certified-marketing-brand-strategist', title: 'Certified Marketing & Brand Strategist' },
+  { slug: 'certified-supply-chain-management-expert', title: 'Certified Supply Chain Management Expert' },
+  { slug: 'certified-entrepreneurship-innovation-specialist', title: 'Certified Entrepreneurship & Innovation Specialist' },
+  { slug: 'certified-renewable-energy-specialist', title: 'Certified Renewable Energy Specialist' },
+  { slug: 'certified-environmental-sustainability-expert', title: 'Certified Environmental Sustainability Expert' },
+  { slug: 'certified-quality-assurance-engineer', title: 'Certified Quality Assurance Engineer' },
+  { slug: 'certified-industrial-safety-specialist', title: 'Certified Industrial Safety Specialist' },
+  { slug: 'certified-academic-research-specialist', title: 'Certified Academic Research Specialist' },
+  { slug: 'certified-scientific-writing-expert', title: 'Certified Scientific Writing Expert' },
+  { slug: 'certified-public-policy-analyst', title: 'Certified Public Policy Analyst' },
+  { slug: 'certified-education-leadership-specialist', title: 'Certified Education Leadership Specialist' },
+  { slug: 'certified-life-coach-wellness-specialist', title: 'Certified Life Coach & Wellness Specialist' },
+  { slug: 'certified-public-speaking-communication-expert', title: 'Certified Public Speaking & Communication Expert' },
+  { slug: 'certified-emotional-intelligence-practitioner', title: 'Certified Emotional Intelligence Practitioner' },
+  { slug: 'certified-mindfulness-resilience-coach', title: 'Certified Mindfulness & Resilience Coach' },
+];
+
 export default function CertificationEnrollPage({ params }: { params: { slug: string } }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const certTitle = certificationsList.find((c) => c.slug === params.slug)?.title || 'Certification Program';
 
   const {
     register,
@@ -67,7 +103,7 @@ export default function CertificationEnrollPage({ params }: { params: { slug: st
           </div>
           <h1 className="font-heading text-3xl font-bold mb-4">Enrollment Request Received!</h1>
           <p className="text-foreground-secondary mb-8">
-            Thank you for your interest. Our admissions team will review your request and contact you shortly with the next steps for completing your enrollment.
+            Thank you for your interest in {certTitle}. Our admissions team will review your request and contact you shortly with the next steps for completing your enrollment.
           </p>
           <Link href="/certifications" className="btn-primary">
             Back to Certifications
@@ -101,6 +137,19 @@ export default function CertificationEnrollPage({ params }: { params: { slug: st
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1.5">
+                Selected Certification
+              </label>
+              <input
+                type="text"
+                className="input-field bg-gray-50 text-gray-500 cursor-not-allowed font-medium"
+                value={certTitle}
+                readOnly
+                disabled
+              />
+            </div>
+
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-foreground mb-1.5">
                 Full Name as it should appear on certificate *

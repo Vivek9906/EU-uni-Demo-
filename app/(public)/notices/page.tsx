@@ -9,7 +9,6 @@ const notices = [
   { title: 'Updated Academic Calendar 2025-2026', category: 'academic', date: 'April 2025', content: 'The academic calendar for 2025-2026 has been published with key dates including Fall semester start on September 15, 2025.' },
   { title: 'Library Database Access Expanded', category: 'admin', date: 'March 2025', content: 'EU American University has expanded digital library resources with access to JSTOR, ProQuest, and Emerald Insight.' },
   { title: 'Commencement 2027 Registration Opens Soon', category: 'general', date: 'March 2025', content: 'Eligible graduates for the Commencement Ceremony 2027 should begin registration. Ceremony scheduled for June 15, 2027.' },
-  { title: 'Scholarship Application Deadline Reminder', category: 'academic', date: 'February 2025', content: 'The EUAU Merit Excellence Scholarship deadline is December 31, 2025.' },
 ];
 
 const categoryColors: Record<string, string> = { academic: 'badge-primary', admin: 'badge-accent', exam: 'badge-error', general: 'badge-success' };
