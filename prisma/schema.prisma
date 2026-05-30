@@ -84,19 +84,23 @@ model Faculty {
 }
 
 model Event {
-  id          String    @id @default(cuid())
-  title       String
-  slug        String    @unique
-  description String
-  date        DateTime
-  endDate     DateTime?
-  venue       String
-  category    String
-  imageUrl    String?
-  attendees   String?
-  isPublished Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  title          String
+  slug           String    @unique
+  description    String
+  date           DateTime
+  endDate        DateTime?
+  venue          String
+  category       String
+  imageUrl       String?
+  bannerImage    String?
+  galleryImages  String?
+  thumbnailImage String?
+  brochurePdf    String?
+  attendees      String?
+  isPublished    Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   @@index([slug])
   @@index([date])
@@ -151,17 +155,15 @@ model Testimonial {
   @@index([isApproved])
 }
 
-model Scholarship {
-  id          String    @id @default(cuid())
+model Program {
+  id          String   @id @default(cuid())
   name        String
-  type        String
-  amount      String
-  eligibility String
-  deadline    DateTime?
-  description String
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  faculty     String
+  duration    String
+  degreeType  String
+  status      String   @default("Published")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model ContactInquiry {

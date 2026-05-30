@@ -17,7 +17,7 @@ export const applicationSchema = z.object({
   mailingAddress: z.string().max(500).optional().default(''),
   
   // Section 3: Program Selection
-  programLevel: z.enum(['bachelors', 'masters', 'phd', 'honorary'], {
+  programLevel: z.enum(['bachelors', 'masters', 'phd', 'honorary', 'certification'], {
     required_error: 'Program level is required',
   }),
   programName: z.string().min(1, 'Program name is required'),

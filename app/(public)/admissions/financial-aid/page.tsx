@@ -25,7 +25,6 @@ export default function FinancialAidPage() {
             <p className="text-foreground-secondary mb-4">Financial aid is assessed as part of the application process. When submitting your application, indicate your interest in financial assistance. Our team will review your eligibility based on academic merit and financial circumstances.</p>
             <p className="text-foreground-secondary mb-6">For specific questions about fees and payment options, please contact our finance office at <a href="mailto:finance@euamericanuniversity.us" className="text-primary font-medium">finance@euamericanuniversity.us</a>.</p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/admissions/scholarships" className="btn-ghost gap-1">View Scholarships <ArrowRight size={14} /></Link>
               <Link href="/contact" className="btn-primary gap-1">Contact Finance Office <ArrowRight size={14} /></Link>
             </div>
           </div>

@@ -60,11 +60,6 @@ export default function AdmissionsPage() {
               <p className="text-sm text-foreground-secondary">Start your application online today.</p>
               <span className="text-sm text-primary mt-3 inline-flex items-center gap-1">Apply <ArrowRight size={14} /></span>
             </Link>
-            <Link href="/admissions/scholarships" className="card p-6 hover:border-primary/20 group">
-              <h3 className="font-heading text-base font-bold group-hover:text-primary transition-colors mb-2">Scholarships</h3>
-              <p className="text-sm text-foreground-secondary">Merit, need-based, and international scholarships.</p>
-              <span className="text-sm text-primary mt-3 inline-flex items-center gap-1">View Options <ArrowRight size={14} /></span>
-            </Link>
             <Link href="/admissions/financial-aid" className="card p-6 hover:border-primary/20 group">
               <h3 className="font-heading text-base font-bold group-hover:text-primary transition-colors mb-2">Financial Aid</h3>
               <p className="text-sm text-foreground-secondary">Payment plans and financial assistance.</p>

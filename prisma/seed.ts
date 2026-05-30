@@ -9,13 +9,13 @@ async function main() {
   await prisma.siteSettings.deleteMany();
   await prisma.legalPage.deleteMany();
   await prisma.notice.deleteMany();
-  await prisma.scholarship.deleteMany();
   await prisma.testimonial.deleteMany();
   await prisma.fAQ.deleteMany();
   await prisma.event.deleteMany();
   await prisma.news.deleteMany();
   await prisma.certification.deleteMany();
   await prisma.student.deleteMany();
+  await prisma.program.deleteMany();
   await prisma.adminUser.deleteMany();
 
   // 1. Super Admin User
@@ -350,41 +350,32 @@ async function main() {
   }
   console.log('✅ Testimonials created');
 
-  // 8. Scholarships
-  const scholarshipData = [
+  // 8. Programs
+  const programData = [
     {
-      name: 'EUAU Merit Excellence Scholarship',
-      type: 'merit',
-      amount: 'Up to 50% tuition reduction',
-      eligibility: 'Available to students with outstanding academic records and professional achievements. Applicants must demonstrate a GPA equivalent of 3.5 or above.',
-      description: 'The Merit Excellence Scholarship rewards outstanding academic achievement and leadership potential.',
-      deadline: new Date('2025-12-31'),
-      isActive: true,
+      name: 'Master of Business Administration',
+      faculty: 'Business',
+      duration: '2 Years',
+      degreeType: 'Masters',
     },
     {
-      name: 'Global Leaders Financial Aid Grant',
-      type: 'need',
-      amount: 'Up to 40% tuition assistance',
-      eligibility: 'Available to students from developing nations or those demonstrating financial need.',
-      description: 'The Global Leaders Grant provides financial assistance to talented students who face economic barriers to accessing quality higher education.',
-      deadline: new Date('2025-11-30'),
-      isActive: true,
+      name: 'Bachelor of Business Administration',
+      faculty: 'Business',
+      duration: '4 Years',
+      degreeType: 'Bachelors',
     },
     {
-      name: 'International Diversity Scholarship',
-      type: 'international',
-      amount: 'Up to 30% tuition reduction',
-      eligibility: 'Available to international students from underrepresented regions.',
-      description: 'The International Diversity Scholarship promotes EU American University\'s mission of providing globally accessible education.',
-      deadline: new Date('2026-03-31'),
-      isActive: true,
-    },
+      name: 'Honorary Doctorate (Honoris Causa)',
+      faculty: 'Business',
+      duration: 'Honorary',
+      degreeType: 'Honorary',
+    }
   ];
 
-  for (const scholarship of scholarshipData) {
-    await prisma.scholarship.create({ data: scholarship });
+  for (const program of programData) {
+    await prisma.program.create({ data: program });
   }
-  console.log('✅ Scholarships created');
+  console.log('✅ Programs created');
 
   // 9. Notices
   const noticeData = [

@@ -10,7 +10,6 @@ const faqData: Record<string, { question: string; answer: string }[]> = {
     { question: 'How do I apply to EU American University?', answer: 'You can apply online through our application portal at /admissions/apply. Complete all required sections, upload documents, and submit. You will receive a confirmation email with your unique Application Reference Number.' },
     { question: 'What is the application deadline?', answer: 'EU American University operates on a rolling admissions basis. We recommend applying at least 8 weeks before your intended start date.' },
     { question: 'Can international students apply?', answer: 'Absolutely. EU American University welcomes students from all countries. We have students from over 100 countries worldwide.' },
-    { question: 'Are there scholarships available?', answer: 'Yes, EU American University offers merit-based, need-based, and international student scholarships. Visit our Scholarships page for details.' },
   ],
   Programs: [
     { question: 'What programs does EU American University offer?', answer: 'EU American University offers MBA programs at both Bachelor\'s and Master\'s levels, plus Honorary Doctorate and Honorary Professorship programs.' },

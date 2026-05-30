@@ -1,28 +1,32 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 const heroSlides = [
   {
-    image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&q=90',
+    // University graduation ceremony — students in caps and gowns
+    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80',
     title: 'Shaping Global Leaders.',
     subtitle: 'Transforming the World.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c476?w=1920&q=90',
+    // University campus building — aerial/exterior
+    image: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1920&q=80',
     title: 'A Legacy of Excellence.',
     subtitle: 'Since 1924.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=1920&q=90',
+    // Students studying in modern library
+    image: 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=1920&q=80',
     title: 'Learn Without Limits.',
     subtitle: 'Study Online, Lead Globally.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=1920&q=90',
+    // Graduation caps being thrown in the air
+    image: 'https://images.unsplash.com/photo-1627556704302-624286467c65?auto=format&fit=crop&w=1920&q=80',
     title: 'Knowledge. Purpose. Impact.',
     subtitle: 'EU American University.',
   },
@@ -31,6 +35,14 @@ const heroSlides = [
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Preload all hero images on mount
+  useEffect(() => {
+    heroSlides.forEach((slide) => {
+      const img = new window.Image();
+      img.src = slide.image;
+    });
+  }, []);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
@@ -80,13 +92,6 @@ export default function HeroSection() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="max-w-3xl mx-auto"
         >
-          {/* Gold label */}
-          <div className="inline-block mb-6 px-4 py-1.5 border border-white/20 rounded-full">
-            <span className="text-[#E09900] text-xs font-bold tracking-[0.15em] uppercase">
-              EST. 1924 · GLOBALLY ACCREDITED
-            </span>
-          </div>
-
           <h1 className="text-4xl md:text-5xl lg:text-[52px] font-bold text-white leading-[1.15] mb-6 text-balance">
             {heroSlides[0].title}{' '}
             <span className="text-[#E09900] italic">
@@ -125,10 +130,10 @@ export default function HeroSection() {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+            className={`rounded-full transition-all duration-300 ${
               index === currentSlide
-                ? 'bg-[#E09900] scale-125'
-                : 'bg-white/40 hover:bg-white/60'
+                ? 'bg-[#E09900] w-7 h-2.5'
+                : 'bg-white/40 hover:bg-white/60 w-2.5 h-2.5'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />

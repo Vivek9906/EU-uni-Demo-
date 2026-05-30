@@ -98,8 +98,8 @@ export default function CertificationsPage() {
                 <h2 className="font-heading text-2xl font-bold mb-2">{bundle.title}</h2>
                 <p className="text-white/70">Master all 25 professional domains in one comprehensive package — the most cost-effective way to build a world-class skill portfolio.</p>
               </div>
-              <Link href={`/certifications/${bundle.slug}/enroll`} className="btn-accent shrink-0 gap-2">
-                Enroll Now <ArrowRight size={16} />
+              <Link href={`/certifications/${bundle.slug}`} className="btn-accent shrink-0 gap-2">
+                View Details <ArrowRight size={16} />
               </Link>
             </div>
           </div>
@@ -155,13 +155,17 @@ export default function CertificationsPage() {
                   </div>
                 </div>
                 <div className="p-5">
-                  <h3 className="font-heading text-base font-bold mb-2 group-hover:text-primary transition-colors leading-tight line-clamp-2">
-                    {cert.title}
-                  </h3>
-                  <p className="text-xs text-foreground-secondary leading-relaxed mb-4 line-clamp-2">{cert.description}</p>
-                  <Link href={`/certifications/${cert.slug}/enroll`} className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary-light transition-colors">
-                    Enroll Now <ArrowRight size={14} />
+                  <Link href={`/certifications/${cert.slug}`} className="block">
+                    <h3 className="font-heading text-base font-bold mb-2 group-hover:text-primary transition-colors leading-tight line-clamp-2">
+                      {cert.title}
+                    </h3>
                   </Link>
+                  <p className="text-xs text-foreground-secondary leading-relaxed mb-4 line-clamp-2">{cert.description}</p>
+                  <div className="flex items-center gap-4">
+                    <Link href={`/certifications/${cert.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary-light transition-colors">
+                      View Details <ArrowRight size={14} />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
