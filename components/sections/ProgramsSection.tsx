@@ -73,7 +73,7 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
       name: 'Honorary Doctorate (Honoris Causa)',
       description:
         'A prestigious recognition for individuals who have demonstrated exceptional leadership and contributions to their field.',
-      href: '/academics/honorary',
+      href: '/academics/honorary/honorary-doctorate',
       imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
       badge: 'Honorary Recognition',
     },
@@ -81,7 +81,7 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
       name: 'Honorary Professorship',
       description:
         'An academic distinction recognizing outstanding contributions to education, research, or professional excellence.',
-      href: '/academics/honorary',
+      href: '/academics/honorary/honorary-professorship',
       imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
       badge: 'Honorary Recognition',
     },
@@ -99,14 +99,14 @@ const programs: Record<ProgramLevel, ProgramCard[]> = {
 };
 
 const tabs: { key: ProgramLevel; label: string }[] = [
-  { key: 'bachelors', label: "Bachelor's" },
-  { key: 'masters', label: "Master's" },
-  { key: 'honorary', label: 'Honorary' },
   { key: 'phd', label: 'PhD' },
+  { key: 'honorary', label: 'Honorary' },
+  { key: 'masters', label: "Master's" },
+  { key: 'bachelors', label: "Bachelor's" },
 ];
 
 export default function ProgramsSection() {
-  const [activeTab, setActiveTab] = useState<ProgramLevel>('bachelors');
+  const [activeTab, setActiveTab] = useState<ProgramLevel>('phd');
 
   return (
     <section className="section-padding">
@@ -118,7 +118,7 @@ export default function ProgramsSection() {
             viewport={{ once: true }}
           >
             <span className="section-label">Explore Programs</span>
-            <h2 className="section-title">Bachelor&apos;s &bull; Master&apos;s &bull; Honorary &bull; PhD</h2>
+            <h2 className="section-title">PhD &bull; Honorary &bull; Master&apos;s &bull; Bachelor&apos;s</h2>
             <p className="section-subtitle mx-auto">
               Discover programs designed to elevate your career and make a global impact.
             </p>

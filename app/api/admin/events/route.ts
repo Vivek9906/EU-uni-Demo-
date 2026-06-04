@@ -47,6 +47,31 @@ export async function POST(request: Request) {
         isPublished: isPublished || false,
       },
     });
+
+    if (isPublished) {
+      try {
+        const subscribers = await prisma.subscriber.findMany({
+          where: { isActive: true },
+          select: { email: true }
+        });
+        const emails = subscribers.map(s => s.email);
+        if (emails.length > 0) {
+          const { sendBroadcastEmail } = await import('@/lib/email');
+          const eventUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/events/${event.slug}`;
+          sendBroadcastEmail(
+            emails, 
+            `New Event: ${event.title}`, 
+            event.title, 
+            event.description.substring(0, 150) + '...', 
+            eventUrl, 
+            'View Event Details'
+          ).catch(console.error);
+        }
+      } catch (err) {
+        console.error("Failed to broadcast event:", err);
+      }
+    }
+
     return NextResponse.json({ success: true, event }, { status: 201 });
   } catch (error) {
     console.error('Failed to create event:', error);

@@ -35,16 +35,16 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="p-8 max-w-7xl mx-auto w-full space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 className="text-2xl font-heading font-bold">Applications</h1>
+        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Applications</h1>
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground-muted" />
+            <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <select
               value={statusFilter}
               onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-              className="input-field pl-9 py-2 text-sm"
+              className="pl-9 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 shadow-sm appearance-none"
             >
               <option value="">All Statuses</option>
               <option value="Pending">Pending</option>
@@ -56,53 +56,53 @@ export default function ApplicationsPage() {
         </div>
       </div>
 
-      <div className="card overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-background-subtle text-foreground-muted font-medium uppercase text-xs">
+          <table className="w-full text-sm text-left whitespace-nowrap">
+            <thead className="bg-slate-50/80 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
               <tr>
-                <th className="px-6 py-3">Reference</th>
-                <th className="px-6 py-3">Applicant</th>
-                <th className="px-6 py-3">Program</th>
-                <th className="px-6 py-3">Level</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Date</th>
-                <th className="px-6 py-3 text-right">Action</th>
+                <th className="px-6 py-3.5">Reference</th>
+                <th className="px-6 py-3.5">Applicant</th>
+                <th className="px-6 py-3.5">Program</th>
+                <th className="px-6 py-3.5">Level</th>
+                <th className="px-6 py-3.5">Status</th>
+                <th className="px-6 py-3.5">Date</th>
+                <th className="px-6 py-3.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-slate-100">
               {isLoading ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-foreground-muted">Loading applications...</td>
+                  <td colSpan={7} className="px-6 py-12 text-center text-slate-500">Loading applications...</td>
                 </tr>
               ) : applications.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-foreground-muted">No applications found matching the criteria.</td>
+                  <td colSpan={7} className="px-6 py-12 text-center text-slate-500">No applications found matching the criteria.</td>
                 </tr>
               ) : (
                 applications.map((app) => (
-                  <tr key={app.id} className="hover:bg-background-subtle/50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs">{app.referenceNumber}</td>
+                  <tr key={app.id} className="hover:bg-slate-50/80 transition-colors duration-150 group">
+                    <td className="px-6 py-4 font-mono text-xs font-bold text-slate-500">{app.referenceNumber}</td>
                     <td className="px-6 py-4">
-                      <div className="font-medium">{app.fullName}</div>
-                      <div className="text-xs text-foreground-muted">{app.email}</div>
+                      <div className="font-bold text-slate-900 group-hover:text-amber-600 transition-colors">{app.fullName}</div>
+                      <div className="text-xs font-medium text-slate-500">{app.email}</div>
                     </td>
-                    <td className="px-6 py-4 text-foreground-secondary">{app.programName}</td>
-                    <td className="px-6 py-4 text-foreground-secondary">{app.programLevel}</td>
+                    <td className="px-6 py-4 text-slate-600 font-medium">{app.programName}</td>
+                    <td className="px-6 py-4 text-slate-600 font-medium">{app.programLevel}</td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
-                        ${app.status === 'Pending' ? 'bg-accent/10 text-accent' : 
-                          app.status === 'Approved' ? 'bg-success/10 text-success' : 
-                          app.status === 'Rejected' ? 'bg-error/10 text-error' : 'bg-gray-100 text-gray-700'}`}>
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
+                        ${app.status === 'Pending' ? 'bg-amber-100 text-amber-800' : 
+                          app.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : 
+                          app.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-slate-100 text-slate-800'}`}>
                         {app.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-foreground-secondary whitespace-nowrap">
+                    <td className="px-6 py-4 text-slate-500 font-medium">
                       {new Date(app.submittedAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Link href={`/dashboard/applications/${app.id}`} className="inline-flex items-center gap-1 text-primary hover:text-primary-light font-medium text-sm">
-                        <Eye size={16} /> View
+                      <Link href={`/dashboard/applications/${app.id}`} className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-md text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-amber-600 transition-colors shadow-sm">
+                        <Eye size={14} /> View
                       </Link>
                     </td>
                   </tr>
@@ -114,20 +114,20 @@ export default function ApplicationsPage() {
         
         {/* Pagination */}
         {total > 1 && (
-          <div className="px-6 py-4 border-t border-border flex items-center justify-between">
-            <p className="text-sm text-foreground-muted">Page {page} of {total}</p>
+          <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <p className="text-sm font-medium text-slate-500">Page {page} of {total}</p>
             <div className="flex gap-2">
               <button
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="p-2 rounded-md border border-border hover:bg-background-subtle disabled:opacity-50"
+                className="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:pointer-events-none transition-colors shadow-sm"
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={() => setPage(p => Math.min(total, p + 1))}
                 disabled={page === total}
-                className="p-2 rounded-md border border-border hover:bg-background-subtle disabled:opacity-50"
+                className="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:pointer-events-none transition-colors shadow-sm"
               >
                 <ChevronRight size={16} />
               </button>

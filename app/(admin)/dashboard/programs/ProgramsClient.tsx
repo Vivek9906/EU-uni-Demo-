@@ -1,249 +1,177 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
-import { 
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
-} from '@/components/admin/ui/Table';
-import { Button } from '@/components/admin/ui/Button';
-import { Badge } from '@/components/admin/ui/Badge';
-import { DeleteButton } from '@/components/admin/DeleteButton';
-import { toast } from 'react-hot-toast';
+import { useState, useTransition } from 'react'
+import { Plus, Edit2, Trash2, GraduationCap } from 'lucide-react'
+import { createProgram, updateProgram, deleteProgram } from './actions'
 
-interface Program {
-  id: string;
-  name: string;
-  faculty: string;
-  duration: string;
-  degreeType: string;
-  status: string;
-  createdAt: string;
-}
+const DEGREE_TYPES = ['Bachelors', 'Masters', 'PhD', 'Honorary']
 
-export function ProgramsClient() {
-  const [programs, setPrograms] = useState<Program[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProgram, setEditingProgram] = useState<Program | null>(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    faculty: '',
-    duration: '',
-    degreeType: '',
-    status: 'Published'
-  });
+export function ProgramsClient({ initialData }: { initialData: any[] }) {
+  const [programs, setPrograms] = useState(initialData)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editing, setEditing] = useState<any>(null)
+  const [formData, setFormData] = useState({ name: '', faculty: '', duration: '', degreeType: 'Bachelors', status: 'Published' })
+  const [isPending, startTransition] = useTransition()
 
-  const fetchPrograms = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetch('/api/admin/programs');
-      if (res.ok) {
-        const data = await res.json();
-        setPrograms(data);
+  const openCreate = () => {
+    setEditing(null)
+    setFormData({ name: '', faculty: '', duration: '', degreeType: 'Bachelors', status: 'Published' })
+    setIsModalOpen(true)
+  }
+
+  const openEdit = (p: any) => {
+    setEditing(p)
+    setFormData({ name: p.name, faculty: p.faculty, duration: p.duration, degreeType: p.degreeType, status: p.status })
+    setIsModalOpen(true)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    startTransition(async () => {
+      if (editing) {
+        const result = await updateProgram(editing.id, formData)
+        if (result.success && result.program) {
+          setPrograms(prev => prev.map(p => p.id === editing.id ? result.program : p))
+        }
+      } else {
+        const result = await createProgram(formData)
+        if (result.success && result.program) {
+          setPrograms(prev => [result.program, ...prev])
+        }
       }
-    } catch (error) {
-      toast.error('Failed to load programs');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      setIsModalOpen(false)
+      setEditing(null)
+    })
+  }
 
-  useEffect(() => {
-    fetchPrograms();
-  }, []);
-
-  const handleOpenModal = (program?: Program) => {
-    if (program) {
-      setEditingProgram(program);
-      setFormData({
-        name: program.name,
-        faculty: program.faculty,
-        duration: program.duration,
-        degreeType: program.degreeType,
-        status: program.status
-      });
-    } else {
-      setEditingProgram(null);
-      setFormData({ name: '', faculty: '', duration: '', degreeType: '', status: 'Published' });
-    }
-    setIsModalOpen(true);
-  };
-
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const url = editingProgram 
-        ? `/api/admin/programs/${editingProgram.id}` 
-        : '/api/admin/programs';
-      const method = editingProgram ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) throw new Error('Failed to save');
-      
-      toast.success(editingProgram ? 'Program updated' : 'Program created');
-      setIsModalOpen(false);
-      fetchPrograms();
-    } catch (error) {
-      toast.error('An error occurred');
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const res = await fetch(`/api/admin/programs/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Failed to delete');
-      toast.success('Program deleted');
-      fetchPrograms();
-    } catch (error) {
-      toast.error('Failed to delete program');
-    }
-  };
+  const handleDelete = (id: string, name: string) => {
+    if (!confirm(`Delete program "${name}"?`)) return
+    startTransition(async () => {
+      const result = await deleteProgram(id)
+      if (result.success) setPrograms(prev => prev.filter(p => p.id !== id))
+    })
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-gray-900">All Programs</h2>
-        <Button onClick={() => handleOpenModal()}>
-          <Plus className="mr-2 h-4 w-4" /> Add Program
-        </Button>
+    <div className="p-8 max-w-7xl mx-auto w-full space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+          <GraduationCap className="text-amber-500" /> Manage Programs
+        </h1>
+        <button onClick={openCreate}
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-semibold text-[13.5px] transition-all duration-200 shadow-sm">
+          <Plus size={16} /> Add Program
+        </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Faculty</TableHead>
-              <TableHead>Duration</TableHead>
-              <TableHead>Degree</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                  Loading programs...
-                </TableCell>
-              </TableRow>
-            ) : programs.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                  No programs found.
-                </TableCell>
-              </TableRow>
-            ) : (
-              programs.map((program) => (
-                <TableRow key={program.id}>
-                  <TableCell className="font-medium text-gray-900">{program.name}</TableCell>
-                  <TableCell>{program.faculty}</TableCell>
-                  <TableCell>{program.duration}</TableCell>
-                  <TableCell>{program.degreeType}</TableCell>
-                  <TableCell>
-                    <Badge variant={program.status === 'Published' ? 'success' : 'secondary'}>
-                      {program.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end items-center gap-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleOpenModal(program)}>
-                        <Edit2 className="h-4 w-4 text-blue-600" />
-                      </Button>
-                      <DeleteButton onDelete={() => handleDelete(program.id)} />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-slate-50/80 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <tr>
+                <th className="px-6 py-3.5">Name</th>
+                <th className="px-6 py-3.5">Faculty</th>
+                <th className="px-6 py-3.5">Duration</th>
+                <th className="px-6 py-3.5">Degree</th>
+                <th className="px-6 py-3.5">Status</th>
+                <th className="px-6 py-3.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {programs.length === 0 ? (
+                <tr><td colSpan={6} className="px-6 py-12 text-center text-slate-500">No programs found.</td></tr>
+              ) : (
+                programs.map((p) => (
+                  <tr key={p.id} className="hover:bg-slate-50/80 transition-colors duration-150">
+                    <td className="px-6 py-4 font-bold text-slate-900">{p.name}</td>
+                    <td className="px-6 py-4 text-slate-600">{p.faculty || '—'}</td>
+                    <td className="px-6 py-4 text-slate-600">{p.duration || '—'}</td>
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700">
+                        {p.degreeType}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        p.status === 'Published' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        {p.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button onClick={() => openEdit(p)} disabled={isPending}
+                          className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors">
+                          <Edit2 size={16} />
+                        </button>
+                        <button onClick={() => handleDelete(p.id, p.name)} disabled={isPending}
+                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Basic Modal implementation */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">
-              {editingProgram ? 'Edit Program' : 'Add Program'}
-            </h3>
-            <form onSubmit={handleSave} className="space-y-4">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full">
+            <div className="p-6 border-b border-slate-100">
+              <h2 className="text-xl font-bold text-slate-900">{editing ? 'Edit Program' : 'Add New Program'}</h2>
+            </div>
+            <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input 
-                  type="text" 
-                  required 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B3A6B]"
-                  value={formData.name}
-                  onChange={e => setFormData({...formData, name: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Faculty / Category</label>
-                <input 
-                  type="text" 
-                  required 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B3A6B]"
-                  value={formData.faculty}
-                  onChange={e => setFormData({...formData, faculty: e.target.value})}
-                />
+                <label className="block text-sm font-bold text-slate-700 mb-1.5">Program Name *</label>
+                <input type="text" required value={formData.name}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
-                  <input 
-                    type="text" 
-                    required 
-                    placeholder="e.g. 2 Years"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B3A6B]"
-                    value={formData.duration}
-                    onChange={e => setFormData({...formData, duration: e.target.value})}
-                  />
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Faculty</label>
+                  <input type="text" value={formData.faculty}
+                    onChange={e => setFormData({ ...formData, faculty: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Degree Type</label>
-                  <select
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B3A6B]"
-                    value={formData.degreeType}
-                    onChange={e => setFormData({...formData, degreeType: e.target.value})}
-                  >
-                    <option value="">Select type</option>
-                    <option value="Bachelors">Bachelors</option>
-                    <option value="Masters">Masters</option>
-                    <option value="Doctorate">Doctorate</option>
-                    <option value="Honorary">Honorary</option>
-                    <option value="Certificate">Certificate</option>
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Duration</label>
+                  <input type="text" value={formData.duration} placeholder="e.g. 4 Years"
+                    onChange={e => setFormData({ ...formData, duration: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Degree Level</label>
+                  <select value={formData.degreeType} onChange={e => setFormData({ ...formData, degreeType: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+                    {DEGREE_TYPES.map(d => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1.5">Status</label>
+                  <select value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500">
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
                   </select>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1B3A6B]"
-                  value={formData.status}
-                  onChange={e => setFormData({...formData, status: e.target.value})}
-                >
-                  <option value="Draft">Draft</option>
-                  <option value="Published">Published</option>
-                </select>
-              </div>
-              <div className="pt-4 flex justify-end gap-3">
-                <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  {editingProgram ? 'Update Program' : 'Save Program'}
-                </Button>
+              <div className="pt-4 flex justify-end gap-3 border-t border-slate-100">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors">Cancel</button>
+                <button type="submit" disabled={isPending} className="px-5 py-2 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition-colors shadow-sm disabled:opacity-50">
+                  {isPending ? 'Saving...' : editing ? 'Save Changes' : 'Create Program'}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
     </div>
-  );
+  )
 }

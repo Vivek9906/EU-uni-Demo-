@@ -36,12 +36,18 @@ interface NavItem {
 /* ─── Programs dropdown data ─── */
 const programsMenu: ProgramItem[] = [
   {
-    label: "Bachelor's Programs",
-    href: '/academics/bachelors',
+    label: 'PhD Programs',
+    href: '/academics/phd',
     children: [
-      { label: 'BBA — Business Administration', href: '/academics/bachelors/bba' },
-      { label: 'BPA — Public Administration', href: '/academics/bachelors/bpa' },
-      { label: 'BSW — Social Work', href: '/academics/bachelors/bsw' },
+      { label: 'Doctor of Philosophy (PhD)', href: '/academics/phd/doctor-of-philosophy' },
+    ],
+  },
+  {
+    label: 'Honorary Programs',
+    href: '/academics/honorary',
+    children: [
+      { label: 'Honorary Doctorate (Honoris Causa)', href: '/academics/honorary/honorary-doctorate' },
+      { label: 'Honorary Professorship', href: '/academics/honorary/honorary-professorship' },
     ],
   },
   {
@@ -54,18 +60,12 @@ const programsMenu: ProgramItem[] = [
     ],
   },
   {
-    label: 'Doctoral Programs (PhD)',
-    href: '/academics/phd',
+    label: "Bachelor's Programs",
+    href: '/academics/bachelors',
     children: [
-      { label: 'Doctor of Philosophy (PhD)', href: '/academics/phd/doctor-of-philosophy' },
-    ],
-  },
-  {
-    label: 'Honorary Programs',
-    href: '/academics/honorary',
-    children: [
-      { label: 'Honorary Doctorate (Honoris Causa)', href: '/academics/honorary/honorary-doctorate' },
-      { label: 'Honorary Professorship', href: '/academics/honorary/honorary-professorship' },
+      { label: 'BBA — Business Administration', href: '/academics/bachelors/bba' },
+      { label: 'BPA — Public Administration', href: '/academics/bachelors/bpa' },
+      { label: 'BSW — Social Work', href: '/academics/bachelors/bsw' },
     ],
   },
   {
@@ -94,9 +94,10 @@ const navItems: NavItem[] = [
     href: '/about',
     children: [
       { label: 'About Us', href: '/about', description: 'Our history and mission' },
-      { label: 'Accreditation', href: '/accreditation', description: 'Accrediting bodies & recognition' },
       { label: 'Campus Life', href: '/campus-life', description: 'Student life at EU American University' },
       { label: 'Alumni', href: '/alumni', description: 'Our global alumni network' },
+      { label: 'Our Partners', href: '/partners', description: 'Our global partner network' },
+      { label: 'Partner With Us', href: '/partner-with-us', description: 'Join our network' },
     ],
   },
   {
@@ -120,6 +121,7 @@ const navItems: NavItem[] = [
       { label: 'News', href: '/news', description: 'Latest news' },
       { label: 'Events', href: '/events', description: 'Upcoming events' },
       { label: 'Research', href: '/research', description: 'Research initiatives' },
+      { label: 'Accreditations', href: '/accreditation', description: 'Quality assurance & recognition' },
       { label: 'Testimonials', href: '/testimonials', description: 'Student voices' },
       { label: 'FAQ', href: '/faq', description: 'Frequently asked questions' },
       { label: 'Contact', href: '/contact', description: 'Get in touch' },
@@ -330,10 +332,7 @@ function MobileProgramsAccordion({ onNavigate }: { onNavigate: () => void }) {
   );
 }
 
-/* ─── Logo ─── */
-function EUAULogo({ className }: { className?: string }) {
-  return <img src="/logo.png" alt="EU American University Logo" className={className} />;
-}
+import { UniversityLogo } from '@/components/ui/UniversityLogo';
 
 /* ─── Main Navbar ─── */
 export default function Navbar() {
@@ -383,17 +382,7 @@ export default function Navbar() {
     >
       <div className="container-main">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="EU American University Home">
-            <EUAULogo className="w-10 h-10" />
-            <div className="hidden sm:block">
-              <div className="font-heading text-sm font-bold text-primary leading-tight tracking-wide uppercase">
-                EU American
-              </div>
-              <div className="font-heading text-[10px] text-primary/70 leading-tight tracking-[0.2em] uppercase">
-                University
-              </div>
-            </div>
-          </Link>
+          <UniversityLogo />
 
           {/* ─── Desktop Nav ─── */}
           <div className="hidden lg:flex items-center gap-1">

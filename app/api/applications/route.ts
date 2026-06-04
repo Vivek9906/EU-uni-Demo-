@@ -63,13 +63,24 @@ export async function POST(request: Request) {
       data: sanitizedData,
     });
 
-    // Send confirmation email (non-blocking)
-    sendApplicationConfirmation(
-      application.email,
-      application.fullName,
-      application.referenceNumber,
-      application.programName
-    ).catch(console.error);
+    // Send tailored confirmation email (non-blocking)
+    if (application.programLevel === 'certification') {
+      const { sendCertificateApplicationEmail } = await import('@/lib/email');
+      sendCertificateApplicationEmail(
+        application.email,
+        application.fullName,
+        application.referenceNumber,
+        application.programName
+      ).catch(console.error);
+    } else {
+      const { sendProgramApplicationEmail } = await import('@/lib/email');
+      sendProgramApplicationEmail(
+        application.email,
+        application.fullName,
+        application.referenceNumber,
+        application.programName
+      ).catch(console.error);
+    }
 
     // Send admin notification (non-blocking)
     sendAdminNotification(

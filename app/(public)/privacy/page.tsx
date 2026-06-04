@@ -60,7 +60,7 @@ export default async function PrivacyPage() {
                 <p>We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.</p>
                 
                 <h2>5. Contact Us</h2>
-                <p>If you have questions about this Privacy Policy, please contact us at: <a href="mailto:privacy@euamericanuniversity.edu">privacy@euamericanuniversity.edu</a></p>
+                <p>If you have questions about this Privacy Policy, please contact us at: <a href="mailto:privacy@euamericanuniversity.us">privacy@euamericanuniversity.us</a></p>
               </>
             )}
           </div>
