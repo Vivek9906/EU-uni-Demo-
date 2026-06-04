@@ -35,7 +35,33 @@ export async function createCertification(data: {
       },
     })
     revalidatePath('/dashboard/certifications')
+    revalidatePath('/dashboard/certifications')
     revalidatePath('/certifications')
+
+    if (cert.isActive) {
+      try {
+        const subscribers = await prisma.subscriber.findMany({
+          where: { isActive: true },
+          select: { email: true }
+        });
+        const emails = subscribers.map(s => s.email);
+        if (emails.length > 0) {
+          const { sendBroadcastEmail } = await import('@/lib/email');
+          const certUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/certifications/${cert.slug}`;
+          sendBroadcastEmail(
+            emails, 
+            `New Certification: ${cert.title}`, 
+            cert.title, 
+            cert.description.substring(0, 150) + '...', 
+            certUrl, 
+            'View Certification'
+          ).catch(console.error);
+        }
+      } catch (err) {
+        console.error("Failed to broadcast certification:", err);
+      }
+    }
+
     return { success: true, certification: { ...cert, createdAt: cert.createdAt.toISOString() } }
   } catch (err) {
     console.error('[ADMIN][certifications] create failed:', err)
