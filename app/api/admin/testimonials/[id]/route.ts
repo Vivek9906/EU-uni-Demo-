@@ -44,9 +44,9 @@ export async function PUT(
       where: { id: params.id },
       data: {
         name,
-        role,
+        program: role,
         content,
-        avatarUrl: avatarUrl || null,
+        photo: avatarUrl || null,
         isApproved,
       },
     });
