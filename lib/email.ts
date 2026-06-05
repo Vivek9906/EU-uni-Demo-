@@ -308,6 +308,7 @@ export async function sendNewsletterConfirmation(
     });
   } catch (error) {
     console.error('Failed to send newsletter confirmation:', error);
+    throw error;
   }
 }
 
