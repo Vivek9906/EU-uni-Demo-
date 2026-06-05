@@ -59,7 +59,7 @@ export async function POST(request: Request) {
         if (emails.length > 0) {
           const { sendBroadcastEmail } = await import('@/lib/email');
           const eventUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/events/${event.slug}`;
-          sendBroadcastEmail(
+          await sendBroadcastEmail(
             emails, 
             `New Event: ${event.title}`, 
             event.title, 

@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Send confirmation to the applicant
-    sendContactConfirmation(data.email, data.name).catch(console.error);
+    await sendContactConfirmation(data.email, data.name).catch(console.error);
 
     return NextResponse.json({ success: true, application });
   } catch (error) {

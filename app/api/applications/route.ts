@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     // Send tailored confirmation email (non-blocking)
     if (application.programLevel === 'certification') {
       const { sendCertificateApplicationEmail } = await import('@/lib/email');
-      sendCertificateApplicationEmail(
+      await sendCertificateApplicationEmail(
         application.email,
         application.fullName,
         application.referenceNumber,
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
       ).catch(console.error);
     } else {
       const { sendProgramApplicationEmail } = await import('@/lib/email');
-      sendProgramApplicationEmail(
+      await sendProgramApplicationEmail(
         application.email,
         application.fullName,
         application.referenceNumber,
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     }
 
     // Send admin notification (non-blocking)
-    sendAdminNotification(
+    await sendAdminNotification(
       `New Application: ${application.referenceNumber}`,
       `<p><strong>Name:</strong> ${application.fullName}</p><p><strong>Program:</strong> ${application.programName}</p><p><strong>Email:</strong> ${application.email}</p><p><strong>Reference:</strong> ${application.referenceNumber}</p>`
     ).catch(console.error);

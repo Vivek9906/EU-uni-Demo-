@@ -49,7 +49,7 @@ export async function POST(req: Request) {
         if (emails.length > 0) {
           const { sendBroadcastEmail } = await import('@/lib/email');
           // Programs usually don't have a unique slug in the basic schema, just a name
-          sendBroadcastEmail(
+          await sendBroadcastEmail(
             emails, 
             `New Program: ${program.name}`, 
             program.name, 
