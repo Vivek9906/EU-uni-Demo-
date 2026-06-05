@@ -3,7 +3,7 @@ import prisma from '@/lib/db';
 import { applicationSchema } from '@/lib/validations/application';
 import { generateReferenceNumber, sanitizeInput } from '@/lib/utils';
 import { checkRateLimit, RATE_LIMITS, getClientIp, rateLimitResponse } from '@/lib/rate-limit';
-import { sendApplicationConfirmation, sendAdminNotification } from '@/lib/email';
+import { sendAdminNotification } from '@/lib/email';
 
 export async function POST(request: Request) {
   try {
