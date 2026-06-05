@@ -37,7 +37,6 @@ const footerLinks = {
     { label: 'About Us', href: '/about' },
     { label: 'Research', href: '/research' },
     { label: 'Campus Life', href: '/campus-life' },
-    { label: 'Accreditation', href: '/accreditation' },
     { label: 'Alumni', href: '/alumni' },
   ],
   Support: [

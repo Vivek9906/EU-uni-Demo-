@@ -121,7 +121,6 @@ const navItems: NavItem[] = [
       { label: 'News', href: '/news', description: 'Latest news' },
       { label: 'Events', href: '/events', description: 'Upcoming events' },
       { label: 'Research', href: '/research', description: 'Research initiatives' },
-      { label: 'Accreditations', href: '/accreditation', description: 'Quality assurance & recognition' },
       { label: 'Testimonials', href: '/testimonials', description: 'Student voices' },
       { label: 'FAQ', href: '/faq', description: 'Frequently asked questions' },
       { label: 'Contact', href: '/contact', description: 'Get in touch' },
