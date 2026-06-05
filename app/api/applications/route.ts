@@ -94,10 +94,10 @@ export async function POST(request: Request) {
       referenceNumber: application.referenceNumber,
       message: 'Application submitted successfully.',
     }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Application submission error:', error);
     return NextResponse.json(
-      { error: 'Internal server error. Please try again later.' },
+      { error: error.message || 'Internal server error. Please try again later.' },
       { status: 500 }
     );
   }

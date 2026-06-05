@@ -16,9 +16,22 @@ export default function ContactPage() {
     try {
       const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
       const data = await res.json();
-      if (res.ok) { setResult({ success: true, message: 'Thank you! Your message has been received. We will respond within 2-3 business days.' }); setForm({ name: '', email: '', phone: '', subject: '', message: '' }); }
-      else { setResult({ success: false, message: data.error || 'Failed to send. Please try again.' }); }
-    } catch { setResult({ success: false, message: 'Network error. Please try again.' }); }
+      if (res.ok) { 
+        setResult({ success: true, message: 'Thank you! Your message has been received. We will respond within 2-3 business days.' }); 
+        setForm({ name: '', email: '', phone: '', subject: '', message: '' }); 
+      } else { 
+        let errorMessage = data.error || 'Failed to send. Please try again.';
+        if (data.details) {
+          const firstError = Object.values(data.details)[0];
+          if (Array.isArray(firstError) && firstError.length > 0) {
+            errorMessage = firstError[0] as string;
+          }
+        }
+        setResult({ success: false, message: errorMessage }); 
+      }
+    } catch { 
+      setResult({ success: false, message: 'Network error. Please try again.' }); 
+    }
     finally { setIsSubmitting(false); }
   };
 

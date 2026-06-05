@@ -11,28 +11,33 @@ export const metadata: Metadata = {
 
 const programs = [
   {
-    level: "Bachelor's",
+    level: 'Doctoral',
     items: [
       {
-        name: 'Bachelor of Business Administration (BBA)',
-        href: '/academics/bachelors/bba',
-        imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
+        name: 'Doctor of Philosophy (PhD)',
+        href: '/academics/phd/doctor-of-philosophy',
+        imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
         description:
-          'Build foundational business skills in management, finance, marketing, and entrepreneurship with a global perspective.',
+          'A fully online doctoral research program designed for scholars and professionals seeking advanced academic inquiry and global recognition.',
+      },
+    ],
+  },
+  {
+    level: 'Honorary',
+    items: [
+      {
+        name: 'Honorary Doctorate (Honoris Causa)',
+        href: '/academics/honorary/honorary-doctorate',
+        imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
+        description:
+          'A prestigious recognition for individuals who have demonstrated exceptional leadership and contributions to their field.',
       },
       {
-        name: 'Bachelor of Public Administration (BPA)',
-        href: '/academics/bachelors/bpa',
-        imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
+        name: 'Honorary Professorship',
+        href: '/academics/honorary/honorary-professorship',
+        imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
         description:
-          'Prepare for leadership roles in government and nonprofit organizations through the study of public policy and governance.',
-      },
-      {
-        name: 'Bachelor of Social Work (BSW)',
-        href: '/academics/bachelors/bsw',
-        imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80',
-        description:
-          'Develop the skills needed to support individuals and communities through counseling, advocacy, and social welfare programs.',
+          'An academic distinction recognizing outstanding contributions to education, research, or professional excellence.',
       },
     ],
   },
@@ -63,33 +68,28 @@ const programs = [
     ],
   },
   {
-    level: 'Doctoral',
+    level: "Bachelor's",
     items: [
       {
-        name: 'Doctor of Philosophy (PhD)',
-        href: '/academics/phd/doctor-of-philosophy',
-        imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
+        name: 'Bachelor of Business Administration (BBA)',
+        href: '/academics/bachelors/bba',
+        imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
         description:
-          'A fully online doctoral research program designed for scholars and professionals seeking advanced academic inquiry and global recognition.',
-      },
-    ],
-  },
-  {
-    level: 'Honorary',
-    items: [
-      {
-        name: 'Honorary Doctorate (Honoris Causa)',
-        href: '/academics/honorary/honorary-doctorate',
-        imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
-        description:
-          'A prestigious recognition for individuals who have demonstrated exceptional leadership and contributions to their field.',
+          'Build foundational business skills in management, finance, marketing, and entrepreneurship with a global perspective.',
       },
       {
-        name: 'Honorary Professorship',
-        href: '/academics/honorary/honorary-professorship',
-        imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
+        name: 'Bachelor of Public Administration (BPA)',
+        href: '/academics/bachelors/bpa',
+        imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
         description:
-          'An academic distinction recognizing outstanding contributions to education, research, or professional excellence.',
+          'Prepare for leadership roles in government and nonprofit organizations through the study of public policy and governance.',
+      },
+      {
+        name: 'Bachelor of Social Work (BSW)',
+        href: '/academics/bachelors/bsw',
+        imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80',
+        description:
+          'Develop the skills needed to support individuals and communities through counseling, advocacy, and social welfare programs.',
       },
     ],
   },
