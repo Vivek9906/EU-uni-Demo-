@@ -68,7 +68,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     }
 
     if (status && status !== application.status) {
-      sendStatusUpdateEmail(updated.email, updated.fullName, updated.referenceNumber, status, updated.programName).catch(console.error);
+      await sendStatusUpdateEmail(updated.email, updated.fullName, updated.referenceNumber, status, updated.programName).catch(console.error);
     }
 
     return NextResponse.json({ success: true, application: updated });

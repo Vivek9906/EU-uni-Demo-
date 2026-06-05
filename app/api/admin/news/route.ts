@@ -43,7 +43,7 @@ export async function POST(request: Request) {
         const emails = subscribers.map(s => s.email);
         if (emails.length > 0) {
           const newsUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/news/${news.slug}`;
-          sendBroadcastEmail(
+          await sendBroadcastEmail(
             emails, 
             `News: ${news.title}`, 
             news.title, 

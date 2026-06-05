@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     });
 
     if (email) {
-      sendCertificateNotification(email, holderName, certificate.certificateId, programName).catch(console.error);
+      await sendCertificateNotification(email, holderName, certificate.certificateId, programName).catch(console.error);
     }
 
     return NextResponse.json({ success: true, certificate }, { status: 201 });

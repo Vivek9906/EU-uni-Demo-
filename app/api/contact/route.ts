@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       },
     });
 
-    sendContactConfirmation(inquiry.email, inquiry.name).catch(console.error);
+    await sendContactConfirmation(inquiry.email, inquiry.name).catch(console.error);
 
     return NextResponse.json({ success: true, message: 'Inquiry submitted successfully.' }, { status: 201 });
   } catch (error) {

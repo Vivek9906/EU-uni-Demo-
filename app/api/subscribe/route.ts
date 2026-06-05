@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         data: { email }
       });
       // Send confirmation email to the new subscriber
-      sendNewsletterConfirmation(email).catch(console.error);
+      await sendNewsletterConfirmation(email).catch(console.error);
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
