@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { getServerSession } from 'next-auth';
@@ -68,3 +69,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Failed to create program' }, { status: 500 });
   }
 }
+
