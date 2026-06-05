@@ -19,11 +19,16 @@ export async function POST(request: Request) {
       await prisma.subscriber.create({
         data: { email }
       });
-      // Send confirmation email to the new subscriber
-      await sendNewsletterConfirmation(email).catch(console.error);
     }
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    try {
+      // Send confirmation email to the subscriber
+      await sendNewsletterConfirmation(email);
+      return NextResponse.json({ success: true }, { status: 200 });
+    } catch (emailError: any) {
+      console.error('Email sending failed:', emailError);
+      return NextResponse.json({ error: 'Failed to send email: ' + emailError.message }, { status: 500 });
+    }
   } catch (error) {
     console.error('Subscription error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
