@@ -9,7 +9,6 @@ const BG_IMAGES = [
   '/images/hero/hero-3.png',
   '/images/hero/hero-4.png',
   '/images/hero/hero-5.png',
-  '/images/hero/hero-6.png',
 ]
 
 // Unsplash fallbacks — used automatically if a local image fails to load
@@ -19,7 +18,6 @@ const FALLBACKS = [
   'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920&q=85&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1627556704302-624286467c65?w=1920&q=85&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&q=85&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=1920&q=85&auto=format&fit=crop',
 ]
 
 export default function HeroSection() {
