@@ -117,7 +117,14 @@ export default function ApplyPage() {
       if (response.ok) {
         setSubmitResult({ success: true, referenceNumber: result.referenceNumber });
       } else {
-        setSubmitResult({ success: false, error: result.error || 'Submission failed. Please try again.' });
+        let errorMessage = result.error || 'Submission failed. Please try again.';
+        if (result.details) {
+          const firstError = Object.values(result.details)[0];
+          if (Array.isArray(firstError) && firstError.length > 0) {
+            errorMessage = firstError[0] as string;
+          }
+        }
+        setSubmitResult({ success: false, error: errorMessage });
       }
     } catch {
       setSubmitResult({ success: false, error: 'Network error. Please check your connection and try again.' });

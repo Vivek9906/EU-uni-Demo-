@@ -28,8 +28,12 @@ export async function POST(request: Request) {
       },
     });
 
-    await sendContactConfirmation(inquiry.email, inquiry.name).catch(console.error);
-
+    try {
+      await sendContactConfirmation(inquiry.email, inquiry.name);
+    } catch (emailError: any) {
+      console.error('Email sending failed:', emailError);
+      return NextResponse.json({ error: 'Failed to send email: ' + emailError.message }, { status: 500 });
+    }
     return NextResponse.json({ success: true, message: 'Inquiry submitted successfully.' }, { status: 201 });
   } catch (error) {
     console.error('Contact form error:', error);

@@ -95,6 +95,7 @@ export async function sendProgramApplicationEmail(
     });
   } catch (error) {
     console.error('Failed to send program application email:', error);
+    throw error;
   }
 }
 
@@ -140,6 +141,7 @@ export async function sendCertificateApplicationEmail(
     });
   } catch (error) {
     console.error('Failed to send certificate application email:', error);
+    throw error;
   }
 }
 
@@ -184,6 +186,7 @@ export async function sendStatusUpdateEmail(
     });
   } catch (error) {
     console.error('Failed to send status update email:', error);
+    throw error;
   }
 }
 
@@ -211,6 +214,7 @@ export async function sendContactConfirmation(
     });
   } catch (error) {
     console.error('Failed to send contact confirmation email:', error);
+    throw error;
   }
 }
 
@@ -235,6 +239,7 @@ export async function sendAdminNotification(
     });
   } catch (error) {
     console.error('Failed to send admin notification:', error);
+    throw error;
   }
 }
 
@@ -272,6 +277,7 @@ export async function sendCertificateNotification(
     });
   } catch (error) {
     console.error('Failed to send certificate notification:', error);
+    throw error;
   }
 }
 
@@ -346,6 +352,7 @@ export async function sendBroadcastEmail(
     });
   } catch (error) {
     console.error('Failed to send broadcast email:', error);
+    throw error;
   }
 }
 
