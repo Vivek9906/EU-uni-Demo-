@@ -2,28 +2,12 @@
 
 const addresses = [
   {
-    id: 1,
-    city: 'Copenhagen, Denmark',
-    flag: '🇩🇰',
-    address: 'Rued Langgaards Vej 7',
-    postcode: '4300 Copenhagen S',
-    country: 'Denmark',
-  },
-  {
     id: 2,
     city: 'Austin, Texas, USA',
     flag: '🇺🇸',
     address: 'Suite 2.408, 1616 Guadalupe Street',
     postcode: 'Austin, TX 78701',
     country: 'United States',
-  },
-  {
-    id: 3,
-    city: 'Petaling Jaya, Malaysia',
-    flag: '🇲🇾',
-    address: 'Blok C, Kompleks Kelana Centre Point, Jalan SS7/14, Kelana Jaya',
-    postcode: '47301 Petaling Jaya, Selangor',
-    country: 'Malaysia',
   },
 ];
 
@@ -49,9 +33,10 @@ export default function AddressCards() {
           <h2 className="section-title">Find Us Around the World</h2>
         </div>
 
-        {/* 3 Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {addresses.map((loc) => (
+        {/* 1 Card */}
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            {addresses.map((loc) => (
             <div
               key={loc.id}
               className="bg-background-card rounded-card border border-border shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-1"
@@ -95,6 +80,7 @@ export default function AddressCards() {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
     </section>

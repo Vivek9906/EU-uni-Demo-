@@ -133,12 +133,12 @@ function AccreditationCard({ acc }: { acc: AccreditationType }) {
             )
           ) : (
             // Missing / broken image
-            <a href={`mailto:info@euamericanuniversity.us?subject=Certificate Request — ${acc.name}`}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', background: '#F8FAFC', color: '#64748B', border: '1.5px solid #E2E8F0', borderRadius: 7, fontWeight: 600, fontSize: 13.5, textDecoration: 'none', transition: 'all 0.15s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#EFF6FF'; (e.currentTarget as HTMLElement).style.color = '#1B3A6B'; (e.currentTarget as HTMLElement).style.borderColor = '#BFDBFE' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#F8FAFC'; (e.currentTarget as HTMLElement).style.color = '#64748B'; (e.currentTarget as HTMLElement).style.borderColor = '#E2E8F0' }}>
-              📧 Request Certificate
-            </a>
+            <button onClick={(e) => e.preventDefault()}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', background: '#1B3A6B', color: '#FFF', borderRadius: 7, fontWeight: 700, fontSize: 13.5, border: 'none', cursor: 'pointer', fontFamily: 'inherit', transition: 'background 0.15s' }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#0F2347'}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#1B3A6B'}>
+              🏅 View Certificate
+            </button>
           )}
         </div>
       </div>
