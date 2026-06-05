@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Application {
@@ -315,3 +316,43 @@ model Subscriber {
   unsubscribedAt DateTime?
   source         String    @default("popup")
 }
+
+model Partner {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  region      String
+  country     String
+  website     String?
+  email       String?
+  logoUrl     String?
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PartnerApplication {
+  id               String    @id @default(cuid())
+  name             String
+  organization     String
+  email            String
+  phone            String?
+  country          String?
+  partnershipType  String?
+  message          String?
+  status           String    @default("pending")
+  adminNotes       String?
+  reviewedAt       DateTime?
+  reviewedBy       String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model SystemSettings {
+  id                  String   @id @default("system_settings")
+  isMaintenanceMode   Boolean  @default(false)
+  maintenanceMessage  String   @default("Website is currently under maintenance. We'll be back shortly.")
+  updatedAt           DateTime @updatedAt
+}
+

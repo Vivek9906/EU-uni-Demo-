@@ -29,7 +29,6 @@ export async function POST(request: Request) {
     });
 
     sendContactConfirmation(inquiry.email, inquiry.name).catch(console.error);
-    sendAdminNotification(`New Contact Inquiry: ${inquiry.subject}`, `<p><strong>From:</strong> ${inquiry.name} (${inquiry.email})</p><p><strong>Subject:</strong> ${inquiry.subject}</p><p><strong>Message:</strong> ${inquiry.message}</p>`).catch(console.error);
 
     return NextResponse.json({ success: true, message: 'Inquiry submitted successfully.' }, { status: 201 });
   } catch (error) {

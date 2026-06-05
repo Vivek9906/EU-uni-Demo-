@@ -9,39 +9,28 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, action, breadcrumb }: PageHeaderProps) {
   return (
-    <div style={{
-      padding: '24px 32px',
-      background: '#FFF',
-      borderBottom: '1px solid #E5E7EB',
-      marginBottom: 24,
-    }}>
+    <div className="bg-white px-8 py-6 border-b border-slate-200 mb-6 shadow-sm">
       {breadcrumb && (
-        <div style={{ fontSize: 12, color: '#6B7280', marginBottom: 6 }}>
+        <div className="text-xs font-medium text-slate-500 mb-2 flex items-center gap-2">
           {breadcrumb.map((b, i) => (
-            <span key={i}>{i > 0 && ' › '}{b}</span>
+            <React.Fragment key={i}>
+              {i > 0 && <span className="text-slate-300">/</span>}
+              <span className={i === breadcrumb.length - 1 ? 'text-slate-900 font-semibold' : ''}>{b}</span>
+            </React.Fragment>
           ))}
         </div>
       )}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 800, color: '#111827', margin: 0 }}>{title}</h1>
-          {description && <p style={{ color: '#6B7280', margin: '4px 0 0', fontSize: 13.5 }}>{description}</p>}
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">{title}</h1>
+          {description && <p className="text-[13.5px] text-slate-500 mt-1.5 leading-relaxed max-w-2xl">{description}</p>}
         </div>
         {action && (
           <button
             onClick={action.onClick}
-            style={{
-              padding: '9px 18px',
-              background: '#1B3A6B',
-              color: '#FFF',
-              border: 'none',
-              borderRadius: 7,
-              fontWeight: 700,
-              fontSize: 13.5,
-              cursor: 'pointer',
-            }}
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-semibold text-[13.5px] transition-all duration-200 shadow-sm hover:shadow active:scale-95 whitespace-nowrap shrink-0"
           >
-            + {action.label}
+            <span className="text-lg leading-none mb-0.5">+</span> {action.label}
           </button>
         )}
       </div>

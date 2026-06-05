@@ -1,6 +1,8 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { sanitizeInput, sanitizeHtml, slugify } from '@/lib/utils';
+import { sendBroadcastEmail } from '@/lib/email';
 
 export async function GET() {
   try {
@@ -32,8 +34,32 @@ export async function POST(request: Request) {
         publishedAt: isPublished ? new Date() : null,
       },
     });
+
+    if (isPublished) {
+      try {
+        const subscribers = await prisma.subscriber.findMany({
+          select: { email: true }
+        });
+        const emails = subscribers.map(s => s.email);
+        if (emails.length > 0) {
+          const newsUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/news/${news.slug}`;
+          sendBroadcastEmail(
+            emails, 
+            `News: ${news.title}`, 
+            news.title, 
+            news.excerpt || '', 
+            newsUrl, 
+            'Read Full Article'
+          ).catch(console.error);
+        }
+      } catch (err) {
+        console.error("Failed to broadcast news:", err);
+      }
+    }
+
     return NextResponse.json({ success: true, news }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+

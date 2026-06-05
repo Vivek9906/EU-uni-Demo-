@@ -57,19 +57,23 @@ export default function ContactPage() {
             <div className="space-y-6">
               <h2 className="font-heading text-2xl font-bold mb-6">Contact Information</h2>
               <div className="card p-6">
-                <h3 className="font-heading text-base font-bold mb-4">Global Headquarters</h3>
+                <h3 className="font-heading text-base font-bold mb-4">🇩🇰 Denmark Office</h3>
                 <div className="space-y-3 text-sm text-foreground-secondary">
-                  <div className="flex items-start gap-3"><MapPin size={16} className="text-primary shrink-0 mt-0.5" />11 rue Magdebourg, Paris, France 75016</div>
-                  <div className="flex items-center gap-3"><Phone size={16} className="text-primary shrink-0" />+33 1 89 37 00 04</div>
+                  <div className="flex items-start gap-3"><MapPin size={16} className="text-primary shrink-0 mt-0.5" /><span>Rued Langgaards Vej 7<br/>4300 Copenhagen S<br/>Denmark</span></div>
                   <div className="flex items-center gap-3"><Mail size={16} className="text-primary shrink-0" />info@euamericanuniversity.us</div>
                   <div className="flex items-center gap-3"><Clock size={16} className="text-primary shrink-0" />Mon–Fri: 9:00 AM – 5:00 PM (CET)</div>
                 </div>
               </div>
               <div className="card p-6">
-                <h3 className="font-heading text-base font-bold mb-4">US Regional Office</h3>
+                <h3 className="font-heading text-base font-bold mb-4">🇺🇸 USA Office</h3>
                 <div className="space-y-3 text-sm text-foreground-secondary">
-                  <div className="flex items-start gap-3"><MapPin size={16} className="text-primary shrink-0 mt-0.5" />1126 W. Foothill Blvd. #165, Upland, CA 91786</div>
-                  <div className="flex items-center gap-3"><Phone size={16} className="text-primary shrink-0" />+1-909-280-0112</div>
+                  <div className="flex items-start gap-3"><MapPin size={16} className="text-primary shrink-0 mt-0.5" /><span>Suite 2.408<br/>1616 Guadalupe Street<br/>Austin, TX 78701<br/>United States</span></div>
+                </div>
+              </div>
+              <div className="card p-6">
+                <h3 className="font-heading text-base font-bold mb-4">🇲🇾 Malaysia Office</h3>
+                <div className="space-y-3 text-sm text-foreground-secondary">
+                  <div className="flex items-start gap-3"><MapPin size={16} className="text-primary shrink-0 mt-0.5" /><span>Blok C, Kompleks Kelana Centre Point<br/>Jalan SS7/14, Kelana Jaya<br/>47301 Petaling Jaya, Selangor<br/>Malaysia</span></div>
                 </div>
               </div>
               <div className="card p-6">
@@ -80,9 +84,6 @@ export default function ContactPage() {
                   <p><strong>Finance:</strong> finance@euamericanuniversity.us</p>
                   <p><strong>Student Records:</strong> records@euamericanuniversity.us</p>
                 </div>
-              </div>
-              <div className="rounded-card overflow-hidden border border-border h-64">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.999!2d2.2875!3d48.8648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66fef846de9e7%3A0x2a42!2s11+Rue+de+Magdebourg%2C+75016+Paris!5e0!3m2!1sen!2sfr!4v1700000000000!5m2!1sen!2sfr" width="100%" height="100%" style={{border: 0}} allowFullScreen loading="lazy" title="EU American University Location" />
               </div>
             </div>
           </div>

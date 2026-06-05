@@ -10,12 +10,8 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: 'EU American University — A Leader\'s Choice in Education',
-    template: '%s | EU American University',
-  },
-  description:
-    'EU American University offers globally recognized programs in Business Administration, Public Administration, Social Work, Honorary Doctorate, and Professional Certifications.',
+  title: 'EU American University',
+  description: 'A leader\'s choice in education',
   keywords: [
     'EU American University',
     'EUAU',
@@ -40,9 +36,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: '/',
     siteName: 'EU American University',
-    title: 'EU American University — A Leader\'s Choice in Education',
-    description:
-      'EU American University offers globally recognized programs in Business Administration, Public Administration, Social Work, Honorary Doctorate, and Professional Certifications.',
+    title: 'EU American University',
+    description: 'A leader\'s choice in education',
     images: [
       {
         url: '/og-image.jpg',
@@ -55,8 +50,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'EU American University',
-    description:
-      'Globally recognized programs in Business, Public Administration, Social Work, Honorary Doctorate, and Professional Certifications.',
+    description: 'A leader\'s choice in education',
     images: ['/og-image.jpg'],
   },
   robots: {

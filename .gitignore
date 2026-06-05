@@ -36,8 +36,10 @@ next-env.d.ts
 
 # prisma
 prisma/*.db
-prisma/migrations/
+prisma/*.db-journal
 
 # uploads
 /public/uploads/*
 !/public/uploads/.gitkeep
+# Added by code-review-graph
+.code-review-graph/

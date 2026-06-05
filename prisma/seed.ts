@@ -306,7 +306,7 @@ async function main() {
     { question: 'What is the application deadline?', answer: 'EU American University operates on a rolling admissions basis, meaning applications are reviewed as they are received. However, we recommend applying at least 8 weeks before your intended start date to allow sufficient time for processing.', category: 'Admissions', order: 3 },
     { question: 'Can international students apply?', answer: 'Absolutely. EU American University welcomes students from all countries and backgrounds. We have students from over 100 countries. International applicants follow the same application process.', category: 'Admissions', order: 4 },
     { question: 'Are there scholarships available?', answer: 'Yes, EU American University offers several scholarship opportunities including merit-based scholarships, need-based financial aid, and special scholarships for international students. Visit our Scholarships page for details.', category: 'Admissions', order: 5 },
-    { question: 'What programs does EU American University offer?', answer: 'EU American University offers Bachelor\'s programs (BBA, BPA, BSW), Master\'s programs (MBA, MPA, MSW), honorary recognition programs (Honorary Doctorate, Doctor of Philosophy, Honorary Professorship), and 30 professional certification programs across five categories.', category: 'Programs', order: 1 },
+    { question: 'What programs does EU American University offer?', answer: 'EU American University offers Bachelor\'s programs (BBA, BPA, BSW), Master\'s programs (MBA, MPA, MSW), a doctoral program (Doctor of Philosophy — PhD), honorary recognition programs (Honorary Doctorate, Honorary Professorship), and 30 professional certification programs across five categories.', category: 'Programs', order: 1 },
     { question: 'What is the difference between the Bachelor\'s and Master\'s programs?', answer: 'Bachelor\'s programs provide foundational education covering core disciplines. Master\'s programs build on this with advanced coursework in strategic leadership, specialized electives, and capstone research. Master\'s programs are designed for professionals seeking senior leadership roles.', category: 'Programs', order: 2 },
     { question: 'What is an Honorary Doctorate?', answer: 'An Honorary Doctorate (Honoris Causa) is a prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society. The program name submitted during application is exactly what appears on your certificate.', category: 'Programs', order: 3 },
     { question: 'Are programs available online?', answer: 'Yes, all EU American University programs are delivered online, making quality education accessible to working professionals worldwide. Our online programs use modern learning platforms with interactive coursework and digital resources.', category: 'Programs', order: 4 },
@@ -369,7 +369,13 @@ async function main() {
       faculty: 'Business',
       duration: 'Honorary',
       degreeType: 'Honorary',
-    }
+    },
+    {
+      name: 'Doctor of Philosophy (PhD)',
+      faculty: 'Research',
+      duration: '3-5 Years',
+      degreeType: 'PhD',
+    },
   ];
 
   for (const program of programData) {
@@ -451,6 +457,18 @@ async function main() {
     },
   });
   console.log('✅ Site settings created');
+
+  // 12. System Settings (Maintenance Mode)
+  await prisma.systemSettings.upsert({
+    where: { id: 'system_settings' },
+    update: {},
+    create: {
+      id: 'system_settings',
+      isMaintenanceMode: false,
+      maintenanceMessage: "Website is currently under maintenance. We'll be back shortly.",
+    },
+  });
+  console.log('✅ System settings created');
 
   console.log('🎉 Database seeded successfully!');
 }

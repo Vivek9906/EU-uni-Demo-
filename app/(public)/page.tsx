@@ -7,7 +7,7 @@ import ProgramsSection from '@/components/sections/ProgramsSection';
 import NewsEvents from '@/components/sections/NewsEvents';
 import TestimonialsCarousel from '@/components/sections/TestimonialsCarousel';
 import HonoraryCtaBanner from '@/components/sections/HonoraryCtaBanner';
-import CampusLocation from '@/components/sections/CampusLocation';
+import AddressCards from '@/components/sections/AddressCards';
 
 function SectionSkeleton() {
   return (
@@ -55,7 +55,7 @@ export default function HomePage() {
 
       <HonoraryCtaBanner />
 
-      <CampusLocation />
+      <AddressCards />
     </>
   );
 }

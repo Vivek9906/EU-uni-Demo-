@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
-  secure: false,
+export const transporter = nodemailer.createTransport({
+  host: 'smtp.hostinger.com',
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -32,7 +32,7 @@ const emailFooter = `
 </div>
 `;
 
-function wrapEmail(content: string): string {
+export function wrapEmail(content: string): string {
   return `
 <!DOCTYPE html>
 <html>
@@ -53,7 +53,7 @@ function wrapEmail(content: string): string {
   `.trim();
 }
 
-export async function sendApplicationConfirmation(
+export async function sendProgramApplicationEmail(
   to: string,
   name: string,
   referenceNumber: string,
@@ -61,31 +61,24 @@ export async function sendApplicationConfirmation(
 ): Promise<void> {
   const content = `
     <h2 style="color: #1A1A2E; font-family: 'Merriweather', Georgia, serif; font-size: 20px;">
-      Application Received
+      Program Application Received
     </h2>
     <p style="color: #4A5568; line-height: 1.7;">
       Dear ${name},
     </p>
     <p style="color: #4A5568; line-height: 1.7;">
-      Thank you for submitting your application to EU American University. We have received your application and it is currently being reviewed by our admissions team.
+      Thank you for applying to the <strong>${programName}</strong> program at EU American University. We have successfully received your application.
     </p>
     <div style="background: #F7F8FA; border: 1px solid #E2E8F0; border-radius: 8px; padding: 20px; margin: 24px 0;">
       <p style="color: #718096; font-size: 13px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 1px;">
-        Application Reference Number
+        Application Reference
       </p>
       <p style="color: #1A3C6E; font-size: 24px; font-weight: bold; margin: 0;">
         ${referenceNumber}
       </p>
-      <p style="color: #718096; font-size: 14px; margin: 8px 0 0;">
-        Program: ${programName}
-      </p>
     </div>
     <p style="color: #4A5568; line-height: 1.7;">
-      Please save your reference number for future correspondence. You will be notified via email when there is an update on your application status.
-    </p>
-    <p style="color: #4A5568; line-height: 1.7;">
-      If you have any questions, please don't hesitate to contact us at 
-      <a href="mailto:admissions@euamericanuniversity.us" style="color: #1A3C6E;">admissions@euamericanuniversity.us</a>.
+      Our admissions team will review your qualifications and get back to you shortly regarding the next steps in your enrollment process.
     </p>
     <p style="color: #4A5568; line-height: 1.7;">
       Best regards,<br>
@@ -97,11 +90,56 @@ export async function sendApplicationConfirmation(
     await transporter.sendMail({
       from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
       to,
-      subject: `Application Received — ${referenceNumber} | EU American University`,
+      subject: `Program Application: ${programName} | EU American University`,
       html: wrapEmail(content),
     });
   } catch (error) {
-    console.error('Failed to send application confirmation email:', error);
+    console.error('Failed to send program application email:', error);
+  }
+}
+
+export async function sendCertificateApplicationEmail(
+  to: string,
+  name: string,
+  referenceNumber: string,
+  certificateName: string
+): Promise<void> {
+  const content = `
+    <h2 style="color: #1A1A2E; font-family: 'Merriweather', Georgia, serif; font-size: 20px;">
+      Certificate Application Received
+    </h2>
+    <p style="color: #4A5568; line-height: 1.7;">
+      Dear ${name},
+    </p>
+    <p style="color: #4A5568; line-height: 1.7;">
+      Thank you for your interest in the <strong>${certificateName}</strong> certificate at EU American University. We have successfully received your application request.
+    </p>
+    <div style="background: #F7F8FA; border: 1px solid #E2E8F0; border-radius: 8px; padding: 20px; margin: 24px 0;">
+      <p style="color: #718096; font-size: 13px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 1px;">
+        Request Reference
+      </p>
+      <p style="color: #1A3C6E; font-size: 24px; font-weight: bold; margin: 0;">
+        ${referenceNumber}
+      </p>
+    </div>
+    <p style="color: #4A5568; line-height: 1.7;">
+      Our certification department will review your application and be in touch soon with further instructions.
+    </p>
+    <p style="color: #4A5568; line-height: 1.7;">
+      Best regards,<br>
+      <strong>EUAU Certification Department</strong>
+    </p>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      to,
+      subject: `Certificate Application: ${certificateName} | EU American University`,
+      html: wrapEmail(content),
+    });
+  } catch (error) {
+    console.error('Failed to send certificate application email:', error);
   }
 }
 
@@ -236,3 +274,77 @@ export async function sendCertificateNotification(
     console.error('Failed to send certificate notification:', error);
   }
 }
+
+export async function sendNewsletterConfirmation(
+  to: string
+): Promise<void> {
+  const content = `
+    <h2 style="color: #1A1A2E; font-family: 'Merriweather', Georgia, serif; font-size: 20px;">
+      Welcome to the EU American University Newsletter
+    </h2>
+    <p style="color: #4A5568; line-height: 1.7;">
+      Thank you for subscribing to our newsletter!
+    </p>
+    <p style="color: #4A5568; line-height: 1.7;">
+      We are thrilled to have you with us. You'll now be the first to hear about our latest programs, upcoming events, academic achievements, and global partnerships.
+    </p>
+    <div style="background: #F7F8FA; border: 1px solid #E2E8F0; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;">
+      <p style="color: #1A3C6E; font-size: 16px; font-weight: bold; margin: 0;">
+        Stay Connected with EUAU
+      </p>
+    </div>
+    <p style="color: #4A5568; line-height: 1.7;">
+      If you ever wish to stop receiving these updates, you can unsubscribe at any time.
+    </p>
+    <p style="color: #4A5568; line-height: 1.7;">Best regards,<br><strong>EUAU Communications Team</strong></p>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      to,
+      subject: 'Thank You for Subscribing | EU American University',
+      html: wrapEmail(content),
+    });
+  } catch (error) {
+    console.error('Failed to send newsletter confirmation:', error);
+  }
+}
+
+export async function sendBroadcastEmail(
+  to: string[],
+  subject: string,
+  title: string,
+  excerpt: string,
+  linkUrl?: string,
+  linkText: string = 'Read More'
+): Promise<void> {
+  const content = `
+    <h2 style="color: #1A1A2E; font-family: 'Merriweather', Georgia, serif; font-size: 20px;">
+      ${title}
+    </h2>
+    <p style="color: #4A5568; line-height: 1.7;">
+      ${excerpt}
+    </p>
+    ${linkUrl ? `
+    <div style="margin: 30px 0;">
+      <a href="${linkUrl}" style="background: #1A3C6E; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">${linkText}</a>
+    </div>
+    ` : ''}
+    <p style="color: #4A5568; line-height: 1.7; font-size: 13px; margin-top: 40px;">
+      You are receiving this email because you subscribed to the EU American University newsletter.
+    </p>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
+      bcc: to, // Send as BCC so recipients don't see each other
+      subject: `${subject} | EU American University`,
+      html: wrapEmail(content),
+    });
+  } catch (error) {
+    console.error('Failed to send broadcast email:', error);
+  }
+}
+

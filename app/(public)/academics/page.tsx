@@ -79,14 +79,14 @@ const programs = [
     items: [
       {
         name: 'Honorary Doctorate (Honoris Causa)',
-        href: '/academics/honorary',
+        href: '/academics/honorary/honorary-doctorate',
         imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
         description:
           'A prestigious recognition for individuals who have demonstrated exceptional leadership and contributions to their field.',
       },
       {
         name: 'Honorary Professorship',
-        href: '/academics/honorary',
+        href: '/academics/honorary/honorary-professorship',
         imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
         description:
           'An academic distinction recognizing outstanding contributions to education, research, or professional excellence.',

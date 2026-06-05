@@ -5,7 +5,7 @@ import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = {
   title: 'Honorary Programs',
-  description: 'EU American University Honorary programs: Honorary Doctorate (Honoris Causa), Doctor of Philosophy (PhD), and Honorary Professorship.',
+  description: 'EU American University Honorary programs: Honorary Doctorate (Honoris Causa) and Honorary Professorship.',
 };
 
 const programs = [
@@ -15,13 +15,6 @@ const programs = [
     description: 'A prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement, professional excellence, and significant contributions to their field, community, or society. This recognition honors a lifetime of distinguished service and leadership.',
     imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
     eligibility: ['Minimum 10 years of professional experience', 'Demonstrated leadership in their field', 'Evidence of community impact', 'Professional references'],
-  },
-  {
-    name: 'Doctor of Philosophy (PhD)',
-    icon: BookOpen,
-    description: 'An honorary recognition awarded to distinguished scholars and researchers whose lifetime contributions have significantly advanced their field of expertise. This program acknowledges individuals who have made substantial academic or intellectual contributions.',
-    imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
-    eligibility: ['Significant academic or research contributions', 'Published works or major research projects', 'Recognition from academic peers', 'Professional references'],
   },
   {
     name: 'Honorary Professorship',

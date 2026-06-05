@@ -1,6 +1,7 @@
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { SubscriptionPopup } from '@/components/ui/SubscriptionPopup';
+import { MaintenanceBanner } from '@/components/layout/MaintenanceBanner';
 
 export default function PublicLayout({
   children,
@@ -9,6 +10,7 @@ export default function PublicLayout({
 }) {
   return (
     <>
+      <MaintenanceBanner />
       <Navbar />
       <main id="main-content">{children}</main>
       <Footer />

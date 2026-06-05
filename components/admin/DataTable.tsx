@@ -25,58 +25,40 @@ export function DataTable<T extends Record<string, any>>({
   emptyMessage = 'No records found.',
 }: DataTableProps<T>) {
   return (
-    <div style={{
-      background: 'var(--admin-card-bg)',
-      borderRadius: 'var(--admin-radius)',
-      border: '1px solid var(--admin-card-border)',
-      boxShadow: 'var(--admin-card-shadow)',
-      overflow: 'hidden',
-    }}>
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       {searchable && (
-        <div style={{ padding: '16px', borderBottom: '1px solid var(--admin-card-border)' }}>
+        <div className="p-4 border-b border-slate-200 bg-slate-50/50">
           <input
             type="text"
             placeholder={searchPlaceholder}
-            className="admin-input"
-            style={{ maxWidth: 300 }}
+            className="w-full max-w-[300px] px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all shadow-sm"
           />
         </div>
       )}
       
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-left text-sm whitespace-nowrap">
           <thead>
-            <tr style={{ background: '#F9FAFB', borderBottom: '1px solid var(--admin-card-border)' }}>
+            <tr className="bg-slate-50/80 border-b border-slate-200">
               {columns.map((col, i) => (
-                <th key={String(col.key) + i} style={{
-                  padding: '12px 16px',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: 'var(--admin-text-muted)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  width: col.width,
-                }}>
+                <th key={String(col.key) + i} style={{ width: col.width }} className="px-5 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
                   {col.label}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-slate-100">
             {data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} style={{ padding: '32px 16px', textAlign: 'center', color: 'var(--admin-text-muted)', fontSize: 14 }}>
+                <td colSpan={columns.length} className="px-5 py-12 text-center text-slate-500 text-sm">
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
               data.map((row, rowIndex) => (
-                <tr key={row.id || rowIndex} style={{
-                  borderBottom: rowIndex === data.length - 1 ? 'none' : '1px solid var(--admin-card-border)',
-                  transition: 'var(--admin-transition)',
-                }} className="hover:bg-gray-50">
+                <tr key={row.id || rowIndex} className="hover:bg-slate-50/80 transition-colors duration-150 group">
                   {columns.map((col, colIndex) => (
-                    <td key={String(col.key) + colIndex} style={{ padding: '12px 16px', fontSize: 14, color: 'var(--admin-text-heading)' }}>
+                    <td key={String(col.key) + colIndex} className="px-5 py-4 text-sm text-slate-700 group-hover:text-slate-900 transition-colors">
                       {col.render ? col.render(row) : row[col.key as keyof T]}
                     </td>
                   ))}

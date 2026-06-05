@@ -6,24 +6,25 @@ import {
   Twitter,
   Linkedin,
   Instagram,
-  Youtube,
   Mail,
   Phone,
   MapPin,
 } from 'lucide-react';
 import { useState } from 'react';
+import { UniversityLogo } from '@/components/ui/UniversityLogo';
 
 function EUAULogoSmall({ className }: { className?: string }) {
   return (
-    <img src="/logo.png" alt="EU American University Logo" className={className} />
+    <img src="/logo-white.png" alt="EU American University Logo" className={className} />
   );
 }
 
 const footerLinks = {
   Academics: [
-    { label: "Bachelor's Programs", href: '/academics/bachelors' },
-    { label: "Master's Programs", href: '/academics/masters' },
+    { label: 'PhD Programs', href: '/academics/phd' },
     { label: 'Honorary Programs', href: '/academics/honorary' },
+    { label: "Master's Programs", href: '/academics/masters' },
+    { label: "Bachelor's Programs", href: '/academics/bachelors' },
     { label: 'Certifications', href: '/certifications' },
     { label: 'All Programs', href: '/academics' },
   ],
@@ -53,7 +54,6 @@ const socialLinks = [
   { icon: Twitter, href: 'https://twitter.com/euamericanuniv', label: 'Twitter' },
   { icon: Linkedin, href: 'https://linkedin.com/school/euamericanuniversity', label: 'LinkedIn' },
   { icon: Instagram, href: 'https://instagram.com/euamericanuniversity', label: 'Instagram' },
-  { icon: Youtube, href: 'https://youtube.com/euamericanuniversity', label: 'YouTube' },
 ];
 
 function SocialIcon({ social }: { social: typeof socialLinks[number] }) {
@@ -87,17 +87,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12">
           {/* Brand column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-4" aria-label="EU American University Home">
-              <EUAULogoSmall className="w-10 h-10" />
-              <div>
-                <div className="font-heading text-sm font-bold leading-tight tracking-wide uppercase">
-                  EU American
-                </div>
-                <div className="font-heading text-[10px] text-white/70 leading-tight tracking-[0.2em] uppercase">
-                  University
-                </div>
-              </div>
-            </Link>
+            <div className="mb-4">
+              <UniversityLogo variant="light" />
+            </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-xs">
               Delivering accessible, high-quality education that equips individuals with the knowledge and global perspective needed to lead with purpose.
             </p>
@@ -116,9 +108,15 @@ export default function Footer() {
                 <Phone size={14} />
                 +33 1 89 37 00 04
               </a>
-              <div className="flex items-start gap-2 text-white/60">
-                <MapPin size={14} className="mt-0.5 shrink-0" />
-                <span>11 rue Magdebourg, Paris, France 75016</span>
+              <div className="flex flex-col gap-1.5 text-white/60 text-[12.5px]">
+                <div className="flex items-start gap-2">
+                  <MapPin size={14} className="mt-0.5 shrink-0" />
+                  <div className="flex flex-col gap-1">
+                    <span>🇩🇰 Rued Langgaards Vej 7, 4300 Copenhagen S, Denmark</span>
+                    <span>🇺🇸 Suite 2.408, 1616 Guadalupe Street, Austin, TX 78701</span>
+                    <span>🇲🇾 Blok C, Kompleks Kelana Centre Point, Petaling Jaya, Malaysia</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

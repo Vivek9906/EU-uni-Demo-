@@ -1,9 +1,10 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { applicationSchema } from '@/lib/validations/application';
 import { generateReferenceNumber, sanitizeInput } from '@/lib/utils';
 import { checkRateLimit, RATE_LIMITS, getClientIp, rateLimitResponse } from '@/lib/rate-limit';
-import { sendApplicationConfirmation, sendAdminNotification } from '@/lib/email';
+import { sendAdminNotification } from '@/lib/email';
 
 export async function POST(request: Request) {
   try {
@@ -63,13 +64,24 @@ export async function POST(request: Request) {
       data: sanitizedData,
     });
 
-    // Send confirmation email (non-blocking)
-    sendApplicationConfirmation(
-      application.email,
-      application.fullName,
-      application.referenceNumber,
-      application.programName
-    ).catch(console.error);
+    // Send tailored confirmation email (non-blocking)
+    if (application.programLevel === 'certification') {
+      const { sendCertificateApplicationEmail } = await import('@/lib/email');
+      sendCertificateApplicationEmail(
+        application.email,
+        application.fullName,
+        application.referenceNumber,
+        application.programName
+      ).catch(console.error);
+    } else {
+      const { sendProgramApplicationEmail } = await import('@/lib/email');
+      sendProgramApplicationEmail(
+        application.email,
+        application.fullName,
+        application.referenceNumber,
+        application.programName
+      ).catch(console.error);
+    }
 
     // Send admin notification (non-blocking)
     sendAdminNotification(
