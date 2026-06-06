@@ -481,11 +481,17 @@ async function main() {
   console.log('🎉 Database seeded successfully!');
 }
 
-main()
-  .catch((e) => {
-    console.error('❌ Seed error:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+export async function seedDatabase() {
+  await main()
+}
+
+if (require.main === module) {
+  main()
+    .catch((e) => {
+      console.error('❌ Seed error:', e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}
