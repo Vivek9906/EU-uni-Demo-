@@ -98,8 +98,8 @@ export default function RootLayout({
               },
               contactPoint: {
                 '@type': 'ContactPoint',
-                telephone: '+33-1-89-37-00-04',
-                contactType: 'admissions',
+                telephone: '+1-505-520-3303',
+                url: 'https://euamericanuniversity.us',
                 email: 'info@euamericanuniversity.us',
               },
               sameAs: [

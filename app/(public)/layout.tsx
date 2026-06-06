@@ -3,6 +3,8 @@ import Footer from '@/components/layout/Footer';
 import { SubscriptionPopup } from '@/components/ui/SubscriptionPopup';
 import { MaintenanceBanner } from '@/components/layout/MaintenanceBanner';
 
+export const dynamic = 'force-dynamic';
+
 export default function PublicLayout({
   children,
 }: {

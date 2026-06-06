@@ -18,7 +18,7 @@ const faqData: Record<string, { question: string; answer: string }[]> = {
     { question: 'Are programs available online?', answer: 'Yes, EU American University offers fully online, hybrid, and on-campus delivery modes using state-of-the-art learning platforms.' },
   ],
   Fees: [
-    { question: 'What are the tuition fees?', answer: 'Tuition varies by program. Contact admissions@euamericanuniversity.us for the current fee schedule.' },
+    { question: 'What are the tuition fees?', answer: 'Tuition varies by program. Contact info@euamericanuniversity.us for the current fee schedule.' },
     { question: 'Are payment plans available?', answer: 'Yes, EU American University offers flexible installment plans. Contact our finance office for details.' },
     { question: 'What does tuition include?', answer: 'Tuition covers all instruction, platform access, digital library resources, and credential issuance upon completion.' },
   ],

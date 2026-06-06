@@ -310,7 +310,7 @@ async function main() {
     { question: 'What is the difference between the Bachelor\'s and Master\'s programs?', answer: 'Bachelor\'s programs provide foundational education covering core disciplines. Master\'s programs build on this with advanced coursework in strategic leadership, specialized electives, and capstone research. Master\'s programs are designed for professionals seeking senior leadership roles.', category: 'Programs', order: 2 },
     { question: 'What is an Honorary Doctorate?', answer: 'An Honorary Doctorate (Honoris Causa) is a prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society. The program name submitted during application is exactly what appears on your certificate.', category: 'Programs', order: 3 },
     { question: 'Are programs available online?', answer: 'Yes, all EU American University programs are delivered online, making quality education accessible to working professionals worldwide. Our online programs use modern learning platforms with interactive coursework and digital resources.', category: 'Programs', order: 4 },
-    { question: 'What are the tuition fees?', answer: 'Tuition fees vary by program. Please contact our admissions office at admissions@euamericanuniversity.us for the current fee schedule. EU American University strives to make quality education accessible and offers various financial aid options.', category: 'Fees', order: 1 },
+    { question: 'What are the tuition fees?', answer: 'Tuition fees vary by program. Please contact our admissions office at info@euamericanuniversity.us for the current fee schedule. EU American University strives to make quality education accessible and offers various financial aid options.', category: 'Fees', order: 1 },
     { question: 'Are there payment plans available?', answer: 'Yes, EU American University offers flexible payment plans that allow students to spread their tuition payments over the duration of their program.', category: 'Fees', order: 2 },
     { question: 'Can I get a refund if I withdraw?', answer: 'EU American University has a structured refund policy. Full refund within 14 days of enrollment if coursework has not started, 50% within 30 days, and no refund after 30 days. See our Refund Policy page for details.', category: 'Fees', order: 3 },
     { question: 'How can I verify my student status or certificate?', answer: 'Use our Student Verification page at /student-verification. Enter your Enrollment ID for instant verification.', category: 'Certificates', order: 1 },
@@ -447,7 +447,7 @@ async function main() {
         siteName: "EU American University",
         tagline: "A leader's choice in education",
         contactEmail: "info@euamericanuniversity.us",
-        contactPhone: "+33 1 89 37 00 04",
+        contactPhone: "+1 505 520 3303",
         address: "11 rue Magdebourg, Paris, France 75016",
         socialMedia: {
           facebook: "https://facebook.com/euamericanuniversity",

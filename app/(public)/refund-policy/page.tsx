@@ -46,7 +46,7 @@ export default async function RefundPolicyPage() {
                 <p>Approved refunds are typically processed within 30 business days and are returned via the original method of payment.</p>
                 
                 <h2>5. Contact</h2>
-                <p>For questions regarding refunds, please contact <a href="mailto:finance@euamericanuniversity.us">finance@euamericanuniversity.us</a>.</p>
+                <p>For questions regarding refunds, please contact <a href="mailto:info@euamericanuniversity.us">info@euamericanuniversity.us</a>.</p>
               </>
             )}
           </div>

@@ -80,10 +80,10 @@ export default function ContactPage() {
               <div className="card p-6">
                 <h3 className="font-heading text-base font-bold mb-4">Department Contacts</h3>
                 <div className="space-y-2 text-sm text-foreground-secondary">
-                  <p><strong>Admissions:</strong> admissions@euamericanuniversity.us</p>
-                  <p><strong>Academic Affairs:</strong> academics@euamericanuniversity.us</p>
-                  <p><strong>Finance:</strong> finance@euamericanuniversity.us</p>
-                  <p><strong>Student Records:</strong> records@euamericanuniversity.us</p>
+                  <p><strong>Admissions:</strong> info@euamericanuniversity.us</p>
+                  <p><strong>Academic Affairs:</strong> info@euamericanuniversity.us</p>
+                  <p><strong>Finance:</strong> info@euamericanuniversity.us</p>
+                  <p><strong>Student Records:</strong> info@euamericanuniversity.us</p>
                 </div>
               </div>
             </div>

@@ -37,7 +37,7 @@ export default function CampusLocation() {
                 </div>
                 <div className="flex items-center gap-3 text-sm text-foreground-secondary">
                   <Phone size={16} className="text-primary shrink-0" />
-                  +33 1 89 37 00 04
+                  +1 505 520 3303
                 </div>
                 <div className="flex items-center gap-3 text-sm text-foreground-secondary">
                   <Mail size={16} className="text-primary shrink-0" />
@@ -62,7 +62,7 @@ export default function CampusLocation() {
                 </div>
                 <div className="flex items-center gap-3 text-sm text-foreground-secondary">
                   <Phone size={16} className="text-primary shrink-0" />
-                  +1-909-280-0112
+                  +1 505 520 3303
                 </div>
               </div>
             </div>

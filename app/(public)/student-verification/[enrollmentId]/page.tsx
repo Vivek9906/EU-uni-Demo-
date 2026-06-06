@@ -197,7 +197,7 @@ export default function StudentVerificationResultPage({ params }: { params: { en
         {/* Trust footer */}
         <p className="verify-note mt-6 text-center text-sm text-foreground-secondary/80 max-w-2xl mx-auto">
           This record has been verified against the EU American University official student registry.
-          For further verification or inquiries, contact <a href="mailto:registrar@euamericanuniversity.us" className="text-primary hover:underline">registrar@euamericanuniversity.us</a>
+          For further verification or inquiries, contact <a href="mailto:info@euamericanuniversity.us" className="text-primary hover:underline">info@euamericanuniversity.us</a>
         </p>
       </div>
     </section>
