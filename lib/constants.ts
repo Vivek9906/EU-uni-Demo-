@@ -1,8 +1,8 @@
 export const CONTACT = {
   email:         'info@euamericanuniversity.us',
-  emailNoReply:  'noreply@euamericanuniversity.us',
-  emailAdmin:    'admin@euamericanuniversity.us',
-  phone:         '+33 1 89 37 00 04',
+  emailNoReply:  'info@euamericanuniversity.us',
+  emailAdmin:    'info@euamericanuniversity.us',
+  phone:         '+1 505 520 3303',
   addresses: {
     copenhagen: {
       line1:   'Rued Langgaards Vej 7',

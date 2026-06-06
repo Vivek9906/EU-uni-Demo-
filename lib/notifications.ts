@@ -32,8 +32,8 @@ export async function sendBroadcastEmail(subject: string, htmlContent: string) {
     const bccList = subscribers.map((sub) => sub.email);
 
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
-      to: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
+      to: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
       bcc: bccList,
       subject: subject,
       html: fullHtml,

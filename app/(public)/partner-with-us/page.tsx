@@ -247,7 +247,7 @@ export default function PartnerWithUsPage() {
                   {status === 'error' && (
                     <p className="text-red-600 text-[13px] mb-3">
                       Something went wrong. Please email us at
-                      partnerships@euamericanuniversity.us
+                      info@euamericanuniversity.us
                     </p>
                   )}
 

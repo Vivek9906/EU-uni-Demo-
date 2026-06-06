@@ -100,12 +100,12 @@ export default function Footer() {
                 <Mail size={14} />
                 info@euamericanuniversity.us
               </a>
-              <a
-                href="tel:+33189370004"
-                className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+              <a 
+                href="tel:+15055203303" 
+                className="flex items-center gap-3 text-sm text-gray-300 hover:text-white transition-colors"
               >
-                <Phone size={14} />
-                +33 1 89 37 00 04
+                <Phone size={18} className="text-primary-light" />
+                +1 505 520 3303
               </a>
               <div className="flex flex-col gap-1.5 text-white/60 text-[12.5px]">
                 <div className="flex items-start gap-2">

@@ -88,7 +88,7 @@ export async function sendProgramApplicationEmail(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
       to,
       subject: `Program Application: ${programName} | EU American University`,
       html: wrapEmail(content),
@@ -134,7 +134,7 @@ export async function sendCertificateApplicationEmail(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
       to,
       subject: `Certificate Application: ${certificateName} | EU American University`,
       html: wrapEmail(content),
@@ -172,14 +172,14 @@ export async function sendStatusUpdateEmail(
       </p>
     </div>
     <p style="color: #4A5568; line-height: 1.7;">
-      If you have any questions, please contact <a href="mailto:admissions@euamericanuniversity.us" style="color: #1A3C6E;">admissions@euamericanuniversity.us</a>.
+      If you have any questions, please contact <a href="mailto:info@euamericanuniversity.us" style="color: #1A3C6E;">info@euamericanuniversity.us</a>.
     </p>
     <p style="color: #4A5568; line-height: 1.7;">Best regards,<br><strong>EUAU Admissions Office</strong></p>
   `;
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
       to,
       subject: `Application Update: ${status.charAt(0).toUpperCase() + status.slice(1)} — ${referenceNumber} | EU American University`,
       html: wrapEmail(content),
@@ -207,7 +207,7 @@ export async function sendContactConfirmation(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
       to,
       subject: 'Your Inquiry Has Been Received | EU American University',
       html: wrapEmail(content),
@@ -222,7 +222,7 @@ export async function sendAdminNotification(
   subject: string,
   body: string
 ): Promise<void> {
-  const adminEmail = process.env.SMTP_USER || 'admin@euamericanuniversity.us';
+  const adminEmail = process.env.SMTP_USER || 'info@euamericanuniversity.us';
   const content = `
     <h2 style="color: #1A1A2E; font-family: 'Merriweather', Georgia, serif; font-size: 20px;">
       Admin Notification
@@ -232,7 +232,7 @@ export async function sendAdminNotification(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
       to: adminEmail,
       subject: `[EUAU Admin] ${subject}`,
       html: wrapEmail(content),
@@ -270,7 +270,7 @@ export async function sendCertificateNotification(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
       to,
       subject: `Certificate Issued — ${certificateId} | EU American University`,
       html: wrapEmail(content),
@@ -307,7 +307,7 @@ export async function sendNewsletterConfirmation(
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@euamericanuniversity.us',
+      from: process.env.EMAIL_FROM || 'info@euamericanuniversity.us',
       to,
       subject: 'Thank You for Subscribing | EU American University',
       html: wrapEmail(content),

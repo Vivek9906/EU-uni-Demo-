@@ -64,7 +64,7 @@ export default function LoginPage() {
               <input
                 type="email" required autoComplete="email"
                 value={email} onChange={e => setEmail(e.target.value)}
-                placeholder="admin@euamericanuniversity.us"
+                placeholder="info@euamericanuniversity.us"
                 style={{ width: '100%', padding: '11px 14px', border: '1.5px solid #D1D5DB', borderRadius: 8, fontSize: 14, outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', transition: 'border-color 0.15s' }}
                 onFocus={e => (e.target as HTMLInputElement).style.borderColor = '#1B3A6B'}
                 onBlur={e => (e.target as HTMLInputElement).style.borderColor = '#D1D5DB'}

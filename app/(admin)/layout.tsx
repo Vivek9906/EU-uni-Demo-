@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Admin Portal',
   description: 'Login to EU American University Admin Portal',
