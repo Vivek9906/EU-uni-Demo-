@@ -28,9 +28,8 @@ export function ProgramsClient({ initialData }: { initialData: any[] }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     startTransition(async () => {
-      let result;
       if (editing) {
-        result = await updateProgram(editing.id, formData)
+        const result = await updateProgram(editing.id, formData)
         if (result.success && result.program) {
           setPrograms(prev => prev.map(p => p.id === editing.id ? result.program : p))
           setIsModalOpen(false)
@@ -39,7 +38,7 @@ export function ProgramsClient({ initialData }: { initialData: any[] }) {
           alert(`Failed to update program: ${result.error || 'Unknown error'}`)
         }
       } else {
-        result = await createProgram(formData)
+        const result = await createProgram(formData)
         if (result.success && result.program) {
           setPrograms(prev => [result.program, ...prev])
           setIsModalOpen(false)
