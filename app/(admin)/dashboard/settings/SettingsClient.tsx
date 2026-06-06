@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { Settings, Save, Loader2, AlertTriangle, Shield } from 'lucide-react'
+import { Settings, AlertTriangle, Shield } from 'lucide-react'
 import { toggleMaintenanceMode } from './actions'
 
 interface Props {
@@ -16,15 +16,6 @@ export function SettingsClient({ settings: initial }: Props) {
   const [message, setMessage] = useState(initial.maintenanceMessage)
   const [isPending, start] = useTransition()
   const [saved, setSaved] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
-
-  // General settings (static for now)
-  const [generalSettings, setGeneralSettings] = useState({
-    siteName: 'EU American University',
-    contactEmail: 'contact@euamericanuniversity.com',
-    phoneNumber: '+1 (555) 123-4567',
-    address: '123 University Ave, New York, NY 10001',
-  })
 
   const handleMaintenanceToggle = () => start(async () => {
     const newState = !maintenance
@@ -39,16 +30,6 @@ export function SettingsClient({ settings: initial }: Props) {
     setSaved(true)
     setTimeout(() => setSaved(false), 3000)
   })
-
-  const handleSaveGeneral = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSaving(true)
-    setTimeout(() => {
-      setIsSaving(false)
-      setSaved(true)
-      setTimeout(() => setSaved(false), 3000)
-    }, 800)
-  }
 
   return (
     <div className="p-8 max-w-4xl mx-auto w-full space-y-6">
@@ -113,64 +94,6 @@ export function SettingsClient({ settings: initial }: Props) {
             </button>
           </div>
         </div>
-      </div>
-
-      {/* ── General Information ── */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <form onSubmit={handleSaveGeneral} className="p-8 space-y-8">
-          <div className="space-y-6">
-            <h2 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2">General Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">Site Name</label>
-                <input
-                  type="text"
-                  value={generalSettings.siteName}
-                  onChange={e => setGeneralSettings({ ...generalSettings, siteName: e.target.value })}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">Contact Email</label>
-                <input
-                  type="email"
-                  value={generalSettings.contactEmail}
-                  onChange={e => setGeneralSettings({ ...generalSettings, contactEmail: e.target.value })}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">Phone Number</label>
-                <input
-                  type="text"
-                  value={generalSettings.phoneNumber}
-                  onChange={e => setGeneralSettings({ ...generalSettings, phoneNumber: e.target.value })}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-bold text-slate-700 mb-1.5">Address</label>
-                <input
-                  type="text"
-                  value={generalSettings.address}
-                  onChange={e => setGeneralSettings({ ...generalSettings, address: e.target.value })}
-                  className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-6 border-t border-slate-100 flex justify-end">
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-semibold text-sm transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-              {isSaving ? 'Saving Settings...' : 'Save Settings'}
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   )

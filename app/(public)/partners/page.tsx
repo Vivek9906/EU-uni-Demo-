@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageHero } from '@/components/ui/PageHero';
+import { prisma } from '@/lib/db'
+import { unstable_cache } from 'next/cache'
 
 export const metadata: Metadata = {
   title: 'Our Partners',
@@ -8,54 +10,16 @@ export const metadata: Metadata = {
     'EU American University collaborates with leading educational institutions and organizations across 4 continents, bringing world-class education closer to learners everywhere.',
 };
 
-const PARTNERS = [
-  {
-    region: 'Asia-Pacific',
-    partners: [
-      { name: 'Elite Learning Institute', address: 'Bangkok, Thailand' },
-      { name: 'Pacific Education Solutions', address: 'Singapore' },
-      { name: 'Innovation Academy Manila', address: 'Philippines' },
-      { name: 'Gulf Excellence Academy', address: 'Dubai, UAE' },
-    ],
+const getPartners = unstable_cache(
+  async () => {
+    return prisma.partner.findMany({
+      where: { isActive: true },
+      orderBy: { order: 'asc' },
+    })
   },
-  {
-    region: 'Europe',
-    partners: [
-      { name: 'Iberian Education Network', address: 'Madrid, Spain' },
-      { name: 'Continental Education Hub', address: 'Berlin, Germany' },
-      { name: 'Franco-European Alliance', address: 'Paris, France' },
-      { name: 'Qualify Learn', address: 'United Kingdom' },
-    ],
-  },
-  {
-    region: 'Americas',
-    partners: [
-      {
-        name: 'North American Education Alliance',
-        address: 'Toronto, Canada',
-      },
-      {
-        name: 'Pan-American Executive Institute',
-        address: 'Mexico City, Mexico',
-      },
-      {
-        name: 'South American Learning Network',
-        address: 'São Paulo, Brazil',
-      },
-    ],
-  },
-  {
-    region: 'Africa',
-    partners: [
-      {
-        name: 'African Excellence Institute',
-        address: 'Cape Town, South Africa',
-      },
-      { name: 'Continental Learning Hub', address: 'Nairobi, Kenya' },
-      { name: 'West Africa Education Network', address: 'Accra, Ghana' },
-    ],
-  },
-];
+  ['active-partners'],
+  { revalidate: 600, tags: ['partners'] }
+)
 
 const STATS = [
   { value: '15+', label: 'Global Partners' },
@@ -63,7 +27,18 @@ const STATS = [
   { value: '10+', label: 'Countries' },
 ];
 
-export default function OurPartnersPage() {
+export default async function OurPartnersPage() {
+  const partnersData = await getPartners()
+
+  // Group partners by region
+  const regionsObj: Record<string, typeof partnersData> = {}
+  partnersData.forEach(p => {
+    if (!regionsObj[p.region]) regionsObj[p.region] = []
+    regionsObj[p.region].push(p)
+  })
+
+  const partnerRegions = Object.entries(regionsObj).map(([region, partners]) => ({ region, partners }))
+
   return (
     <>
       <PageHero
@@ -95,7 +70,7 @@ export default function OurPartnersPage() {
           </div>
 
           {/* Partner regions */}
-          {PARTNERS.map((region) => (
+          {partnerRegions.map((region) => (
             <div key={region.region} className="mb-12">
               <h2
                 className="font-heading text-[17px] font-extrabold mb-5 pb-2.5 inline-block"

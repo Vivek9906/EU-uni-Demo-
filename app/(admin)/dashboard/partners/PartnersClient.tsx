@@ -3,8 +3,6 @@
 import { useState, useTransition } from 'react'
 import { createPartner, updatePartner, deletePartner } from './actions'
 
-const REGIONS = ['Europe', 'Asia-Pacific', 'Americas', 'Africa', 'Middle East', 'Other']
-
 interface Partner {
   id: string
   name: string
@@ -27,6 +25,10 @@ export function PartnersClient({ partners: initial }: { partners: Partner[] }) {
   const [search, setSearch] = useState('')
   const [regionFilter, setRegion] = useState('all')
   const [isPending, start] = useTransition()
+
+  // Dynamically derive regions from the partners data, plus common defaults
+  const dynamicRegions = Array.from(new Set(partners.map(p => p.region))).sort()
+  const REGIONS = dynamicRegions.length > 0 ? dynamicRegions : ['Europe', 'Asia-Pacific', 'Americas', 'Africa', 'Middle East']
 
   const filtered = partners.filter(p => {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.country.toLowerCase().includes(search.toLowerCase())
@@ -138,15 +140,21 @@ export function PartnersClient({ partners: initial }: { partners: Partner[] }) {
               const res = await updatePartner(editing.id, data)
               if (res.success && res.partner) {
                 setPartners(prev => prev.map(p => p.id === editing.id ? { ...res.partner!, createdAt: new Date(res.partner!.createdAt).toISOString(), updatedAt: new Date(res.partner!.updatedAt).toISOString() } : p))
+                setShowForm(false)
+                setEditing(null)
+              } else {
+                alert(`Failed to update partner: ${res.error || 'Unknown error'}`)
               }
             } else {
               const res = await createPartner(data)
               if (res.success && res.partner) {
                 setPartners(prev => [...prev, { ...res.partner!, createdAt: new Date(res.partner!.createdAt).toISOString(), updatedAt: new Date(res.partner!.updatedAt).toISOString() }])
+                setShowForm(false)
+                setEditing(null)
+              } else {
+                alert(`Failed to add partner: ${res.error || 'Unknown error'}`)
               }
             }
-            setShowForm(false)
-            setEditing(null)
           }}
         />
       )}

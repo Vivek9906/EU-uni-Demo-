@@ -14,7 +14,7 @@ export default async function ProgramsPage() {
       orderBy: { createdAt: 'desc' },
     })
   } catch (err) {
-    console.error('[ADMIN][programs] DB fetch failed:', err)
+    console.error('[ADMIN][programs] DB fetch failed. This usually means your Prisma client is out of sync with your database schema. Please restart your Next.js dev server.', err)
   }
 
   const serialized = programs.map(p => ({
