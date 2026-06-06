@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Globe } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
+import { prisma } from '@/lib/db';
 
 export const metadata: Metadata = {
   title: 'Academic Programs',
@@ -9,93 +10,24 @@ export const metadata: Metadata = {
     'Explore EU American University\'s academic programs: Bachelor\'s (BBA, BPA, BSW), Master\'s (MBA, MPA, MSW), Doctoral research programs, and Honorary programs.',
 };
 
-const programs = [
-  {
-    level: 'Doctoral',
-    items: [
-      {
-        name: 'Doctor of Philosophy (PhD)',
-        href: '/academics/phd/doctor-of-philosophy',
-        imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
-        description:
-          'A fully online doctoral research program designed for scholars and professionals seeking advanced academic inquiry and global recognition.',
-      },
-    ],
-  },
-  {
-    level: 'Honorary',
-    items: [
-      {
-        name: 'Honorary Doctorate (Honoris Causa)',
-        href: '/academics/honorary/honorary-doctorate',
-        imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
-        description:
-          'A prestigious recognition for individuals who have demonstrated exceptional leadership and contributions to their field.',
-      },
-      {
-        name: 'Honorary Professorship',
-        href: '/academics/honorary/honorary-professorship',
-        imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
-        description:
-          'An academic distinction recognizing outstanding contributions to education, research, or professional excellence.',
-      },
-    ],
-  },
-  {
-    level: "Master's",
-    items: [
-      {
-        name: 'Master of Business Administration (MBA)',
-        href: '/academics/masters/mba',
-        imageUrl: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80',
-        description:
-          'An advanced program for professionals seeking senior leadership positions through strategic thinking and executive decision-making.',
-      },
-      {
-        name: 'Master of Public Administration (MPA)',
-        href: '/academics/masters/mpa',
-        imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
-        description:
-          'Advance your career in public service with graduate-level expertise in policy analysis and organizational management.',
-      },
-      {
-        name: 'Master of Social Work (MSW)',
-        href: '/academics/masters/msw',
-        imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
-        description:
-          'Deepen your expertise in clinical practice, community organization, and social policy to make a meaningful impact on society.',
-      },
-    ],
-  },
-  {
-    level: "Bachelor's",
-    items: [
-      {
-        name: 'Bachelor of Business Administration (BBA)',
-        href: '/academics/bachelors/bba',
-        imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
-        description:
-          'Build foundational business skills in management, finance, marketing, and entrepreneurship with a global perspective.',
-      },
-      {
-        name: 'Bachelor of Public Administration (BPA)',
-        href: '/academics/bachelors/bpa',
-        imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
-        description:
-          'Prepare for leadership roles in government and nonprofit organizations through the study of public policy and governance.',
-      },
-      {
-        name: 'Bachelor of Social Work (BSW)',
-        href: '/academics/bachelors/bsw',
-        imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80',
-        description:
-          'Develop the skills needed to support individuals and communities through counseling, advocacy, and social welfare programs.',
-      },
-    ],
-  },
-];
+export default async function AcademicsPage() {
+  const dbPrograms = await prisma.program.findMany({
+    where: { isActive: true },
+    orderBy: { order: 'asc' }
+  });
 
-export default function AcademicsPage() {
+  const phd = dbPrograms.filter(p => p.level === 'phd');
+  const honorary = dbPrograms.filter(p => p.level === 'honorary');
+  const masters = dbPrograms.filter(p => p.level === 'masters');
+  const bachelors = dbPrograms.filter(p => p.level === 'bachelors');
+
+  const programs = [
+    ...(phd.length > 0 ? [{ level: 'Doctoral', items: phd }] : []),
+    ...(honorary.length > 0 ? [{ level: 'Honorary', items: honorary }] : []),
+    ...(masters.length > 0 ? [{ level: "Master's", items: masters }] : []),
+    ...(bachelors.length > 0 ? [{ level: "Bachelor's", items: bachelors }] : []),
+  ];
+
   return (
     <>
       <PageHero
@@ -111,7 +43,7 @@ export default function AcademicsPage() {
             <div className={`grid gap-6 ${group.level === 'Doctoral' ? 'md:grid-cols-1 max-w-3xl' : 'md:grid-cols-3'}`}>
               {group.items.map((program) => (
                 <div
-                  key={program.name}
+                  key={program.title}
                   className="bg-background-card border border-border rounded-card shadow-sm transition-all duration-200 hover:shadow-md overflow-hidden group"
                 >
                   <div className="relative h-48 overflow-hidden">
@@ -125,12 +57,12 @@ export default function AcademicsPage() {
                   <div className="p-5">
                     <span className="badge-primary mb-2">{group.level}</span>
                     <h3 className="font-heading text-lg font-bold mb-2 group-hover:text-primary transition-colors leading-tight">
-                      {program.name}
+                      {program.title}
                     </h3>
                     <p className="text-sm text-foreground-secondary leading-relaxed mb-4">{program.description}</p>
                     <div className="flex items-center gap-3">
                       <Link
-                        href={program.href}
+                        href={`/academics/${program.level}/${program.slug}`}
                         className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary-light transition-colors"
                       >
                         View Details <ArrowRight size={14} />

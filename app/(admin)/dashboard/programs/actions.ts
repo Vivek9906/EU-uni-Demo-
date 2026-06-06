@@ -11,21 +11,25 @@ async function guard() {
 }
 
 export async function createProgram(data: {
-  name: string
-  faculty: string
-  duration: string
-  degreeType: string
-  status?: string
+  title: string
+  slug: string
+  level: string
+  description: string
+  imageUrl?: string
+  isActive?: boolean
+  order?: number
 }) {
   await guard()
   try {
     const program = await prisma.program.create({
       data: {
-        name: data.name,
-        faculty: data.faculty || '',
-        duration: data.duration || '',
-        degreeType: data.degreeType,
-        status: data.status ?? 'Published',
+        title: data.title,
+        slug: data.slug,
+        level: data.level,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        isActive: data.isActive ?? true,
+        order: data.order ?? 0,
       },
     })
     revalidatePath('/dashboard/programs')
@@ -34,6 +38,7 @@ export async function createProgram(data: {
     revalidatePath('/academics/masters')
     revalidatePath('/academics/phd')
     revalidatePath('/academics/honorary')
+    revalidatePath(`/academics/${data.level}/${data.slug}`)
     return { success: true, program: { ...program, createdAt: program.createdAt.toISOString(), updatedAt: program.updatedAt.toISOString() } }
   } catch (err) {
     console.error('[ADMIN][programs] create failed:', err)
@@ -42,11 +47,13 @@ export async function createProgram(data: {
 }
 
 export async function updateProgram(id: string, data: {
-  name?: string
-  faculty?: string
-  duration?: string
-  degreeType?: string
-  status?: string
+  title?: string
+  slug?: string
+  level?: string
+  description?: string
+  imageUrl?: string
+  isActive?: boolean
+  order?: number
 }) {
   await guard()
   try {
@@ -57,6 +64,7 @@ export async function updateProgram(id: string, data: {
     revalidatePath('/academics/masters')
     revalidatePath('/academics/phd')
     revalidatePath('/academics/honorary')
+    revalidatePath(`/academics/${program.level}/${program.slug}`)
     return { success: true, program: { ...program, createdAt: program.createdAt.toISOString(), updatedAt: program.updatedAt.toISOString() } }
   } catch (err) {
     console.error('[ADMIN][programs] update failed:', err)

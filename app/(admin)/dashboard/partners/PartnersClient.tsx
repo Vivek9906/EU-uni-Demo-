@@ -3,8 +3,6 @@
 import { useState, useTransition } from 'react'
 import { createPartner, updatePartner, deletePartner } from './actions'
 
-const REGIONS = ['Europe', 'Asia-Pacific', 'Americas', 'Africa', 'Middle East', 'Other']
-
 interface Partner {
   id: string
   name: string
@@ -27,6 +25,10 @@ export function PartnersClient({ partners: initial }: { partners: Partner[] }) {
   const [search, setSearch] = useState('')
   const [regionFilter, setRegion] = useState('all')
   const [isPending, start] = useTransition()
+
+  // Dynamically derive regions from the partners data, plus common defaults
+  const dynamicRegions = Array.from(new Set(partners.map(p => p.region))).sort()
+  const REGIONS = dynamicRegions.length > 0 ? dynamicRegions : ['Europe', 'Asia-Pacific', 'Americas', 'Africa', 'Middle East']
 
   const filtered = partners.filter(p => {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) || p.country.toLowerCase().includes(search.toLowerCase())
@@ -132,21 +134,28 @@ export function PartnersClient({ partners: initial }: { partners: Partner[] }) {
       {showForm && (
         <PartnerFormModal
           partner={editing}
+          regions={REGIONS}
           onClose={() => { setShowForm(false); setEditing(null) }}
           onSave={async (data: any) => {
             if (editing) {
               const res = await updatePartner(editing.id, data)
               if (res.success && res.partner) {
                 setPartners(prev => prev.map(p => p.id === editing.id ? { ...res.partner!, createdAt: new Date(res.partner!.createdAt).toISOString(), updatedAt: new Date(res.partner!.updatedAt).toISOString() } : p))
+                setShowForm(false)
+                setEditing(null)
+              } else {
+                alert(`Failed to update partner: ${res.error || 'Unknown error'}`)
               }
             } else {
               const res = await createPartner(data)
               if (res.success && res.partner) {
                 setPartners(prev => [...prev, { ...res.partner!, createdAt: new Date(res.partner!.createdAt).toISOString(), updatedAt: new Date(res.partner!.updatedAt).toISOString() }])
+                setShowForm(false)
+                setEditing(null)
+              } else {
+                alert(`Failed to add partner: ${res.error || 'Unknown error'}`)
               }
             }
-            setShowForm(false)
-            setEditing(null)
           }}
         />
       )}
@@ -154,11 +163,11 @@ export function PartnersClient({ partners: initial }: { partners: Partner[] }) {
   )
 }
 
-function PartnerFormModal({ partner, onClose, onSave }: { partner: Partner | null, onClose: () => void, onSave: (data: any) => Promise<void> }) {
+function PartnerFormModal({ partner, regions, onClose, onSave }: { partner: Partner | null, regions: string[], onClose: () => void, onSave: (data: any) => Promise<void> }) {
   const [form, setForm] = useState({
     name: partner?.name ?? '',
     address: partner?.address ?? '',
-    region: partner?.region ?? REGIONS[0],
+    region: partner?.region ?? regions[0],
     country: partner?.country ?? '',
     website: partner?.website ?? '',
     email: partner?.email ?? '',
@@ -196,7 +205,7 @@ function PartnerFormModal({ partner, onClose, onSave }: { partner: Partner | nul
               <label style={{ display: 'block', fontSize: 12.5, fontWeight: 700, color: '#374151', marginBottom: 5 }}>Region <span style={{ color: '#DC2626' }}>*</span></label>
               <select required value={form.region} onChange={e => setForm(p => ({ ...p, region: e.target.value }))}
                 style={{ width: '100%', padding: '9px 12px', border: '1.5px solid #D1D5DB', borderRadius: 8, fontSize: 14, fontFamily: 'inherit' }}>
-                {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
+                {regions.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
             </div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>

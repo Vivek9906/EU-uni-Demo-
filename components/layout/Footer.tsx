@@ -111,7 +111,7 @@ export default function Footer() {
                 <div className="flex items-start gap-2">
                   <MapPin size={14} className="mt-0.5 shrink-0" />
                   <div className="flex flex-col gap-1">
-                    <span>🇺🇸 Suite 2.408, 1616 Guadalupe Street, Austin, TX 78701</span>
+                    <span>Suite 2.408, 1616 Guadalupe Street, Austin, TX 78701</span>
                   </div>
                 </div>
               </div>

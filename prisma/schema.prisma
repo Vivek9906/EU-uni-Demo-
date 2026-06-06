@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_POSTGRES_URL_NON_POOLING")
 }
 
 model Application {
@@ -158,11 +158,13 @@ model Testimonial {
 
 model Program {
   id          String   @id @default(cuid())
-  name        String
-  faculty     String
-  duration    String
-  degreeType  String
-  status      String   @default("Published")
+  title       String
+  slug        String   @unique
+  level       String
+  description String
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -319,7 +321,7 @@ model Subscriber {
 
 model Partner {
   id          String   @id @default(cuid())
-  name        String
+  name        String   @unique
   address     String
   region      String
   country     String

@@ -351,37 +351,45 @@ async function main() {
   console.log('✅ Testimonials created');
 
   // 8. Programs
-  const programData = [
-    {
-      name: 'Master of Business Administration',
-      faculty: 'Business',
-      duration: '2 Years',
-      degreeType: 'Masters',
-    },
-    {
-      name: 'Bachelor of Business Administration',
-      faculty: 'Business',
-      duration: '4 Years',
-      degreeType: 'Bachelors',
-    },
-    {
-      name: 'Honorary Doctorate (Honoris Causa)',
-      faculty: 'Business',
-      duration: 'Honorary',
-      degreeType: 'Honorary',
-    },
-    {
-      name: 'Doctor of Philosophy (PhD)',
-      faculty: 'Research',
-      duration: '3-5 Years',
-      degreeType: 'PhD',
-    },
+  const SEED_PROGRAMS = [
+    { title: 'Doctor of Philosophy (PhD)', slug: 'doctor-of-philosophy', level: 'phd', description: 'An internationally recognized doctoral program for scholars who wish to advance their field through independent research and academic inquiry.', imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80', isActive: true, order: 1 },
+    { title: 'Honorary Doctorate', slug: 'honorary-doctorate', level: 'honorary', description: 'A prestigious award recognizing exceptional contributions to society, business, and public service.', imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80', isActive: true, order: 2 },
+    { title: 'Master of Business Administration (MBA)', slug: 'master-of-business-administration', level: 'masters', description: 'Our flagship MBA program designed to develop strategic leaders capable of navigating complex global business challenges.', imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80', isActive: true, order: 3 },
+    { title: 'Master of Public Administration (MPA)', slug: 'master-of-public-administration', level: 'masters', description: 'Prepares professionals for leadership roles in government, non-profits, and international organizations.', imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80', isActive: true, order: 4 },
+    { title: 'Master of Social Work (MSW)', slug: 'master-of-social-work', level: 'masters', description: 'Advanced clinical and macro practice skills for addressing complex social issues and promoting community well-being.', imageUrl: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800&q=80', isActive: true, order: 5 },
+    { title: 'Bachelor of Business Administration (BBA)', slug: 'bachelor-of-business-administration', level: 'bachelors', description: 'A comprehensive foundation in business principles, management, and entrepreneurship.', imageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80', isActive: true, order: 6 },
+    { title: 'Bachelor of Public Administration (BPA)', slug: 'bachelor-of-public-administration', level: 'bachelors', description: 'Essential skills for policy analysis, civic engagement, and public sector management.', imageUrl: 'https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=800&q=80', isActive: true, order: 7 },
+    { title: 'Bachelor of Social Work (BSW)', slug: 'bachelor-of-social-work', level: 'bachelors', description: 'Foundational knowledge and field experience for generalist social work practice.', imageUrl: 'https://images.unsplash.com/photo-1531206715517-5c561081788a?w=800&q=80', isActive: true, order: 8 },
+    { title: 'Bachelor of Arts in English Language (BAEL)', slug: 'bachelor-of-arts-in-english-language', level: 'bachelors', description: 'In-depth study of literature, linguistics, and advanced communication skills for global contexts.', imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80', isActive: true, order: 9 },
   ];
 
-  for (const program of programData) {
-    await prisma.program.create({ data: program });
+  for (const program of SEED_PROGRAMS) {
+    await prisma.program.upsert({
+      where: { slug: program.slug },
+      update: { title: program.title, description: program.description, imageUrl: program.imageUrl, order: program.order },
+      create: program,
+    });
   }
   console.log('✅ Programs created');
+
+  // Partners
+  const SEED_PARTNERS = [
+    { name: 'California University FCE', address: 'California, USA', region: 'North America', country: 'United States', website: 'https://cufce.org', email: 'info@cufce.org', logoUrl: '/partners/cufce.png', isActive: true, order: 1 },
+    { name: 'Esep Le Berger', address: 'Benin Republic', region: 'Africa', country: 'Benin', website: 'https://esepleberger.com', email: 'contact@esepleberger.com', logoUrl: '/partners/esep.png', isActive: true, order: 2 },
+    { name: 'University of Nicosia', address: 'Nicosia, Cyprus', region: 'Europe', country: 'Cyprus', website: 'https://unic.ac.cy', email: 'info@unic.ac.cy', logoUrl: '/partners/nicosia.png', isActive: true, order: 3 },
+    { name: 'Ballsbridge University', address: 'Dominica', region: 'Caribbean', country: 'Dominica', website: 'https://ballsbridgeuniversity.org', email: 'info@ballsbridge.org', logoUrl: '/partners/ballsbridge.png', isActive: true, order: 4 },
+    { name: 'City University Cambodia', address: 'Phnom Penh, Cambodia', region: 'Asia', country: 'Cambodia', website: 'https://cityuniversity.edu.kh', email: 'info@cityuniversity.edu.kh', logoUrl: '/partners/cityuniv.png', isActive: true, order: 5 },
+    { name: 'Prowess University', address: 'Delaware, USA', region: 'North America', country: 'United States', website: 'https://prowessuniversity.edu', email: 'info@prowessuniversity.edu', logoUrl: '/partners/prowess.png', isActive: true, order: 6 },
+  ]
+  
+  for (const p of SEED_PARTNERS) {
+    await prisma.partner.upsert({
+      where: { name: p.name },
+      update: p,
+      create: p,
+    });
+  }
+  console.log('✅ Partners created');
 
   // 9. Notices
   const noticeData = [
