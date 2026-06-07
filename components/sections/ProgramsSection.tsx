@@ -38,10 +38,10 @@ export default function ProgramsSection({ dbPrograms }: Props) {
 
   // Group programs by level
   const programs: Record<ProgramLevel, ProgramCard[]> = {
-    phd: dbPrograms.filter(p => p.level === 'phd'),
-    honorary: dbPrograms.filter(p => p.level === 'honorary'),
-    masters: dbPrograms.filter(p => p.level === 'masters'),
-    bachelors: dbPrograms.filter(p => p.level === 'bachelors'),
+    phd: dbPrograms.filter(p => p.level === 'phd').slice(0, 3),
+    honorary: dbPrograms.filter(p => p.level === 'honorary').slice(0, 3),
+    masters: dbPrograms.filter(p => p.level === 'masters').slice(0, 3),
+    bachelors: dbPrograms.filter(p => p.level === 'bachelors').slice(0, 3),
   };
 
   return (

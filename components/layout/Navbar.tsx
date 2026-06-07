@@ -33,58 +33,7 @@ interface NavItem {
   programs?: true; // flag for the Programs dropdown
 }
 
-/* ─── Programs dropdown data ─── */
-const programsMenu: ProgramItem[] = [
-  {
-    label: 'PhD Programs',
-    href: '/academics/phd',
-    children: [
-      { label: 'Doctor of Philosophy (PhD)', href: '/academics/phd/doctor-of-philosophy' },
-    ],
-  },
-  {
-    label: 'Honorary Programs',
-    href: '/academics/honorary',
-    children: [
-      { label: 'Honorary Doctorate (Honoris Causa)', href: '/academics/honorary/honorary-doctorate' },
-      { label: 'Honorary Professorship', href: '/academics/honorary/honorary-professorship' },
-    ],
-  },
-  {
-    label: "Master's Programs",
-    href: '/academics/masters',
-    children: [
-      { label: 'MBA — Business Administration', href: '/academics/masters/mba' },
-      { label: 'MPA — Public Administration', href: '/academics/masters/mpa' },
-      { label: 'MSW — Social Work', href: '/academics/masters/msw' },
-    ],
-  },
-  {
-    label: "Bachelor's Programs",
-    href: '/academics/bachelors',
-    children: [
-      { label: 'BBA — Business Administration', href: '/academics/bachelors/bba' },
-      { label: 'BPA — Public Administration', href: '/academics/bachelors/bpa' },
-      { label: 'BSW — Social Work', href: '/academics/bachelors/bsw' },
-    ],
-  },
-  {
-    label: 'Certifications',
-    href: '/certifications',
-    children: null,
-  },
-  {
-    label: 'Student Records & Verification',
-    href: '/student-verification',
-    children: null,
-  },
-  {
-    label: 'View All Programs →',
-    href: '/academics',
-    children: null,
-    highlight: true,
-  },
-];
+/* ─── Static Nav Items ─── */
 
 /* ─── Main nav items ─── */
 const navItems: NavItem[] = [
@@ -131,10 +80,12 @@ const navItems: NavItem[] = [
 /* ─── Programs Dropdown (Desktop) ─── */
 function ProgramsDropdown({
   open,
+  programsMenu,
   onMouseEnter,
   onMouseLeave,
 }: {
   open: boolean;
+  programsMenu: ProgramItem[];
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }) {
@@ -239,7 +190,7 @@ function ProgramsDropdown({
 }
 
 /* ─── Mobile Programs Accordion ─── */
-function MobileProgramsAccordion({ onNavigate }: { onNavigate: () => void }) {
+function MobileProgramsAccordion({ programsMenu, onNavigate }: { programsMenu: ProgramItem[]; onNavigate: () => void }) {
   const [open, setOpen] = useState(false);
   const [openChild, setOpenChild] = useState<string | null>(null);
 
@@ -334,7 +285,8 @@ function MobileProgramsAccordion({ onNavigate }: { onNavigate: () => void }) {
 import { UniversityLogo } from '@/components/ui/UniversityLogo';
 
 /* ─── Main Navbar ─── */
-export default function Navbar() {
+export default function Navbar({ programsMenu }: { programsMenu: ProgramItem[] }) {
+  console.log("Navbar rendering with items:", programsMenu?.length);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -425,6 +377,7 @@ export default function Navbar() {
                 {item.programs && (
                   <ProgramsDropdown
                     open={openDropdown === item.label}
+                    programsMenu={programsMenu}
                     onMouseEnter={() => handleDropdownEnter(item.label)}
                     onMouseLeave={handleDropdownLeave}
                   />
@@ -511,7 +464,7 @@ export default function Navbar() {
                 <div key={item.label}>
                   {/* Programs — special accordion component */}
                   {item.programs ? (
-                    <MobileProgramsAccordion onNavigate={() => setIsOpen(false)} />
+                    <MobileProgramsAccordion programsMenu={programsMenu} onNavigate={() => setIsOpen(false)} />
                   ) : item.children ? (
                     /* Standard accordion for About, Admissions, More */
                     <div>
