@@ -1,26 +1,26 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
+import { prisma } from '@/lib/db';
 
 export const metadata: Metadata = {
   title: "Master's Programs",
-  description: "Explore EU American University's Master's programs: MBA, MPA, and MSW. Fully online, globally recognized graduate degrees.",
+  description: "Explore EU American University's Master's programs. Fully online, globally recognized graduate degrees.",
 };
 
-const programs = [
-  { name: 'Master of Business Administration (MBA)', slug: 'mba', description: 'An advanced program for professionals seeking senior leadership positions through strategic thinking and executive decision-making.', imageUrl: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80' },
-  { name: 'Master of Public Administration (MPA)', slug: 'mpa', description: 'Advance your career in public service with graduate-level expertise in policy analysis, organizational management, and governance.', imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80' },
-  { name: 'Master of Social Work (MSW)', slug: 'msw', description: 'Deepen your expertise in clinical practice, community organization, and social policy to make a meaningful impact on society.', imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80' },
-];
+export default async function MastersPage() {
+  const programs = await prisma.program.findMany({
+    where: { level: 'masters', isActive: true },
+    orderBy: { order: 'asc' },
+  });
 
-export default function MastersPage() {
   return (
     <>
       <PageHero
         title="Master&apos;s Programs"
-        subtitle="EU American University offers three graduate programs designed for working professionals who want to advance into senior leadership roles in business, public service, and social work."
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Master&apos;s Programs' }]}
+        subtitle="EU American University offers graduate programs designed for working professionals who want to advance into senior leadership roles in business, public service, and social work."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: "Master\u0027s Programs" }]}
       />
 
       <section className="section-padding">
@@ -29,14 +29,11 @@ export default function MastersPage() {
             {programs.map((program) => (
               <div key={program.slug} className="bg-background-card border border-border rounded-card shadow-sm transition-all duration-200 hover:shadow-md overflow-hidden group">
                 <div className="relative h-52 overflow-hidden">
-                  <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style={{ backgroundImage: `url(${program.imageUrl})` }} />
+                  <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style={{ backgroundImage: `url(${program.imageUrl || 'https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80'})` }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <div className="absolute bottom-3 left-3">
-                    
-                  </div>
                 </div>
                 <div className="p-6">
-                  <h2 className="font-heading text-xl font-bold mb-2 group-hover:text-primary transition-colors">{program.name}</h2>
+                  <h2 className="font-heading text-xl font-bold mb-2 group-hover:text-primary transition-colors">{program.title}</h2>
                   <p className="text-sm text-foreground-secondary leading-relaxed mb-4">{program.description}</p>
                   <div className="flex items-center gap-3">
                     <Link href={`/academics/masters/${program.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary-light transition-colors">View Details <ArrowRight size={14} /></Link>

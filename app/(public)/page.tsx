@@ -3,7 +3,7 @@ import HeroSection from '@/components/sections/HeroSection';
 import StatsBar from '@/components/sections/StatsBar';
 import WhyEUAU from '@/components/sections/WhyEUAU';
 import AboutPreview from '@/components/sections/AboutPreview';
-import ProgramsSection from '@/components/sections/ProgramsSection';
+import ProgramsSectionServer from '@/components/sections/ProgramsSectionServer';
 import NewsEvents from '@/components/sections/NewsEvents';
 import TestimonialsCarousel from '@/components/sections/TestimonialsCarousel';
 import HonoraryCtaBanner from '@/components/sections/HonoraryCtaBanner';
@@ -42,7 +42,7 @@ export default function HomePage() {
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton />}>
-        <ProgramsSection />
+        <ProgramsSectionServer />
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton />}>
