@@ -13,8 +13,6 @@ export const metadata: Metadata = {
   description: 'Upcoming and past events at EU American University.',
 };
 
-export const revalidate = 3600; // Revalidate every hour
-
 export default async function EventsPage({ searchParams }: { searchParams: { tab?: string } }) {
   const activeTab = searchParams.tab === 'past' ? 'past' : 'upcoming';
 
