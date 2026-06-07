@@ -5,7 +5,7 @@ import WhyEUAU from '@/components/sections/WhyEUAU';
 import AboutPreview from '@/components/sections/AboutPreview';
 import ProgramsSectionServer from '@/components/sections/ProgramsSectionServer';
 import NewsEvents from '@/components/sections/NewsEvents';
-import TestimonialsCarousel from '@/components/sections/TestimonialsCarousel';
+import TestimonialsCarouselServer from '@/components/sections/TestimonialsCarouselServer';
 import HonoraryCtaBanner from '@/components/sections/HonoraryCtaBanner';
 
 function SectionSkeleton() {
@@ -49,7 +49,7 @@ export default function HomePage() {
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton />}>
-        <TestimonialsCarousel />
+        <TestimonialsCarouselServer />
       </Suspense>
 
       <HonoraryCtaBanner />
