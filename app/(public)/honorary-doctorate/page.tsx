@@ -5,15 +5,13 @@ import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Honorary Doctorate', description: 'Be recognized for a lifetime of achievement. Learn about EUAU\'s Honorary Doctorate (Honoris Causa) program.' };
 
-const faqs = [
-  { q: 'Who is eligible for an Honorary Doctorate?', a: 'Individuals who have demonstrated exceptional leadership for at least 10 years and made significant contributions to their field, community, or society.' },
-  { q: 'What does the certificate look like?', a: 'The certificate is an official EU American University document featuring the holder\'s name, the program title (exactly as submitted during application), the date of conferral, and EUAU\'s official seal.' },
-  { q: 'How long does the process take?', a: 'From application submission to conferral, the typical timeline is 4-8 weeks depending on the completeness of your application and the committee review schedule.' },
-  { q: 'Is the Honorary Doctorate recognized internationally?', a: 'Yes. EUAU\'s Honorary Doctorate is backed by our IARC, QAHE accreditation and ACBSP, IACBE, ASIC UK memberships. Each certificate includes a unique verification ID.' },
-  { q: 'Can I nominate someone else?', a: 'Yes. Nominations from third parties are welcome. The nominee will be contacted to complete the formal application process if they accept the nomination.' },
-];
+import { prisma } from '@/lib/db';
 
-export default function HonoraryDoctoratePage() {
+export default async function HonoraryDoctoratePage() {
+  const faqs = await prisma.fAQ.findMany({
+    where: { isActive: true, category: 'Programs' }, // Or however they categorize it
+    orderBy: { order: 'asc' },
+  });
   return (
     <>
       <PageHero
@@ -38,7 +36,7 @@ export default function HonoraryDoctoratePage() {
           </div>
           <h2 className="section-title mb-6 text-center">Frequently Asked Questions</h2>
           <div className="space-y-4 mb-12">
-            {faqs.map((faq) => (<div key={faq.q} className="card p-6"><h3 className="font-heading text-base font-bold mb-2">{faq.q}</h3><p className="text-sm text-foreground-secondary">{faq.a}</p></div>))}
+            {faqs.length > 0 ? faqs.map((faq) => (<div key={faq.id} className="card p-6"><h3 className="font-heading text-base font-bold mb-2">{faq.question}</h3><p className="text-sm text-foreground-secondary">{faq.answer}</p></div>)) : <p className="text-foreground-secondary">No FAQs available at the moment.</p>}
           </div>
           <div className="text-center bg-primary text-white rounded-card p-10">
             <h2 className="font-heading text-2xl font-bold mb-4">Ready to Be Recognized?</h2>

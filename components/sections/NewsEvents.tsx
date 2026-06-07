@@ -4,38 +4,22 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, Calendar, MapPin, Tag } from 'lucide-react';
 
-const newsItems = [
-  {
-    date: 'March 15, 2025',
-    category: 'Partnerships',
-    title: 'EU American University Launches New Partnership with European Business Schools Network',
-    excerpt: 'EU American University partners with EBSN to offer expanded international opportunities for students and faculty.',
-    slug: 'euau-european-partnership-2025',
-  },
-  {
-    date: 'February 20, 2025',
-    category: 'Rankings',
-    title: 'EU American University Ranked Among Top 10 for Management Programs in Europe',
-    excerpt: "EU American University earns a place among Europe's top 10 institutions for management and leadership education.",
-    slug: 'euau-top-10-management-ranking',
-  },
-  {
-    date: 'January 10, 2025',
-    category: 'Awards',
-    title: 'Honorary Doctorate Recipients Make Global Impact in 2025',
-    excerpt: "EU American University's 2025 Honorary Doctorate recipients demonstrate the program's global reach and impact.",
-    slug: 'honorary-doctorate-global-impact-2025',
-  },
-];
+export interface NewsItem {
+  date: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  slug: string;
+}
 
-const upcomingEvent = {
-  date: 'June 15, 2028',
-  title: 'EUAU Commencement Ceremony 2028',
-  venue: 'EU American Grand Hall, Paris, France',
-  slug: 'commencement-ceremony-2028',
-};
+export interface UpcomingEvent {
+  date: string;
+  title: string;
+  venue: string;
+  slug: string;
+}
 
-export default function NewsEvents() {
+export default function NewsEvents({ newsItems, upcomingEvent }: { newsItems: NewsItem[], upcomingEvent?: UpcomingEvent }) {
   return (
     <section className="section-padding bg-background-subtle">
       <div className="container-main">
@@ -88,6 +72,7 @@ export default function NewsEvents() {
           ))}
 
           {/* Upcoming event */}
+          {upcomingEvent && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -119,6 +104,7 @@ export default function NewsEvents() {
               <ArrowRight size={14} />
             </Link>
           </motion.div>
+          )}
         </div>
       </div>
     </section>

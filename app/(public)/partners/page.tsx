@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageHero } from '@/components/ui/PageHero';
 import { prisma } from '@/lib/db'
-import { unstable_cache } from 'next/cache'
 
 export const metadata: Metadata = {
   title: 'Our Partners',
@@ -10,16 +9,14 @@ export const metadata: Metadata = {
     'EU American University collaborates with leading educational institutions and organizations across 4 continents, bringing world-class education closer to learners everywhere.',
 };
 
-const getPartners = unstable_cache(
-  async () => {
-    return prisma.partner.findMany({
-      where: { isActive: true },
-      orderBy: { order: 'asc' },
-    })
-  },
-  ['active-partners'],
-  { revalidate: 600, tags: ['partners'] }
-)
+export const dynamic = 'force-dynamic';
+
+const getPartners = async () => {
+  return prisma.partner.findMany({
+    where: { isActive: true },
+    orderBy: { order: 'asc' },
+  });
+};
 
 const STATS = [
   { value: '15+', label: 'Global Partners' },

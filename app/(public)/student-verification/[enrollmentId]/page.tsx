@@ -45,7 +45,7 @@ export default function StudentVerificationResultPage({ params }: { params: { en
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        const response = await fetch(`/api/students/verify/${encodeURIComponent(params.enrollmentId)}`);
+        const response = await fetch(`/api/students/verify/${encodeURIComponent(params.enrollmentId)}`, { cache: 'no-store' });
         if (!response.ok) {
           if (response.status === 429) {
              throw new Error('Rate limit exceeded. Please try again later.');
