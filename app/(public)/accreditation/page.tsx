@@ -17,7 +17,7 @@ const ACCREDITATIONS: AccreditationType[] = [
     id: 'qahe',
     name: 'QAHE',
     fullName: 'International Association for Quality Assurance in Pre-Tertiary & Higher Education',
-    logo: '🏆',
+    logo: '/images/logos/qahe.jpeg',
     description: 'EU American University holds accreditation from QAHE, a globally recognized organization promoting academic quality and institutional excellence. This accreditation affirms our commitment to high educational standards, measurable student learning outcomes, and continuous improvement across all programs.',
     certificateUrl: '/images/qahe.jpg',
   },
@@ -25,7 +25,7 @@ const ACCREDITATIONS: AccreditationType[] = [
     id: 'eahea',
     name: 'EAHEA',
     fullName: 'European Association for Higher Education Advancement',
-    logo: '🎓',
+    logo: '/images/logos/eahea.png',
     description: 'Recognized by EAHEA, EU American University demonstrates strong academic quality, industry relevance, and continuous institutional improvement aligned with internationally respected standards.',
     certificateUrl: '/images/eahea.png',
   },
@@ -33,7 +33,7 @@ const ACCREDITATIONS: AccreditationType[] = [
     id: 'acbsp',
     name: 'ACBSP',
     fullName: 'Accreditation Council for Business Schools and Programs',
-    logo: '📋',
+    logo: '/images/logos/acbsp.png',
     description: 'EU American University holds ACBSP Candidate for Accreditation status. Founded in 1988 and recognized by CHEA, ACBSP supports over 1,100 member campuses globally in advancing quality business education.',
     certificateUrl: null,
   },
@@ -41,15 +41,15 @@ const ACCREDITATIONS: AccreditationType[] = [
     id: 'iacbe',
     name: 'IACBE',
     fullName: 'International Accreditation Council for Business Education',
-    logo: '🌐',
+    logo: '/images/logos/iacbe.jpeg',
     description: 'IACBE recognizes EU American University for excellence in business and management education, evaluating programs on outcomes-based effectiveness, innovation, ethical leadership, and measurable student achievement.',
-    certificateUrl: '/images/iacbe.png',
+    certificateUrl: '/images/iacbe.jpg',
   },
   {
     id: 'athea',
     name: 'ATHEA',
     fullName: 'Association for Transnational Higher Education Accreditation',
-    logo: '🌍',
+    logo: '/images/logos/athea.jpeg',
     description: 'Through ATHEA recognition, EU American University demonstrates commitment to quality teaching, research governance, and academic best practices that align with international higher education standards.',
     certificateUrl: '/images/athea.png',
   },
@@ -57,7 +57,7 @@ const ACCREDITATIONS: AccreditationType[] = [
     id: 'accreditat',
     name: 'ACCREDITAT',
     fullName: 'ACCREDITAT International Quality Assurance',
-    logo: '✅',
+    logo: '/images/logos/accreditat.png',
     description: 'ACCREDITAT recognition affirms EU American University\'s adherence to internationally benchmarked standards covering academic quality, student support services, and strategic institutional development.',
     certificateUrl: '/images/accreditat.png',
   },
@@ -65,7 +65,7 @@ const ACCREDITATIONS: AccreditationType[] = [
     id: 'unesco',
     name: 'UNESCO',
     fullName: 'United Nations Educational, Scientific and Cultural Organization',
-    logo: '🏛️',
+    logo: '/images/logos/unesco.png',
     description: 'EU American University supports the educational values and global vision of UNESCO, promoting intercultural understanding, lifelong learning, ethical leadership, and knowledge-sharing worldwide.',
     certificateUrl: null,
   },
@@ -73,7 +73,7 @@ const ACCREDITATIONS: AccreditationType[] = [
     id: 'acics',
     name: 'ACICS',
     fullName: 'Accrediting Council for Independent Colleges and Schools',
-    logo: '🎯',
+    logo: '/images/logos/acics.jpeg',
     description: 'Through ACICS association, EU American University upholds standards of academic integrity, student achievement, and operational effectiveness that prepare graduates for a competitive global workforce.',
     certificateUrl: null,
   },
@@ -99,8 +99,12 @@ function AccreditationCard({ acc }: { acc: AccreditationType }) {
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
-          <div style={{ width: 52, height: 52, background: '#F0F4FF', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>
-            {acc.logo}
+          <div style={{ width: 52, height: 52, background: '#F0F4FF', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0, overflow: 'hidden', padding: acc.logo.startsWith('/') ? '4px' : '0' }}>
+            {acc.logo.startsWith('/') ? (
+              <img src={acc.logo} alt={`${acc.name} logo`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            ) : (
+              acc.logo
+            )}
           </div>
           <div>
             <h3 style={{ color: '#1B3A6B', fontWeight: 800, fontSize: 18, margin: '0 0 4px' }}>{acc.name}</h3>

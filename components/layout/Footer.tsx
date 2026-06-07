@@ -2,15 +2,10 @@
 
 import Link from 'next/link';
 import {
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
   Mail,
   Phone,
   MapPin,
 } from 'lucide-react';
-import { useState } from 'react';
 import { UniversityLogo } from '@/components/ui/UniversityLogo';
 
 function EUAULogoSmall({ className }: { className?: string }) {
@@ -48,35 +43,6 @@ const footerLinks = {
   ],
 };
 
-const socialLinks = [
-  { icon: Facebook, href: 'https://facebook.com/euamericanuniversity', label: 'Facebook' },
-  { icon: Twitter, href: 'https://twitter.com/euamericanuniv', label: 'Twitter' },
-  { icon: Linkedin, href: 'https://linkedin.com/school/euamericanuniversity', label: 'LinkedIn' },
-  { icon: Instagram, href: 'https://instagram.com/euamericanuniversity', label: 'Instagram' },
-];
-
-function SocialIcon({ social }: { social: typeof socialLinks[number] }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <a
-      key={social.label}
-      href={social.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
-      style={{
-        border: '1.5px solid ' + (hovered ? '#E09900' : 'rgba(255,255,255,0.35)'),
-        background: hovered ? '#E09900' : 'rgba(255,255,255,0.08)',
-        color: hovered ? '#fff' : 'rgba(255,255,255,0.85)',
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      aria-label={social.label}
-    >
-      <social.icon size={15} />
-    </a>
-  );
-}
 
 export default function Footer() {
   return (
@@ -102,9 +68,9 @@ export default function Footer() {
               </a>
               <a 
                 href="tel:+15055203303" 
-                className="flex items-center gap-3 text-sm text-gray-300 hover:text-white transition-colors"
+                className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
               >
-                <Phone size={18} className="text-primary-light" />
+                <Phone size={14} />
                 +1 505 520 3303
               </a>
               <div className="flex flex-col gap-1.5 text-white/60 text-[12.5px]">
@@ -161,11 +127,7 @@ export default function Footer() {
               Cookie Policy
             </Link>
           </div>
-          <div className="flex items-center gap-3">
-            {socialLinks.map((social) => (
-              <SocialIcon key={social.label} social={social} />
-            ))}
-          </div>
+
         </div>
       </div>
     </footer>

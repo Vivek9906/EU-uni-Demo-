@@ -4,7 +4,6 @@ const addresses = [
   {
     id: 2,
     city: 'Austin, Texas, USA',
-    flag: '🇺🇸',
     address: 'Suite 2.408, 1616 Guadalupe Street',
     postcode: 'Austin, TX 78701',
     country: 'United States',
@@ -52,7 +51,6 @@ export default function AddressCards() {
                     📍
                   </div>
                   <div>
-                    <span className="text-xl">{loc.flag}</span>
                     <p className="font-heading font-bold text-[15px] text-foreground leading-tight">
                       {loc.city}
                     </p>

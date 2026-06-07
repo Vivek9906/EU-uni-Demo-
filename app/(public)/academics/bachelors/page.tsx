@@ -1,26 +1,26 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Globe } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
+import { prisma } from '@/lib/db';
 
 export const metadata: Metadata = {
   title: "Bachelor's Programs",
-  description: "Explore EU American University's Bachelor's programs: BBA, BPA, and BSW. Fully online, globally recognized undergraduate degrees.",
+  description: "Explore EU American University's Bachelor's programs. Fully online, globally recognized undergraduate degrees.",
 };
 
-const programs = [
-  { name: 'Bachelor of Business Administration (BBA)', slug: 'bba', description: 'Build foundational business skills in management, finance, marketing, and entrepreneurship with a global perspective.', imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80' },
-  { name: 'Bachelor of Public Administration (BPA)', slug: 'bpa', description: 'Prepare for leadership roles in government and nonprofit organizations through the study of public policy, governance, and civic leadership.', imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80' },
-  { name: 'Bachelor of Social Work (BSW)', slug: 'bsw', description: 'Develop the skills needed to support individuals and communities through counseling, advocacy, and social welfare programs.', imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80' },
-];
+export default async function BachelorsPage() {
+  const programs = await prisma.program.findMany({
+    where: { level: 'bachelors', isActive: true },
+    orderBy: { order: 'asc' },
+  });
 
-export default function BachelorsPage() {
   return (
     <>
       <PageHero
         title="Bachelor&apos;s Programs"
-        subtitle="EU American University offers three undergraduate programs designed to provide a strong academic foundation and prepare graduates for professional success in business, public service, and social work."
-        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Bachelor&apos;s Programs' }]}
+        subtitle="EU American University offers undergraduate programs designed to provide a strong academic foundation and prepare graduates for professional success in business, public service, and social work."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: "Bachelor\u0027s Programs" }]}
       />
 
       <section className="section-padding">
@@ -29,14 +29,11 @@ export default function BachelorsPage() {
             {programs.map((program) => (
               <div key={program.slug} className="bg-background-card border border-border rounded-card shadow-sm transition-all duration-200 hover:shadow-md overflow-hidden group">
                 <div className="relative h-52 overflow-hidden">
-                  <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style={{ backgroundImage: `url(${program.imageUrl})` }} />
+                  <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style={{ backgroundImage: `url(${program.imageUrl || 'https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80'})` }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <div className="absolute bottom-3 left-3">
-                    
-                  </div>
                 </div>
                 <div className="p-6">
-                  <h2 className="font-heading text-xl font-bold mb-2 group-hover:text-primary transition-colors">{program.name}</h2>
+                  <h2 className="font-heading text-xl font-bold mb-2 group-hover:text-primary transition-colors">{program.title}</h2>
                   <p className="text-sm text-foreground-secondary leading-relaxed mb-4">{program.description}</p>
                   <div className="flex items-center gap-3">
                     <Link href={`/academics/bachelors/${program.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary-light transition-colors">View Details <ArrowRight size={14} /></Link>

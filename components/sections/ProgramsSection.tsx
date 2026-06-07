@@ -7,95 +7,23 @@ import { ArrowRight } from 'lucide-react';
 
 type ProgramLevel = 'bachelors' | 'masters' | 'honorary' | 'phd';
 
-type ProgramCard = {
-  name: string;
-  description: string;
-  href: string;
-  imageUrl: string;
-  badge: string;
+const LEVEL_BADGES: Record<string, string> = {
+  bachelors: "Bachelor\u2019s Program",
+  masters: "Master\u2019s Program",
+  phd: 'PhD Program',
+  honorary: 'Honorary Recognition',
 };
 
-const programs: Record<ProgramLevel, ProgramCard[]> = {
-  bachelors: [
-    {
-      name: 'Bachelor of Business Administration (BBA)',
-      description:
-        'Build foundational business skills in management, finance, marketing, and entrepreneurship with a global perspective.',
-      href: '/academics/bachelors/bba',
-      imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
-      badge: "Bachelor\u2019s Program",
-    },
-    {
-      name: 'Bachelor of Public Administration (BPA)',
-      description:
-        'Prepare for leadership roles in government and nonprofit organizations through the study of public policy, governance, and civic leadership.',
-      href: '/academics/bachelors/bpa',
-      imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
-      badge: "Bachelor\u2019s Program",
-    },
-    {
-      name: 'Bachelor of Social Work (BSW)',
-      description:
-        'Develop the skills needed to support individuals and communities through counseling, advocacy, and social welfare programs.',
-      href: '/academics/bachelors/bsw',
-      imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&q=80',
-      badge: "Bachelor\u2019s Program",
-    },
-  ],
-  masters: [
-    {
-      name: 'Master of Business Administration (MBA)',
-      description:
-        'An advanced program for professionals seeking senior leadership positions through strategic thinking and executive decision-making.',
-      href: '/academics/masters/mba',
-      imageUrl: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80',
-      badge: "Master\u2019s Program",
-    },
-    {
-      name: 'Master of Public Administration (MPA)',
-      description:
-        'Advance your career in public service with graduate-level expertise in policy analysis, organizational management, and governance.',
-      href: '/academics/masters/mpa',
-      imageUrl: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
-      badge: "Master\u2019s Program",
-    },
-    {
-      name: 'Master of Social Work (MSW)',
-      description:
-        'Deepen your expertise in clinical practice, community organization, and social policy to make a meaningful impact on society.',
-      href: '/academics/masters/msw',
-      imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
-      badge: "Master\u2019s Program",
-    },
-  ],
-  honorary: [
-    {
-      name: 'Honorary Doctorate (Honoris Causa)',
-      description:
-        'A prestigious recognition for individuals who have demonstrated exceptional leadership and contributions to their field.',
-      href: '/academics/honorary/honorary-doctorate',
-      imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
-      badge: 'Honorary Recognition',
-    },
-    {
-      name: 'Honorary Professorship',
-      description:
-        'An academic distinction recognizing outstanding contributions to education, research, or professional excellence.',
-      href: '/academics/honorary/honorary-professorship',
-      imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
-      badge: 'Honorary Recognition',
-    },
-  ],
-  phd: [
-    {
-      name: 'Doctor of Philosophy (PhD)',
-      description:
-        'An internationally recognized doctoral program for scholars, researchers, and professionals who wish to make significant contributions to their field through advanced research and academic inquiry.',
-      href: '/academics/phd/doctor-of-philosophy',
-      imageUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80',
-      badge: 'PhD Program',
-    },
-  ],
+type ProgramCard = {
+  title: string;
+  slug: string;
+  level: string;
+  description: string;
+  imageUrl: string | null;
+};
+
+type Props = {
+  dbPrograms: ProgramCard[];
 };
 
 const tabs: { key: ProgramLevel; label: string }[] = [
@@ -105,8 +33,16 @@ const tabs: { key: ProgramLevel; label: string }[] = [
   { key: 'bachelors', label: "Bachelor's" },
 ];
 
-export default function ProgramsSection() {
+export default function ProgramsSection({ dbPrograms }: Props) {
   const [activeTab, setActiveTab] = useState<ProgramLevel>('phd');
+
+  // Group programs by level
+  const programs: Record<ProgramLevel, ProgramCard[]> = {
+    phd: dbPrograms.filter(p => p.level === 'phd'),
+    honorary: dbPrograms.filter(p => p.level === 'honorary'),
+    masters: dbPrograms.filter(p => p.level === 'masters'),
+    bachelors: dbPrograms.filter(p => p.level === 'bachelors'),
+  };
 
   return (
     <section className="section-padding">
@@ -153,30 +89,30 @@ export default function ProgramsSection() {
             className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto"
           >
             {programs[activeTab].map((program) => (
-              <div key={program.name} className="card overflow-hidden group">
+              <div key={program.slug} className="card overflow-hidden group">
                 <div className="relative h-48 overflow-hidden">
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                    style={{ backgroundImage: 'url(' + program.imageUrl + ')' }}
+                    style={{ backgroundImage: `url(${program.imageUrl || 'https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80'})` }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   <div className="absolute top-3 left-3">
                     <span className="inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-primary text-xs font-semibold px-2.5 py-1 rounded-full">
-                      {program.badge}
+                      {LEVEL_BADGES[program.level] ?? program.level}
                     </span>
                   </div>
                 </div>
 
                 <div className="p-5">
                   <h3 className="font-heading text-lg font-bold mb-2 group-hover:text-primary transition-colors leading-tight">
-                    {program.name}
+                    {program.title}
                   </h3>
                   <p className="text-sm text-foreground-secondary leading-relaxed mb-4">
                     {program.description}
                   </p>
                   <div className="flex items-center gap-3">
                     <Link
-                      href={program.href}
+                      href={`/academics/${program.level}/${program.slug}`}
                       className="text-sm font-medium text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1"
                     >
                       View Details <ArrowRight size={14} />

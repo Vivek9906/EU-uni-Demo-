@@ -1,31 +1,20 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Globe, Award, BookOpen, GraduationCap } from 'lucide-react';
+import { ArrowRight, Award, GraduationCap } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
+import { prisma } from '@/lib/db';
 
 export const metadata: Metadata = {
   title: 'Honorary Programs',
   description: 'EU American University Honorary programs: Honorary Doctorate (Honoris Causa) and Honorary Professorship.',
 };
 
-const programs = [
-  {
-    name: 'Honorary Doctorate (Honoris Causa)',
-    icon: Award,
-    description: 'A prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement, professional excellence, and significant contributions to their field, community, or society. This recognition honors a lifetime of distinguished service and leadership.',
-    imageUrl: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80',
-    eligibility: ['Minimum 10 years of professional experience', 'Demonstrated leadership in their field', 'Evidence of community impact', 'Professional references'],
-  },
-  {
-    name: 'Honorary Professorship',
-    icon: GraduationCap,
-    description: 'An academic distinction recognizing outstanding contributions to education, research, or professional practice. Recipients are acknowledged among EU American University\'s distinguished faculty for their exceptional accomplishments.',
-    imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
-    eligibility: ['Demonstrated excellence in education or research', 'Significant professional accomplishments', 'Contributions to academic community', 'Professional references'],
-  },
-];
+export default async function HonoraryPage() {
+  const programs = await prisma.program.findMany({
+    where: { level: 'honorary', isActive: true },
+    orderBy: { order: 'asc' },
+  });
 
-export default function HonoraryPage() {
   return (
     <>
       <PageHero
@@ -37,35 +26,22 @@ export default function HonoraryPage() {
       <section className="section-padding">
         <div className="container-main">
           <div className="space-y-12">
-            {programs.map((program) => (
-              <div key={program.name} className="grid lg:grid-cols-2 gap-8 items-center">
+            {programs.map((program, i) => (
+              <div key={program.slug} className="grid lg:grid-cols-2 gap-8 items-center">
                 <div className="relative h-72 lg:h-80 overflow-hidden rounded-card">
-                  <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${program.imageUrl})` }} />
+                  <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${program.imageUrl || 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80'})` }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <div className="absolute bottom-3 left-3">
-                    
-                  </div>
                 </div>
                 <div>
                   <div className="flex items-center gap-3 mb-3">
-                    <program.icon className="w-7 h-7 text-accent" />
-                    <h2 className="font-heading text-2xl font-bold">{program.name}</h2>
+                    {i === 0 ? <Award className="w-7 h-7 text-accent" /> : <GraduationCap className="w-7 h-7 text-accent" />}
+                    <h2 className="font-heading text-2xl font-bold">{program.title}</h2>
                   </div>
                   <p className="text-foreground-secondary leading-relaxed mb-6">{program.description}</p>
 
-                  <h3 className="font-heading text-base font-bold mb-3">Eligibility</h3>
-                  <ul className="space-y-2 mb-6">
-                    {program.eligibility.map((item) => (
-                      <li key={item} className="text-sm text-foreground-secondary flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-1.5" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-
                   <div className="flex items-center gap-3">
                     <Link href="/admissions/apply" className="btn-primary btn-sm gap-2">Apply Now <ArrowRight size={14} /></Link>
-                    <Link href="/honorary-doctorate" className="text-sm font-medium text-primary hover:text-primary-light transition-colors">Learn More →</Link>
+                    <Link href={`/academics/honorary/${program.slug}`} className="text-sm font-medium text-primary hover:text-primary-light transition-colors">Learn More →</Link>
                   </div>
                 </div>
               </div>
