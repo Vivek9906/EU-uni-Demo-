@@ -29,10 +29,10 @@ const newsItems = [
 ];
 
 const upcomingEvent = {
-  date: 'June 15, 2027',
-  title: 'EUAU Commencement Ceremony 2027',
+  date: 'June 15, 2028',
+  title: 'EUAU Commencement Ceremony 2028',
   venue: 'EU American Grand Hall, Paris, France',
-  slug: 'commencement-ceremony-2027',
+  slug: 'commencement-ceremony-2028',
 };
 
 export default function NewsEvents() {
