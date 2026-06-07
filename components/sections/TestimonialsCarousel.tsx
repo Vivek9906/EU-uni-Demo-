@@ -3,35 +3,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
-const testimonials = [
-  {
-    name: 'Dr. James Okoye',
-    program: 'Honorary Doctorate in Business Leadership',
-    content: "Receiving the Honorary Doctorate from EU American University was a defining moment in my career. The recognition validated decades of work in community development across West Africa.",
-  },
-  {
-    name: 'Maria Fernandez',
-    program: 'Master of Business Administration (MBA)',
-    content: "The MBA program at EU American University transformed my approach to business leadership. The flexible online format allowed me to continue working while pursuing my degree.",
-  },
-  {
-    name: 'Prof. Ahmed Al-Rashid',
-    program: 'Honorary Professorship',
-    content: "Being awarded an Honorary Professorship by EU American University was an incredible honor that recognized my contributions to education in the Middle East.",
-  },
-  {
-    name: 'Sarah Chen',
-    program: 'Bachelor of Business Administration (BBA)',
-    content: "The BBA program gave me the confidence and skills to launch my startup. The global perspective and practical curriculum at EU American University made all the difference.",
-  },
-  {
-    name: 'Dr. Elena Vasquez',
-    program: 'Master of Public Administration (MPA)',
-    content: "EU American University's MPA program connected me with like-minded professionals from around the world. The coursework was directly applicable to my role in government.",
-  },
-];
+export interface TestimonialItem {
+  id?: string;
+  name: string;
+  program: string;
+  content: string;
+}
 
-export default function TestimonialsCarousel() {
+export default function TestimonialsCarousel({ testimonials }: { testimonials: TestimonialItem[] }) {
+  if (!testimonials || testimonials.length === 0) return null;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
