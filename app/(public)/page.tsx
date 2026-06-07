@@ -4,7 +4,7 @@ import StatsBar from '@/components/sections/StatsBar';
 import WhyEUAU from '@/components/sections/WhyEUAU';
 import AboutPreview from '@/components/sections/AboutPreview';
 import ProgramsSectionServer from '@/components/sections/ProgramsSectionServer';
-import NewsEvents from '@/components/sections/NewsEvents';
+import NewsEventsServer from '@/components/sections/NewsEventsServer';
 import TestimonialsCarouselServer from '@/components/sections/TestimonialsCarouselServer';
 import HonoraryCtaBanner from '@/components/sections/HonoraryCtaBanner';
 
@@ -45,7 +45,7 @@ export default function HomePage() {
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton />}>
-        <NewsEvents />
+        <NewsEventsServer />
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton />}>
