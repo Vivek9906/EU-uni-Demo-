@@ -382,7 +382,7 @@ async function main() {
     { name: 'City University Cambodia', address: 'Phnom Penh, Cambodia', region: 'Asia', country: 'Cambodia', website: 'https://cityuniversity.edu.kh', email: 'info@cityuniversity.edu.kh', logoUrl: '/partners/cityuniv.png', isActive: true, order: 5 },
     { name: 'Prowess University', address: 'Delaware, USA', region: 'North America', country: 'United States', website: 'https://prowessuniversity.edu', email: 'info@prowessuniversity.edu', logoUrl: '/partners/prowess.png', isActive: true, order: 6 },
   ]
-
+  
   for (const p of SEED_PARTNERS) {
     await prisma.partner.upsert({
       where: { name: p.name },
