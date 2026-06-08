@@ -100,7 +100,7 @@ export default function PartnerWithUsPage() {
           </div>
 
           {/* Enquiry Form */}
-          <div className="max-w-[680px] mx-auto">
+          <div id="application-form" className="max-w-[680px] mx-auto scroll-mt-24">
             <div className="bg-background-card rounded-xl border border-border p-8 md:p-10 shadow-sm">
               <h2 className="font-heading text-[22px] font-extrabold text-foreground mb-1.5">
                 Partnership Enquiry

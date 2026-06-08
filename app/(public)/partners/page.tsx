@@ -153,76 +153,33 @@ export default function GlobalPartnersPage() {
       {/* Start Your Partnership Journey */}
       <section className="section-padding bg-background-subtle">
         <div className="container-main">
-          <div className="bg-[#1B3A6B] text-white rounded-2xl p-8 md:p-12">
-            <div className="text-center mb-10">
-              <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-4 text-white">
-                Start Your Partnership Journey
-              </h2>
-              <p className="text-white/90 max-w-2xl mx-auto">
-                Interested in partnering with EU American University? Contact our partnerships team for a personalized consultation.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full border border-white/20 shadow-sm">
-                <h4 className="font-bold mb-4 text-[17px] leading-snug text-white drop-shadow-sm">🤝 Training Centers & Academic</h4>
-                <div className="space-y-3 text-sm text-white/90 mt-auto">
-                  <div>
-                    <span className="text-white/80 block mb-1 font-medium">Email:</span>
-                    <a href="mailto:partnerships@euamericanuniversity.us" className="font-medium text-white hover:text-[#E09900] transition-colors break-all underline decoration-white/30 underline-offset-2">
-                      partnerships@euamericanuniversity.us
-                    </a>
-                  </div>
-                  <p className="text-white/80 font-medium">Response Time: 24 hours</p>
-                </div>
-              </div>
-
-              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full border border-white/20 shadow-sm">
-                <h4 className="font-bold mb-4 text-[17px] leading-snug text-white drop-shadow-sm">💼 Franchise & Business</h4>
-                <div className="space-y-3 text-sm text-white/90 mt-auto">
-                  <div>
-                    <span className="text-white/80 block mb-1 font-medium">Email:</span>
-                    <a href="mailto:business@euamericanuniversity.us" className="font-medium text-white hover:text-[#E09900] transition-colors break-all underline decoration-white/30 underline-offset-2">
-                      business@euamericanuniversity.us
-                    </a>
-                  </div>
-                  <p className="text-white/80 font-medium">Response Time: 24 hours</p>
-                </div>
-              </div>
-
-              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full border border-white/20 shadow-sm">
-                <h4 className="font-bold mb-4 text-[17px] leading-snug text-white drop-shadow-sm">📢 Recruitment & Marketing</h4>
-                <div className="space-y-3 text-sm text-white/90 mt-auto">
-                  <div>
-                    <span className="text-white/80 block mb-1 font-medium">Email:</span>
-                    <a href="mailto:recruitment@euamericanuniversity.us" className="font-medium text-white hover:text-[#E09900] transition-colors break-all underline decoration-white/30 underline-offset-2">
-                      recruitment@euamericanuniversity.us
-                    </a>
-                  </div>
-                  <p className="text-white/80 font-medium">Response Time: 24 hours</p>
-                </div>
-              </div>
-
-              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full border border-white/20 shadow-sm">
-                <h4 className="font-bold mb-4 text-[17px] leading-snug text-white drop-shadow-sm">🏢 Corporate Programs</h4>
-                <div className="space-y-3 text-sm text-white/90 mt-auto">
-                  <div>
-                    <span className="text-white/80 block mb-1 font-medium">Email:</span>
-                    <a href="mailto:corporate@euamericanuniversity.us" className="font-medium text-white hover:text-[#E09900] transition-colors break-all underline decoration-white/30 underline-offset-2">
-                      corporate@euamericanuniversity.us
-                    </a>
-                  </div>
-                  <p className="text-white/80 font-medium">Response Time: 24 hours</p>
+          <div className="bg-[#1B3A6B] text-white rounded-2xl p-8 md:p-12 text-center max-w-4xl mx-auto border border-white/10 shadow-lg">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-4 text-white">
+              Start Your Partnership Journey
+            </h2>
+            <p className="text-white/90 text-[16px] mb-10 max-w-2xl mx-auto leading-relaxed">
+              Interested in partnering with EU American University? Contact our partnerships team for a personalized consultation regarding any of our partnership models.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-10">
+              <div className="bg-white/10 rounded-xl p-5 md:p-6 border border-white/20 backdrop-blur-sm flex items-center gap-5 shadow-sm text-left">
+                <div className="text-4xl">📧</div>
+                <div>
+                  <p className="text-white/70 text-sm font-medium mb-1">Email Us</p>
+                  <a href="mailto:info@euamericanuniversity.us" className="text-white font-bold hover:text-[#E09900] transition-colors text-[17px] md:text-lg underline decoration-white/30 underline-offset-2">
+                    info@euamericanuniversity.us
+                  </a>
+                  <p className="text-white/70 text-xs mt-1.5 font-medium">Response Time: 24 hours</p>
                 </div>
               </div>
             </div>
 
-            <div className="text-center mt-12">
+            <div>
               <Link
-                href="/partner-with-us"
-                className="bg-[#E09900] text-white px-8 py-3.5 rounded-lg font-bold hover:bg-[#c28400] transition-colors inline-block"
+                href="/partner-with-us#application-form"
+                className="bg-[#E09900] text-white px-8 py-4 rounded-lg font-bold hover:bg-[#c28400] transition-all inline-flex items-center gap-2 text-[16px] shadow-lg hover:shadow-xl hover:-translate-y-0.5 duration-200"
               >
-                Schedule a Consultation
+                Schedule a Consultation →
               </Link>
             </div>
           </div>
