@@ -18,6 +18,7 @@ const PARTNERS = [
   { region: 'Europe Region', name: 'Iberian Education Network', address: 'Madrid, Spain' },
   { region: 'Europe Region', name: 'Continental Education Hub', address: 'Berlin, Germany' },
   { region: 'Europe Region', name: 'Franco-European Alliance', address: 'Paris, France' },
+  { region: 'Europe Region', name: 'Qualify Learn', address: 'United Kingdom' },
   // Americas Region
   { region: 'Americas Region', name: 'North American Education Alliance', address: 'Toronto, Canada' },
   { region: 'Americas Region', name: 'Pan-American Executive Institute', address: 'Mexico City, Mexico' },
@@ -194,114 +195,6 @@ export default function GlobalPartnersPage() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Detailed Partnership Categories */}
-      <section className="section-padding">
-        <div className="container-main">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-foreground mb-4">
-              Detailed Partnership Categories
-            </h2>
-          </div>
-
-          <div className="space-y-12 max-w-4xl mx-auto">
-            <div className="bg-background-subtle rounded-xl p-8 border border-border">
-              <h3 className="font-heading text-xl font-extrabold text-[#1B3A6B] mb-3">Training Center Partnerships</h3>
-              <p className="text-foreground-secondary mb-6">For established institutions seeking to deliver our programs with comprehensive support.</p>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-bold text-foreground mb-3">What You Get:</h4>
-                  <ul className="space-y-2 text-sm text-foreground-secondary">
-                    <li>• Program delivery rights for your region</li>
-                    <li>• Marketing materials and co-branding</li>
-                    <li>• Faculty training and curriculum support</li>
-                    <li>• Student recruitment tools</li>
-                    <li>• Revenue sharing (30-40%)</li>
-                    <li>• Annual partnership review</li>
-                    <li>• Certificate of Partnership</li>
-                    <li>• Dedicated partnership manager</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-bold text-foreground mb-3">Investment & Timeline:</h4>
-                  <p className="text-sm text-foreground-secondary mb-2"><strong>Initial setup fee:</strong> $5,000 - $15,000 (varies by region)</p>
-                  <p className="text-sm text-foreground-secondary"><strong>Implementation period:</strong> 6 months from agreement to first cohort</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-background-subtle rounded-xl p-8 border border-border">
-              <h3 className="font-heading text-xl font-extrabold text-[#1B3A6B] mb-3">Academic Alliances & Dual Degrees</h3>
-              <p className="text-foreground-secondary mb-6">For universities offering joint degree programs and credit transfer arrangements.</p>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-bold text-foreground mb-3">Available Models:</h4>
-                  <ul className="space-y-2 text-sm text-foreground-secondary">
-                    <li>✓ 2+2 Bachelor Degree Programs</li>
-                    <li>✓ Master&apos;s Pathway Programs</li>
-                    <li>✓ PhD Collaboration</li>
-                    <li>✓ Joint Research Initiatives</li>
-                    <li>✓ Faculty Exchange Programs</li>
-                    <li>✓ Articulation Agreements</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-bold text-foreground mb-3">Timeline:</h4>
-                  <p className="text-sm text-foreground-secondary">Typically 8-12 weeks from initial discussion to signed agreement</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-background-subtle rounded-xl p-8 border border-border">
-              <h3 className="font-heading text-xl font-extrabold text-[#1B3A6B] mb-3">Franchise & License Agreements</h3>
-              <p className="text-foreground-secondary mb-6">For organizations seeking exclusive regional rights with full operational support.</p>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-bold text-foreground mb-3">Typical Franchise Investment:</h4>
-                  <ul className="space-y-2 text-sm text-foreground-secondary">
-                    <li>💰 Franchise Fee: $50,000 - $150,000</li>
-                    <li>💰 Initial Setup: $20,000 - $50,000</li>
-                    <li>💰 Ongoing Royalties: 15-20%</li>
-                    <li>💰 Marketing Support: $5,000 - $10,000 annual</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-bold text-foreground mb-3">Support Includes:</h4>
-                  <p className="text-sm text-foreground-secondary">12-month comprehensive launch support, staff training, marketing strategy, systems setup (LMS, CRM), and dedicated franchise manager.</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-background-subtle rounded-xl p-8 border border-border">
-              <h3 className="font-heading text-xl font-extrabold text-[#1B3A6B] mb-3">Recruitment & Marketing Partnerships</h3>
-              <p className="text-foreground-secondary mb-6">For education consultants and marketing agencies seeking commission-based enrollment opportunities.</p>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-bold text-foreground mb-3">Compensation Model:</h4>
-                  <p className="text-sm text-foreground-secondary mb-4">15-25% commission per successful student enrollment</p>
-                  <h4 className="font-bold text-foreground mb-3">Timeline to First Commission:</h4>
-                  <p className="text-sm text-foreground-secondary">2-4 weeks after partnership agreement</p>
-                </div>
-                <div>
-                  <h4 className="font-bold text-foreground mb-3">What We Provide:</h4>
-                  <ul className="space-y-2 text-sm text-foreground-secondary">
-                    <li>✓ Marketing materials and collateral</li>
-                    <li>✓ Program overview presentations</li>
-                    <li>✓ Student inquiry management system</li>
-                    <li>✓ Marketing co-op funds</li>
-                    <li>✓ Regular partner webinars</li>
-                    <li>✓ Commission tracking dashboard</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
