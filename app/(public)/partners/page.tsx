@@ -62,33 +62,6 @@ const BENEFITS = [
   },
 ];
 
-const TYPES = [
-  {
-    title: 'Training Centers',
-    desc: 'Deliver our programs in-person with online faculty support.',
-  },
-  {
-    title: 'Academic Alliances',
-    desc: 'Articulation agreements and dual degree programs with universities.',
-  },
-  {
-    title: 'Franchise/License',
-    desc: 'Exclusive regional rights with comprehensive training and support.',
-  },
-  {
-    title: 'Recruitment Partners',
-    desc: 'Market our programs and earn commission per successful enrollment.',
-  },
-  {
-    title: 'Corporate Programs',
-    desc: 'Custom training and development programs for organizations.',
-  },
-  {
-    title: 'Research & Innovation',
-    desc: 'Collaborative research projects and innovation partnerships.',
-  },
-];
-
 export default function GlobalPartnersPage() {
   const regionsObj: Record<string, typeof PARTNERS> = {};
   PARTNERS.forEach((p) => {
@@ -136,27 +109,6 @@ export default function GlobalPartnersPage() {
           </div>
         </div>
       </section>
-
-      {/* Types of Partnerships */}
-      <section className="section-padding">
-        <div className="container-main">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-foreground mb-4">
-              Types of Partnerships Available
-            </h2>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TYPES.map((t) => (
-              <div key={t.title} className="bg-background-subtle rounded-xl p-6 border border-border">
-                <h3 className="font-heading font-extrabold text-lg text-[#1B3A6B] mb-2">{t.title}</h3>
-                <p className="text-foreground-secondary text-sm">{t.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Our Global Partner Network */}
       <section className="section-padding bg-background-subtle">
         <div className="container-main">
