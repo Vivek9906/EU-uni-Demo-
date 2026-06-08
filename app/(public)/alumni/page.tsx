@@ -49,7 +49,7 @@ export default function AlumniPage() {
       {/* Stats */}
       <section style={{ padding: '56px 0', background: '#1B3A6B' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
             {ALUMNI_STATS.map(s => (
               <div key={s.label} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 34, fontWeight: 800, color: '#E09900', marginBottom: 6 }}>{s.value}</div>
@@ -71,7 +71,7 @@ export default function AlumniPage() {
             </div>
             <h2 style={{ color: '#0F1C35', fontSize: 30, fontWeight: 800, margin: 0 }}>Notable Alumni</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {NOTABLE_ALUMNI.map(a => (
               <div key={a.name} style={{ background: '#F8FAFC', borderRadius: 12, border: '1px solid #E2E8F0', padding: '24px', borderLeft: '4px solid #1B3A6B' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
@@ -102,7 +102,7 @@ export default function AlumniPage() {
               Your graduation is just the beginning. EUAU alumni enjoy exclusive benefits for life.
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {ALUMNI_BENEFITS.map(b => (
               <div key={b.title} style={{ background: '#FFF', borderRadius: 12, border: '1px solid #E2E8F0', padding: '26px', borderTop: '3px solid #E09900' }}>
                 <div style={{ fontSize: 28, marginBottom: 12 }}>{b.icon}</div>

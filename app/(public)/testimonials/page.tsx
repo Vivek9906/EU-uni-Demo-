@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/db';
 import { PageHero } from '@/components/ui/PageHero';
-import { Quote, PlusCircle } from 'lucide-react';
+import { Quote } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = { 
@@ -61,10 +61,6 @@ export default async function TestimonialsPage({
                 Technology
               </Link>
             </div>
-            
-            <Link href="/testimonials/submit" className="btn-primary gap-2">
-              <PlusCircle size={18} /> Submit Yours
-            </Link>
           </div>
 
           {testimonials.length === 0 ? (
