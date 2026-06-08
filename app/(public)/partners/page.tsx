@@ -1,76 +1,174 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageHero } from '@/components/ui/PageHero';
-import { prisma } from '@/lib/db'
 
 export const metadata: Metadata = {
-  title: 'Our Partners',
+  title: 'Global Partners | EU American University',
   description:
-    'EU American University collaborates with leading educational institutions and organizations across 4 continents, bringing world-class education closer to learners everywhere.',
+    'Join our growing network of 75+ partner institutions across 6 continents. We offer flexible partnership models with proven revenue growth and dedicated support.',
 };
 
-export const dynamic = 'force-dynamic';
-
-const getPartners = async () => {
-  return prisma.partner.findMany({
-    where: { isActive: true },
-    orderBy: { order: 'asc' },
-  });
-};
-
-const STATS = [
-  { value: '15+', label: 'Global Partners' },
-  { value: '4', label: 'Continents' },
-  { value: '10+', label: 'Countries' },
+const PARTNERS = [
+  // Asia-Pacific Region
+  { region: 'Asia-Pacific Region', name: 'Elite Learning Institute', address: 'Bangkok, Thailand' },
+  { region: 'Asia-Pacific Region', name: 'Pacific Education Solutions', address: 'Singapore' },
+  { region: 'Asia-Pacific Region', name: 'Innovation Academy Manila', address: 'Philippines' },
+  { region: 'Asia-Pacific Region', name: 'Gulf Excellence Academy', address: 'Dubai, UAE' },
+  // Europe Region
+  { region: 'Europe Region', name: 'Iberian Education Network', address: 'Madrid, Spain' },
+  { region: 'Europe Region', name: 'Continental Education Hub', address: 'Berlin, Germany' },
+  { region: 'Europe Region', name: 'Franco-European Alliance', address: 'Paris, France' },
+  // Americas Region
+  { region: 'Americas Region', name: 'North American Education Alliance', address: 'Toronto, Canada' },
+  { region: 'Americas Region', name: 'Pan-American Executive Institute', address: 'Mexico City, Mexico' },
+  { region: 'Americas Region', name: 'South American Learning Network', address: 'São Paulo, Brazil' },
+  // Africa Region
+  { region: 'Africa Region', name: 'African Excellence Institute', address: 'Cape Town, South Africa' },
+  { region: 'Africa Region', name: 'Continental Learning Hub', address: 'Nairobi, Kenya' },
+  { region: 'Africa Region', name: 'West Africa Education Network', address: 'Accra, Ghana' },
 ];
 
-export default async function OurPartnersPage() {
-  const partnersData = await getPartners()
+const BENEFITS = [
+  {
+    icon: '🏆',
+    title: 'Internationally Recognized',
+    desc: 'Access to our accredited degree programs and professional credentials trusted worldwide.',
+  },
+  {
+    icon: '💻',
+    title: 'Flexible Delivery',
+    desc: 'Choose from online, blended, and in-person delivery models to match your market needs.',
+  },
+  {
+    icon: '📚',
+    title: 'Customizable Curriculum',
+    desc: "Adapt our programs to your region's requirements and student needs.",
+  },
+  {
+    icon: '🤝',
+    title: 'Dedicated Support',
+    desc: 'Assigned partnership manager for implementation, marketing, and ongoing support.',
+  },
+  {
+    icon: '📈',
+    title: 'Revenue Growth',
+    desc: 'Competitive revenue sharing models (30-40%) with proven ROI for partners.',
+  },
+  {
+    icon: '🌍',
+    title: 'Global Network',
+    desc: 'Access to our international partner ecosystem and student recruitment network.',
+  },
+];
 
-  // Group partners by region
-  const regionsObj: Record<string, typeof partnersData> = {}
-  partnersData.forEach(p => {
-    if (!regionsObj[p.region]) regionsObj[p.region] = []
-    regionsObj[p.region].push(p)
-  })
+const TYPES = [
+  {
+    title: 'Training Centers',
+    desc: 'Deliver our programs in-person with online faculty support.',
+  },
+  {
+    title: 'Academic Alliances',
+    desc: 'Articulation agreements and dual degree programs with universities.',
+  },
+  {
+    title: 'Franchise/License',
+    desc: 'Exclusive regional rights with comprehensive training and support.',
+  },
+  {
+    title: 'Recruitment Partners',
+    desc: 'Market our programs and earn commission per successful enrollment.',
+  },
+  {
+    title: 'Corporate Programs',
+    desc: 'Custom training and development programs for organizations.',
+  },
+  {
+    title: 'Research & Innovation',
+    desc: 'Collaborative research projects and innovation partnerships.',
+  },
+];
 
-  const partnerRegions = Object.entries(regionsObj).map(([region, partners]) => ({ region, partners }))
+export default function GlobalPartnersPage() {
+  const regionsObj: Record<string, typeof PARTNERS> = {};
+  PARTNERS.forEach((p) => {
+    if (!regionsObj[p.region]) regionsObj[p.region] = [];
+    regionsObj[p.region].push(p);
+  });
+  const partnerRegions = Object.entries(regionsObj).map(([region, partners]) => ({ region, partners }));
 
   return (
     <>
       <PageHero
-        label="GLOBAL NETWORK"
-        title="Our Global Partner Network"
-        description="EU American University collaborates with leading educational institutions and organizations across 4 continents, bringing world-class education closer to learners everywhere."
+        label="PARTNERING WITH EU AMERICAN UNIVERSITY"
+        title="Building Global Educational Excellence Together"
+        description="Join our growing network of 75+ partner institutions across 6 continents. We offer flexible partnership models with proven revenue growth and dedicated support."
       />
 
+      {/* Why Partner With Us */}
       <section className="section-padding bg-background-subtle">
         <div className="container-main">
-          {/* Stats row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-16">
-            {STATS.map((s) => (
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-foreground mb-4">
+              Why Partner With Us?
+            </h2>
+            <p className="text-foreground-secondary max-w-2xl mx-auto">
+              Our Partnership Model provides comprehensive support and proven benefits for our global partners.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {BENEFITS.map((b) => (
               <div
-                key={s.label}
-                className="bg-background-card rounded-card border border-border p-6 text-center"
+                key={b.title}
+                className="bg-background-card rounded-card border border-border p-6 shadow-sm transition-all duration-150 hover:shadow-md hover:-translate-y-[3px]"
+                style={{ borderTop: '4px solid #E09900' }}
               >
-                <div
-                  className="text-[32px] font-extrabold mb-1.5"
-                  style={{ color: '#E09900' }}
-                >
-                  {s.value}
-                </div>
-                <div className="text-[13px] text-foreground-secondary font-semibold">
-                  {s.label}
-                </div>
+                <div className="text-[28px] mb-3">{b.icon}</div>
+                <h3 className="font-heading font-extrabold text-[16px] text-foreground mb-2">
+                  ✓ {b.title}
+                </h3>
+                <p className="text-foreground-secondary text-[14px] leading-relaxed">
+                  {b.desc}
+                </p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Partner regions */}
+      {/* Types of Partnerships */}
+      <section className="section-padding">
+        <div className="container-main">
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-foreground mb-4">
+              Types of Partnerships Available
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {TYPES.map((t) => (
+              <div key={t.title} className="bg-background-subtle rounded-xl p-6 border border-border">
+                <h3 className="font-heading font-extrabold text-lg text-[#1B3A6B] mb-2">{t.title}</h3>
+                <p className="text-foreground-secondary text-sm">{t.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Global Partner Network */}
+      <section className="section-padding bg-background-subtle">
+        <div className="container-main">
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-foreground mb-4">
+              Our Global Partner Network
+            </h2>
+          </div>
+
           {partnerRegions.map((region) => (
             <div key={region.region} className="mb-12">
               <h2
-                className="font-heading text-[17px] font-extrabold mb-5 pb-2.5 inline-block"
+                className="font-heading text-[19px] font-extrabold mb-6 pb-2.5 inline-block"
                 style={{
                   color: '#1B3A6B',
                   borderBottom: '2px solid #E09900',
@@ -78,36 +176,210 @@ export default async function OurPartnersPage() {
               >
                 {region.region}
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {region.partners.map((partner) => (
                   <div
                     key={partner.name}
                     className="bg-background-card rounded-[10px] border border-border p-5 shadow-sm transition-all duration-150 hover:shadow-md hover:-translate-y-[3px]"
                     style={{ borderLeft: '4px solid #1B3A6B' }}
                   >
-                    <p className="font-extrabold text-sm text-foreground mb-1.5">
+                    <p className="font-extrabold text-[15px] text-foreground mb-2">
                       {partner.name}
                     </p>
-                    <p className="text-[13px] text-foreground-secondary flex items-center gap-1.5">
-                      📍 {partner.address}
+                    <p className="text-[13.5px] text-foreground-secondary flex items-start gap-1.5">
+                      <span className="mt-0.5">📍</span> {partner.address}
                     </p>
                   </div>
                 ))}
               </div>
             </div>
           ))}
+        </div>
+      </section>
 
-          {/* CTA */}
-          <div className="text-center mt-12">
-            <p className="text-foreground-secondary text-base mb-5">
-              Interested in joining our global partner network?
-            </p>
-            <Link
-              href="/partner-with-us"
-              className="btn-primary inline-block"
-            >
-              Partner With Us →
-            </Link>
+      {/* Detailed Partnership Categories */}
+      <section className="section-padding">
+        <div className="container-main">
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-2xl md:text-3xl font-extrabold text-foreground mb-4">
+              Detailed Partnership Categories
+            </h2>
+          </div>
+
+          <div className="space-y-12 max-w-4xl mx-auto">
+            <div className="bg-background-subtle rounded-xl p-8 border border-border">
+              <h3 className="font-heading text-xl font-extrabold text-[#1B3A6B] mb-3">Training Center Partnerships</h3>
+              <p className="text-foreground-secondary mb-6">For established institutions seeking to deliver our programs with comprehensive support.</p>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-bold text-foreground mb-3">What You Get:</h4>
+                  <ul className="space-y-2 text-sm text-foreground-secondary">
+                    <li>• Program delivery rights for your region</li>
+                    <li>• Marketing materials and co-branding</li>
+                    <li>• Faculty training and curriculum support</li>
+                    <li>• Student recruitment tools</li>
+                    <li>• Revenue sharing (30-40%)</li>
+                    <li>• Annual partnership review</li>
+                    <li>• Certificate of Partnership</li>
+                    <li>• Dedicated partnership manager</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-bold text-foreground mb-3">Investment & Timeline:</h4>
+                  <p className="text-sm text-foreground-secondary mb-2"><strong>Initial setup fee:</strong> $5,000 - $15,000 (varies by region)</p>
+                  <p className="text-sm text-foreground-secondary"><strong>Implementation period:</strong> 6 months from agreement to first cohort</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-background-subtle rounded-xl p-8 border border-border">
+              <h3 className="font-heading text-xl font-extrabold text-[#1B3A6B] mb-3">Academic Alliances & Dual Degrees</h3>
+              <p className="text-foreground-secondary mb-6">For universities offering joint degree programs and credit transfer arrangements.</p>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-bold text-foreground mb-3">Available Models:</h4>
+                  <ul className="space-y-2 text-sm text-foreground-secondary">
+                    <li>✓ 2+2 Bachelor Degree Programs</li>
+                    <li>✓ Master&apos;s Pathway Programs</li>
+                    <li>✓ PhD Collaboration</li>
+                    <li>✓ Joint Research Initiatives</li>
+                    <li>✓ Faculty Exchange Programs</li>
+                    <li>✓ Articulation Agreements</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-bold text-foreground mb-3">Timeline:</h4>
+                  <p className="text-sm text-foreground-secondary">Typically 8-12 weeks from initial discussion to signed agreement</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-background-subtle rounded-xl p-8 border border-border">
+              <h3 className="font-heading text-xl font-extrabold text-[#1B3A6B] mb-3">Franchise & License Agreements</h3>
+              <p className="text-foreground-secondary mb-6">For organizations seeking exclusive regional rights with full operational support.</p>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-bold text-foreground mb-3">Typical Franchise Investment:</h4>
+                  <ul className="space-y-2 text-sm text-foreground-secondary">
+                    <li>💰 Franchise Fee: $50,000 - $150,000</li>
+                    <li>💰 Initial Setup: $20,000 - $50,000</li>
+                    <li>💰 Ongoing Royalties: 15-20%</li>
+                    <li>💰 Marketing Support: $5,000 - $10,000 annual</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-bold text-foreground mb-3">Support Includes:</h4>
+                  <p className="text-sm text-foreground-secondary">12-month comprehensive launch support, staff training, marketing strategy, systems setup (LMS, CRM), and dedicated franchise manager.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-background-subtle rounded-xl p-8 border border-border">
+              <h3 className="font-heading text-xl font-extrabold text-[#1B3A6B] mb-3">Recruitment & Marketing Partnerships</h3>
+              <p className="text-foreground-secondary mb-6">For education consultants and marketing agencies seeking commission-based enrollment opportunities.</p>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-bold text-foreground mb-3">Compensation Model:</h4>
+                  <p className="text-sm text-foreground-secondary mb-4">15-25% commission per successful student enrollment</p>
+                  <h4 className="font-bold text-foreground mb-3">Timeline to First Commission:</h4>
+                  <p className="text-sm text-foreground-secondary">2-4 weeks after partnership agreement</p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-foreground mb-3">What We Provide:</h4>
+                  <ul className="space-y-2 text-sm text-foreground-secondary">
+                    <li>✓ Marketing materials and collateral</li>
+                    <li>✓ Program overview presentations</li>
+                    <li>✓ Student inquiry management system</li>
+                    <li>✓ Marketing co-op funds</li>
+                    <li>✓ Regular partner webinars</li>
+                    <li>✓ Commission tracking dashboard</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Start Your Partnership Journey */}
+      <section className="section-padding bg-background-subtle">
+        <div className="container-main">
+          <div className="bg-[#1B3A6B] text-white rounded-2xl p-8 md:p-12">
+            <div className="text-center mb-10">
+              <h2 className="font-heading text-2xl md:text-3xl font-extrabold mb-4 text-white">
+                Start Your Partnership Journey
+              </h2>
+              <p className="text-white/90 max-w-2xl mx-auto">
+                Interested in partnering with EU American University? Contact our partnerships team for a personalized consultation.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full border border-white/20 shadow-sm">
+                <h4 className="font-bold mb-4 text-[17px] leading-snug text-white drop-shadow-sm">🤝 Training Centers & Academic</h4>
+                <div className="space-y-3 text-sm text-white/90 mt-auto">
+                  <div>
+                    <span className="text-white/80 block mb-1 font-medium">Email:</span>
+                    <a href="mailto:partnerships@euamericanuniversity.us" className="font-medium text-white hover:text-[#E09900] transition-colors break-all underline decoration-white/30 underline-offset-2">
+                      partnerships@euamericanuniversity.us
+                    </a>
+                  </div>
+                  <p className="text-white/80 font-medium">Response Time: 24 hours</p>
+                </div>
+              </div>
+
+              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full border border-white/20 shadow-sm">
+                <h4 className="font-bold mb-4 text-[17px] leading-snug text-white drop-shadow-sm">💼 Franchise & Business</h4>
+                <div className="space-y-3 text-sm text-white/90 mt-auto">
+                  <div>
+                    <span className="text-white/80 block mb-1 font-medium">Email:</span>
+                    <a href="mailto:business@euamericanuniversity.us" className="font-medium text-white hover:text-[#E09900] transition-colors break-all underline decoration-white/30 underline-offset-2">
+                      business@euamericanuniversity.us
+                    </a>
+                  </div>
+                  <p className="text-white/80 font-medium">Response Time: 24 hours</p>
+                </div>
+              </div>
+
+              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full border border-white/20 shadow-sm">
+                <h4 className="font-bold mb-4 text-[17px] leading-snug text-white drop-shadow-sm">📢 Recruitment & Marketing</h4>
+                <div className="space-y-3 text-sm text-white/90 mt-auto">
+                  <div>
+                    <span className="text-white/80 block mb-1 font-medium">Email:</span>
+                    <a href="mailto:recruitment@euamericanuniversity.us" className="font-medium text-white hover:text-[#E09900] transition-colors break-all underline decoration-white/30 underline-offset-2">
+                      recruitment@euamericanuniversity.us
+                    </a>
+                  </div>
+                  <p className="text-white/80 font-medium">Response Time: 24 hours</p>
+                </div>
+              </div>
+
+              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm flex flex-col h-full border border-white/20 shadow-sm">
+                <h4 className="font-bold mb-4 text-[17px] leading-snug text-white drop-shadow-sm">🏢 Corporate Programs</h4>
+                <div className="space-y-3 text-sm text-white/90 mt-auto">
+                  <div>
+                    <span className="text-white/80 block mb-1 font-medium">Email:</span>
+                    <a href="mailto:corporate@euamericanuniversity.us" className="font-medium text-white hover:text-[#E09900] transition-colors break-all underline decoration-white/30 underline-offset-2">
+                      corporate@euamericanuniversity.us
+                    </a>
+                  </div>
+                  <p className="text-white/80 font-medium">Response Time: 24 hours</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mt-12">
+              <Link
+                href="/partner-with-us"
+                className="bg-[#E09900] text-white px-8 py-3.5 rounded-lg font-bold hover:bg-[#c28400] transition-colors inline-block"
+              >
+                Schedule a Consultation
+              </Link>
+            </div>
           </div>
         </div>
       </section>
