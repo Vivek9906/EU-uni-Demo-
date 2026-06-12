@@ -19,29 +19,31 @@ export async function GET(
     const rawId = params.enrollmentId?.trim()?.toUpperCase();
     const normalizedId = rawId?.replace(/^AMU-/, 'EUAU-');
 
-    if (!normalizedId || !/^EUAU-.+$/.test(normalizedId)) {
+    if (!normalizedId || normalizedId.length < 3) {
       return NextResponse.json({ found: false }, { status: 200 });
     }
 
-    const student = await prisma.student.findUnique({
+    const student = await prisma.student.findFirst({
       where: {
-        enrollmentId: normalizedId,
+        isPubliclyVisible: true,
+        OR: [
+          { enrollmentId: normalizedId },
+          { email: rawId?.toLowerCase() },
+        ],
       },
       select: {
         enrollmentId: true,
         fullName: true,
         programName: true,
         programLevel: true,
-        enrollmentYear: true,
-        intendedStartDate: true,
-        expectedCompletion: true,
+        graduatingYear: true,
         status: true,
         photo: true,
         isPubliclyVisible: true,
       },
     });
 
-    if (!student || !student.isPubliclyVisible) {
+    if (!student) {
       return NextResponse.json(
         { found: false },
         { status: 200 }

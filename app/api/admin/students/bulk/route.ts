@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       email: row.email || `student_${Math.random().toString(36).substring(7)}@example.com`,
       programName: row.programName || 'Unknown Program',
       programLevel: row.programLevel || 'Bachelors',
-      enrollmentYear: parseInt(row.enrollmentYear) || new Date().getFullYear(),
+      graduatingYear: parseInt(row.graduatingYear) || new Date().getFullYear(),
       status: row.status || 'active',
       enrollmentId: `EUAU-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
     }));

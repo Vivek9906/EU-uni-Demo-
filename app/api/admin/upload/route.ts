@@ -1,47 +1,101 @@
-import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import cloudinary from '@/lib/cloudinary'
+
+export const runtime = 'nodejs'
 
 export async function POST(req: Request) {
   try {
-    const formData = await req.formData();
-    const file = formData.get('file') as File;
+    const session = await getServerSession(authOptions)
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const formData = await req.formData()
+    const file = formData.get('file') as File | null
 
     if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-    if (!validTypes.includes(file.type)) {
-      return NextResponse.json({ error: 'Invalid file type. Allowed: JPG, PNG, WebP, GIF' }, { status: 400 });
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { error: 'Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.' },
+        { status: 400 }
+      )
     }
 
-    // Max 5MB
+    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ error: 'File too large. Maximum 5MB.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'File too large. Maximum size is 5MB.' },
+        { status: 400 }
+      )
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // Convert File to buffer
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
 
-    // Generate unique filename
-    const ext = file.name.split('.').pop() || 'jpg';
-    const filename = `student_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`;
+    // Check if Cloudinary is actually configured
+    const isCloudinaryConfigured = 
+      process.env.CLOUDINARY_CLOUD_NAME && 
+      process.env.CLOUDINARY_CLOUD_NAME !== 'your_cloud_name';
 
-    // Ensure uploads directory exists
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-    await mkdir(uploadsDir, { recursive: true });
+    let secureUrl = '';
+    let publicId = '';
 
-    // Write file
-    const filepath = path.join(uploadsDir, filename);
-    await writeFile(filepath, buffer);
+    if (isCloudinaryConfigured) {
+      // Upload to Cloudinary
+      const result = await new Promise<{ secure_url: string; public_id: string }>(
+        (resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream(
+              {
+                folder: 'euau/students',
+                resource_type: 'image',
+                transformation: [
+                  { width: 400, height: 400, crop: 'fill', gravity: 'face' },
+                  { quality: 'auto', fetch_format: 'auto' },
+                ],
+              },
+              (error, result) => {
+                if (error || !result) reject(error ?? new Error('Upload failed'))
+                else resolve(result as { secure_url: string; public_id: string })
+              }
+            )
+            .end(buffer)
+        }
+      )
+      secureUrl = result.secure_url;
+      publicId = result.public_id;
+    } else {
+      // Fallback to local upload for development
+      const fs = await import('fs/promises');
+      const path = await import('path');
+      
+      const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+      // Ensure directory exists
+      await fs.mkdir(uploadDir, { recursive: true }).catch(() => {});
+      
+      const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+      const filePath = path.join(uploadDir, fileName);
+      
+      await fs.writeFile(filePath, buffer);
+      
+      secureUrl = `/uploads/${fileName}`;
+      publicId = fileName; // Use filename as public ID locally
+    }
 
-    // Return public URL
-    const url = `/uploads/${filename}`;
-    return NextResponse.json({ url });
+    return NextResponse.json({ url: secureUrl, publicId: publicId })
   } catch (error) {
-    console.error('[UPLOAD_ERROR]', error);
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    console.error('[UPLOAD ERROR]', error)
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Upload failed' },
+      { status: 500 }
+    )
   }
 }

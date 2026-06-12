@@ -5,12 +5,12 @@ export function UniversityLogo({ className = '', variant = 'dark', href = '/' }:
   const isLight = variant === 'light';
   return (
     <Link href={href} className={`flex items-center gap-2 ${className}`}>
-      <div className="relative w-[52px] h-[52px] flex-shrink-0">
+      <div className="relative w-[52px] h-[52px] flex-shrink-0 bg-white rounded-full overflow-hidden flex items-center justify-center border border-slate-200">
         <Image
           src="/logo.png"
           alt="EU American University Logo"
           fill
-          className="object-contain"
+          className="object-contain p-1"
           sizes="52px"
           priority
         />

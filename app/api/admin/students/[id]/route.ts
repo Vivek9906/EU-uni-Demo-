@@ -1,11 +1,19 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
 
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const student = await prisma.student.findUnique({
       where: { id: params.id },
     });
@@ -26,18 +34,22 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const {
       fullName,
       email,
       programName,
       programLevel,
-      enrollmentYear,
+      graduatingYear,
       enrollmentId,
       status,
       photo,
-      intendedStartDate,
-      expectedCompletion,
+      photoPublicId,
       isPubliclyVisible,
     } = body;
 
@@ -67,17 +79,20 @@ export async function PUT(
         ...(email !== undefined && { email }),
         ...(programName !== undefined && { programName }),
         ...(programLevel !== undefined && { programLevel }),
-        ...(enrollmentYear !== undefined && { enrollmentYear: parseInt(enrollmentYear) || existing.enrollmentYear }),
+        ...(graduatingYear !== undefined && { graduatingYear: parseInt(graduatingYear) || existing.graduatingYear }),
         ...(enrollmentId !== undefined && { enrollmentId }),
         ...(status !== undefined && { status }),
         ...(photo !== undefined && { photo }),
-        ...(intendedStartDate !== undefined && { intendedStartDate }),
-        ...(expectedCompletion !== undefined && { expectedCompletion }),
+        ...(photoPublicId !== undefined && { photoPublicId }),
         ...(isPubliclyVisible !== undefined && { isPubliclyVisible }),
       },
     });
 
-    return NextResponse.json({ student });
+    revalidatePath('/student-verification');
+    revalidatePath(`/student-verification/${student.enrollmentId}`);
+    revalidatePath('/dashboard/students');
+
+    return NextResponse.json({ success: true, student });
   } catch (error) {
     console.error('[STUDENT_UPDATE_ERROR]', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -89,9 +104,18 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const student = await prisma.student.delete({
       where: { id: params.id },
     });
+
+    revalidatePath('/student-verification');
+    revalidatePath('/dashboard/students');
+
     return NextResponse.json({ success: true, student });
   } catch (error) {
     console.error('[STUDENT_DELETE_ERROR]', error);
