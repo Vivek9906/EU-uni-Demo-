@@ -3,6 +3,7 @@ import { Bell, FileText, Calendar } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Notices', description: 'Official university notices and announcements from EU American University.' };
+export const dynamic = 'force-dynamic';
 
 import { prisma } from '@/lib/db';
 
