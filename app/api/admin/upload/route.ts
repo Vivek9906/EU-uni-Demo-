@@ -73,21 +73,11 @@ export async function POST(req: Request) {
       secureUrl = result.secure_url;
       publicId = result.public_id;
     } else {
-      // Fallback to local upload for development
-      const fs = await import('fs/promises');
-      const path = await import('path');
-      
-      const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-      // Ensure directory exists
-      await fs.mkdir(uploadDir, { recursive: true }).catch(() => {});
-      
-      const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
-      const filePath = path.join(uploadDir, fileName);
-      
-      await fs.writeFile(filePath, buffer);
-      
-      secureUrl = `/uploads/${fileName}`;
-      publicId = fileName; // Use filename as public ID locally
+      // Fallback: Convert to Base64 data URI
+      // This works in serverless environments (like Vercel) where the filesystem is read-only.
+      const base64 = buffer.toString('base64');
+      secureUrl = `data:${file.type};base64,${base64}`;
+      publicId = `local-${Date.now()}`;
     }
 
     return NextResponse.json({ url: secureUrl, publicId: publicId })
