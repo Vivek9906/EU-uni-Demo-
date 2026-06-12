@@ -325,15 +325,15 @@ export default function Navbar({ programsMenu }: { programsMenu: ProgramItem[] }
 
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white shadow-sm'
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-md' : 'bg-white shadow-sm'
       }`}
       role="navigation"
       aria-label="Main navigation"
     >
       <div className="container-main">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <UniversityLogo />
+          <UniversityLogo variant="dark" />
 
           {/* ─── Desktop Nav ─── */}
           <div className="hidden lg:flex items-center gap-1">
@@ -354,8 +354,8 @@ export default function Navbar({ programsMenu }: { programsMenu: ProgramItem[] }
                   }
                   className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-md ${
                     pathname === item.href
-                      ? 'text-primary bg-primary/5'
-                      : 'text-foreground-secondary hover:text-primary hover:bg-primary/5'
+                      ? 'text-[#1B3A6B] bg-[#1B3A6B]/5'
+                      : 'text-[#3D4A5C] hover:text-[#1B3A6B] hover:bg-[#1B3A6B]/5'
                   }`}
                   style={{
                     color: openDropdown === item.label ? '#E09900' : undefined,
@@ -429,7 +429,7 @@ export default function Navbar({ programsMenu }: { programsMenu: ProgramItem[] }
           {/* ─── Desktop Right Actions ─── */}
           <div className="hidden lg:flex items-center gap-3">
             <NavbarNotificationBell />
-            <Link href="/contact" className="text-sm font-medium text-foreground-secondary hover:text-primary transition-colors">
+            <Link href="/contact" className="text-sm font-medium text-[#3D4A5C] hover:text-[#1B3A6B] transition-colors">
               Contact
             </Link>
             <Link href="/admissions/apply" prefetch={true} className="btn-primary btn-sm">
@@ -440,7 +440,7 @@ export default function Navbar({ programsMenu }: { programsMenu: ProgramItem[] }
           {/* ─── Mobile Hamburger ─── */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-md hover:bg-background-subtle transition-colors"
+            className="lg:hidden p-2 rounded-md text-[#1B3A6B] hover:bg-[#1B3A6B]/5 transition-colors"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isOpen}
           >

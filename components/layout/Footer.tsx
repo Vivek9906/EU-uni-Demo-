@@ -46,7 +46,7 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0F1C35] text-white" role="contentinfo">
+    <footer className="bg-[#0F2347] text-white" role="contentinfo">
       {/* Main footer */}
       <div className="container-main py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12">

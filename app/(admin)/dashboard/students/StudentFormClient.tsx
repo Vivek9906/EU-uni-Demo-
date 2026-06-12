@@ -1,17 +1,23 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { PROGRAMS } from '@/lib/programs'
 
 interface StudentFormClientProps {
   mode:    'create' | 'edit'
   student?: {
-    id:             string
-    fullName:       string
-    email:          string
-    programName:    string
-    programLevel:   string
-    enrollmentYear: number
-    status:         string
+    id:                 string
+    enrollmentId:       string
+    fullName:           string
+    email:              string
+    programName:        string
+    programLevel:       string
+    enrollmentYear:     number
+    status:             string
+    photo:              string | null
+    intendedStartDate:  string | null
+    expectedCompletion: string | null
+    isPubliclyVisible:  boolean
   }
 }
 
@@ -19,13 +25,20 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState('')
+  const [photoMode, setPhotoMode] = useState<'upload' | 'url'>(student?.photo ? 'url' : 'upload')
+  const [isUploading, setIsUploading] = useState(false)
   const [form, setForm] = useState({
-    fullName:       student?.fullName       ?? '',
-    email:          student?.email          ?? '',
-    programName:    student?.programName    ?? '',
-    programLevel:   student?.programLevel   ?? 'Bachelors',
-    enrollmentYear: student?.enrollmentYear ?? new Date().getFullYear(),
-    status:         student?.status         ?? 'enrolled',
+    enrollmentId:       student?.enrollmentId       ?? '',
+    fullName:           student?.fullName           ?? '',
+    email:              student?.email              ?? '',
+    programName:        student?.programName        ?? '',
+    programLevel:       student?.programLevel       ?? 'Bachelors',
+    enrollmentYear:     student?.enrollmentYear     ?? new Date().getFullYear(),
+    status:             student?.status             ?? 'enrolled',
+    photo:              student?.photo              ?? '',
+    intendedStartDate:  student?.intendedStartDate  ?? '',
+    expectedCompletion: student?.expectedCompletion ?? '',
+    isPubliclyVisible:  student?.isPubliclyVisible  ?? true,
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,6 +67,24 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
     })
   }
 
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '10px 13px',
+    border: '1.5px solid #D1D5DB',
+    borderRadius: 8,
+    fontSize: 14,
+    boxSizing: 'border-box' as const,
+    fontFamily: 'inherit',
+  }
+
+  const labelStyle: React.CSSProperties = {
+    display: 'block',
+    fontSize: 12.5,
+    fontWeight: 700,
+    color: '#374151',
+    marginBottom: 6,
+  }
+
   return (
     <div>
       <div style={{ background:'#FFF', borderBottom:'1px solid #E2E8F0', padding:'20px 28px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
@@ -67,7 +98,7 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
         </div>
       </div>
 
-      <div style={{ padding:'28px', maxWidth:680 }}>
+      <div style={{ padding:'28px', maxWidth:720 }}>
         <form onSubmit={handleSubmit}>
           <div style={{ background:'#FFF', borderRadius:12, border:'1px solid #E2E8F0', padding:'28px' }}>
             {error && (
@@ -76,45 +107,178 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
               </div>
             )}
 
-            <div style={{ marginBottom:18 }}>
-              <label style={{ display:'block', fontSize:12.5, fontWeight:700, color:'#374151', marginBottom:6 }}>Full Name <span style={{ color:'#DC2626' }}>*</span></label>
-              <input required value={form.fullName} onChange={e => setForm(f => ({ ...f, fullName: e.target.value }))} style={{ width:'100%', padding:'10px 13px', border:'1.5px solid #D1D5DB', borderRadius:8, fontSize:14, boxSizing:'border-box', fontFamily:'inherit' }} />
-            </div>
+            {/* Photo preview */}
+            {form.photo && (
+              <div style={{ marginBottom: 20, textAlign: 'center' }}>
+                <img
+                  src={form.photo}
+                  alt="Student photo"
+                  style={{ width: 100, height: 100, borderRadius: 12, objectFit: 'cover', border: '2px solid #E2E8F0' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                />
+              </div>
+            )}
 
-            <div style={{ marginBottom:18 }}>
-              <label style={{ display:'block', fontSize:12.5, fontWeight:700, color:'#374151', marginBottom:6 }}>Email <span style={{ color:'#DC2626' }}>*</span></label>
-              <input type="email" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={{ width:'100%', padding:'10px 13px', border:'1.5px solid #D1D5DB', borderRadius:8, fontSize:14, boxSizing:'border-box', fontFamily:'inherit' }} />
-            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <div>
+                <label style={labelStyle}>Enrollment ID <span style={{ color:'#DC2626' }}>*</span></label>
+                <input
+                  required
+                  placeholder="e.g. EUAU-2024-00001"
+                  value={form.enrollmentId}
+                  onChange={e => setForm(f => ({ ...f, enrollmentId: e.target.value }))}
+                  style={inputStyle}
+                />
+              </div>
 
-            <div style={{ marginBottom:18 }}>
-              <label style={{ display:'block', fontSize:12.5, fontWeight:700, color:'#374151', marginBottom:6 }}>Program Level <span style={{ color:'#DC2626' }}>*</span></label>
-              <select required value={form.programLevel} onChange={e => setForm(f => ({ ...f, programLevel: e.target.value }))} style={{ width:'100%', padding:'10px 13px', border:'1.5px solid #D1D5DB', borderRadius:8, fontSize:14, fontFamily:'inherit' }}>
-                <option value="Bachelors">Bachelor's</option>
-                <option value="Masters">Master's</option>
-                <option value="PhD">PhD</option>
-                <option value="Honorary">Honorary</option>
-                <option value="Certification">Certification</option>
-              </select>
-            </div>
+              <div>
+                <label style={labelStyle}>Full Name <span style={{ color:'#DC2626' }}>*</span></label>
+                <input required value={form.fullName} onChange={e => setForm(f => ({ ...f, fullName: e.target.value }))} style={inputStyle} />
+              </div>
 
-            <div style={{ marginBottom:18 }}>
-              <label style={{ display:'block', fontSize:12.5, fontWeight:700, color:'#374151', marginBottom:6 }}>Program Name <span style={{ color:'#DC2626' }}>*</span></label>
-              <input required value={form.programName} onChange={e => setForm(f => ({ ...f, programName: e.target.value }))} style={{ width:'100%', padding:'10px 13px', border:'1.5px solid #D1D5DB', borderRadius:8, fontSize:14, boxSizing:'border-box', fontFamily:'inherit' }} />
-            </div>
+              <div>
+                <label style={labelStyle}>Email <span style={{ color:'#DC2626' }}>*</span></label>
+                <input type="email" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={inputStyle} />
+              </div>
 
-            <div style={{ marginBottom:18 }}>
-              <label style={{ display:'block', fontSize:12.5, fontWeight:700, color:'#374151', marginBottom:6 }}>Enrollment Year <span style={{ color:'#DC2626' }}>*</span></label>
-              <input type="number" required value={form.enrollmentYear} onChange={e => setForm(f => ({ ...f, enrollmentYear: parseInt(e.target.value) || 2024 }))} style={{ width:'100%', padding:'10px 13px', border:'1.5px solid #D1D5DB', borderRadius:8, fontSize:14, boxSizing:'border-box', fontFamily:'inherit' }} />
-            </div>
+              <div>
+                <label style={labelStyle}>Program Level <span style={{ color:'#DC2626' }}>*</span></label>
+                <select required value={form.programLevel} onChange={e => setForm(f => ({ ...f, programLevel: e.target.value }))} style={inputStyle}>
+                  <option value="Bachelors">Bachelor&apos;s</option>
+                  <option value="Masters">Master&apos;s</option>
+                  <option value="PhD">PhD</option>
+                  <option value="Honorary">Honorary</option>
+                  <option value="Certification">Certification</option>
+                </select>
+              </div>
 
-            <div style={{ marginBottom:18 }}>
-              <label style={{ display:'block', fontSize:12.5, fontWeight:700, color:'#374151', marginBottom:6 }}>Status <span style={{ color:'#DC2626' }}>*</span></label>
-              <select required value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value }))} style={{ width:'100%', padding:'10px 13px', border:'1.5px solid #D1D5DB', borderRadius:8, fontSize:14, fontFamily:'inherit' }}>
-                <option value="enrolled">Enrolled</option>
-                <option value="active">Active</option>
-                <option value="graduated">Graduated</option>
-                <option value="suspended">Suspended</option>
-              </select>
+              <div>
+                <label style={labelStyle}>Program Name <span style={{ color:'#DC2626' }}>*</span></label>
+                {form.programLevel === 'Certification' ? (
+                  <input required value={form.programName} onChange={e => setForm(f => ({ ...f, programName: e.target.value }))} style={inputStyle} />
+                ) : (
+                  <select required value={form.programName} onChange={e => setForm(f => ({ ...f, programName: e.target.value }))} style={inputStyle}>
+                    <option value="" disabled>Select a program...</option>
+                    {form.programLevel === 'Bachelors' && PROGRAMS.bachelors.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
+                    {form.programLevel === 'Masters' && PROGRAMS.masters.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
+                    {form.programLevel === 'PhD' && PROGRAMS.phd.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
+                    {form.programLevel === 'Honorary' && PROGRAMS.honorary.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
+                  </select>
+                )}
+              </div>
+
+              <div>
+                <label style={labelStyle}>Enrollment Year <span style={{ color:'#DC2626' }}>*</span></label>
+                <input type="number" required value={form.enrollmentYear} onChange={e => setForm(f => ({ ...f, enrollmentYear: parseInt(e.target.value) || 2024 }))} style={inputStyle} />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Status <span style={{ color:'#DC2626' }}>*</span></label>
+                <select required value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value }))} style={inputStyle}>
+                  <option value="enrolled">Enrolled</option>
+                  <option value="active">Active</option>
+                  <option value="graduated">Graduated</option>
+                  <option value="suspended">Suspended</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={labelStyle}>Intended Start Date</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Fall 2024"
+                  value={form.intendedStartDate}
+                  onChange={e => setForm(f => ({ ...f, intendedStartDate: e.target.value }))}
+                  style={inputStyle}
+                />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Expected Completion</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Spring 2028"
+                  value={form.expectedCompletion}
+                  onChange={e => setForm(f => ({ ...f, expectedCompletion: e.target.value }))}
+                  style={inputStyle}
+                />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Publicly Visible</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 4 }}>
+                  <input
+                    type="checkbox"
+                    checked={form.isPubliclyVisible}
+                    onChange={e => setForm(f => ({ ...f, isPubliclyVisible: e.target.checked }))}
+                    style={{ width: 18, height: 18, accentColor: '#1B3A6B' }}
+                  />
+                  <span style={{ fontSize: 13.5, color: '#475569' }}>Show on verification portal</span>
+                </div>
+              </div>
+
+              <div style={{ gridColumn: '1 / -1' }}>
+                <label style={labelStyle}>Student Photo</label>
+                <div style={{ display: 'flex', gap: 2, background: '#F1F5F9', padding: 2, borderRadius: 8, marginBottom: 12 }}>
+                  <button
+                    type="button"
+                    onClick={() => setPhotoMode('upload')}
+                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '6px 0', fontSize: 12, fontWeight: 600, borderRadius: 6, border: 'none', cursor: 'pointer', fontFamily: 'inherit', background: photoMode === 'upload' ? '#FFF' : 'transparent', color: photoMode === 'upload' ? '#0F172A' : '#64748B', boxShadow: photoMode === 'upload' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+                  >
+                    📤 Upload Image
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPhotoMode('url')}
+                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '6px 0', fontSize: 12, fontWeight: 600, borderRadius: 6, border: 'none', cursor: 'pointer', fontFamily: 'inherit', background: photoMode === 'url' ? '#FFF' : 'transparent', color: photoMode === 'url' ? '#0F172A' : '#64748B', boxShadow: photoMode === 'url' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}
+                  >
+                    🔗 Image URL
+                  </button>
+                </div>
+                {photoMode === 'upload' ? (
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        setIsUploading(true);
+                        try {
+                          const fd = new FormData();
+                          fd.append('file', file);
+                          const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+                          if (res.ok) {
+                            const data = await res.json();
+                            setForm(f => ({ ...f, photo: data.url }));
+                          } else {
+                            const err = await res.json();
+                            alert(err.error || 'Upload failed');
+                          }
+                        } catch { alert('Upload failed'); }
+                        finally { setIsUploading(false); }
+                      }}
+                      style={{ fontSize: 13 }}
+                    />
+                    {isUploading && <p style={{ fontSize: 11, color: '#D97706', marginTop: 4 }}>⏳ Uploading...</p>}
+                    {form.photo && !isUploading && <p style={{ fontSize: 11, color: '#059669', marginTop: 4 }}>✓ Photo ready</p>}
+                  </div>
+                ) : (
+                  <input
+                    type="url"
+                    placeholder="https://example.com/photo.jpg"
+                    value={form.photo}
+                    onChange={e => setForm(f => ({ ...f, photo: e.target.value }))}
+                    style={inputStyle}
+                  />
+                )}
+                {form.photo && (
+                  <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <img src={form.photo} alt="Preview" style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid #E2E8F0' }} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                    <button type="button" onClick={() => setForm(f => ({ ...f, photo: '' }))} style={{ fontSize: 12, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>Remove photo</button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

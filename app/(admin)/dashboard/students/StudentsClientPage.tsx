@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, Plus, Loader2, Upload, UserPlus, X, Download } from 'lucide-react';
+import { Search, Plus, Loader2, Upload, UserPlus, X, Download, ImageUp } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
+import { PROGRAMS } from '@/lib/programs';
 
 interface Student {
   id: string;
@@ -23,15 +24,19 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'manual' | 'bulk'>('manual');
   const [isSaving, setIsSaving] = useState(false);
+  const [photoMode, setPhotoMode] = useState<'upload' | 'url'>('upload');
+  const [isUploading, setIsUploading] = useState(false);
 
   // Manual Form State
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    enrollmentId: '',
     programName: '',
     programLevel: 'Bachelors',
     enrollmentYear: new Date().getFullYear(),
-    status: 'active'
+    status: 'enrolled',
+    photo: '',
   });
 
   // Bulk Upload State
@@ -54,6 +59,16 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
       });
       if (res.ok) {
         setIsModalOpen(false);
+        setFormData({
+          fullName: '',
+          email: '',
+          enrollmentId: '',
+          programName: '',
+          programLevel: 'Bachelors',
+          enrollmentYear: new Date().getFullYear(),
+          status: 'enrolled',
+          photo: '',
+        });
         router.refresh();
       } else {
         const err = await res.json();
@@ -96,6 +111,28 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
       alert('Error during bulk upload');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!window.confirm(`Are you sure you want to delete student "${name}"? This action cannot be undone.`)) {
+      return;
+    }
+    
+    try {
+      const res = await fetch(`/api/admin/students/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (res.ok) {
+        router.refresh();
+      } else {
+        const err = await res.json();
+        alert(err.error || 'Failed to delete student');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error deleting student');
     }
   };
 
@@ -176,9 +213,18 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
                         {student.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <button className="text-xs font-bold text-amber-600 hover:text-amber-700 uppercase tracking-wider">
+                    <td className="px-6 py-4 text-right space-x-3">
+                      <button
+                        onClick={() => router.push(`/dashboard/students/${student.id}/edit`)}
+                        className="text-xs font-bold text-amber-600 hover:text-amber-700 uppercase tracking-wider"
+                      >
                         Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(student.id, student.fullName)}
+                        className="text-xs font-bold text-red-600 hover:text-red-700 uppercase tracking-wider"
+                      >
+                        Delete
                       </button>
                     </td>
                   </tr>
@@ -231,6 +277,17 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
                     </div>
                   </div>
                   <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Enrollment ID *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. EUAU-2024-00001"
+                      value={formData.enrollmentId}
+                      onChange={e => setFormData({ ...formData, enrollmentId: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
                     <label className="block text-sm font-bold text-slate-700 mb-1.5">Full Name *</label>
                     <input
                       type="text"
@@ -250,18 +307,6 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
                       className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                     />
                   </div>
-                  <div className={formData.programLevel === 'Certification' ? 'col-span-2' : ''}>
-                    <label className="block text-sm font-bold text-slate-700 mb-1.5">
-                      {formData.programLevel === 'Certification' ? 'Certification Name *' : 'Program Name *'}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.programName}
-                      onChange={e => setFormData({ ...formData, programName: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
-                    />
-                  </div>
                   {formData.programLevel !== 'Certification' && (
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-1.5">Program Level</label>
@@ -270,13 +315,40 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
                       onChange={e => setFormData({ ...formData, programLevel: e.target.value })}
                       className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none"
                     >
-                      <option value="Bachelors">Bachelor's</option>
-                      <option value="Masters">Master's</option>
+                      <option value="Bachelors">Bachelor&apos;s</option>
+                      <option value="Masters">Master&apos;s</option>
                       <option value="PhD">PhD</option>
                       <option value="Honorary">Honorary</option>
                     </select>
                   </div>
                   )}
+                  <div className={formData.programLevel === 'Certification' ? 'col-span-2' : ''}>
+                    <label className="block text-sm font-bold text-slate-700 mb-1.5">
+                      {formData.programLevel === 'Certification' ? 'Certification Name *' : 'Program Name *'}
+                    </label>
+                    {formData.programLevel === 'Certification' ? (
+                      <input
+                        type="text"
+                        required
+                        value={formData.programName}
+                        onChange={e => setFormData({ ...formData, programName: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                      />
+                    ) : (
+                      <select
+                        required
+                        value={formData.programName}
+                        onChange={e => setFormData({ ...formData, programName: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none"
+                      >
+                        <option value="" disabled>Select a program...</option>
+                        {formData.programLevel === 'Bachelors' && PROGRAMS.bachelors.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
+                        {formData.programLevel === 'Masters' && PROGRAMS.masters.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
+                        {formData.programLevel === 'PhD' && PROGRAMS.phd.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
+                        {formData.programLevel === 'Honorary' && PROGRAMS.honorary.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
+                      </select>
+                    )}
+                  </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-1.5">Enrollment Year</label>
                     <input
@@ -299,6 +371,70 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
                       <option value="graduated">Graduated</option>
                       <option value="suspended">Suspended</option>
                     </select>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-sm font-bold text-slate-700 mb-2">Student Photo</label>
+                    <div className="flex space-x-1 bg-slate-100 p-0.5 rounded-lg mb-3">
+                      <button
+                        type="button"
+                        onClick={() => setPhotoMode('upload')}
+                        className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${photoMode === 'upload' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        <ImageUp size={13} /> Upload Image
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPhotoMode('url')}
+                        className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${photoMode === 'url' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        🔗 Image URL
+                      </button>
+                    </div>
+                    {photoMode === 'upload' ? (
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,image/gif"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            setIsUploading(true);
+                            try {
+                              const fd = new FormData();
+                              fd.append('file', file);
+                              const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setFormData(prev => ({ ...prev, photo: data.url }));
+                              } else {
+                                const err = await res.json();
+                                alert(err.error || 'Upload failed');
+                              }
+                            } catch { alert('Upload failed'); }
+                            finally { setIsUploading(false); }
+                          }}
+                          className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100"
+                        />
+                        {isUploading && <p className="text-xs text-amber-600 mt-1 flex items-center gap-1"><Loader2 size={12} className="animate-spin" /> Uploading...</p>}
+                        {formData.photo && !isUploading && <p className="text-xs text-emerald-600 mt-1">✓ Photo uploaded</p>}
+                      </div>
+                    ) : (
+                      <div>
+                        <input
+                          type="url"
+                          placeholder="https://example.com/photo.jpg"
+                          value={formData.photo}
+                          onChange={e => setFormData({ ...formData, photo: e.target.value })}
+                          className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                        />
+                      </div>
+                    )}
+                    {formData.photo && (
+                      <div className="mt-2 flex items-center gap-3">
+                        <img src={formData.photo} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-slate-200" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                        <button type="button" onClick={() => setFormData({ ...formData, photo: '' })} className="text-xs text-red-500 hover:text-red-700">Remove</button>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="pt-4 flex justify-end gap-3 border-t border-slate-100">

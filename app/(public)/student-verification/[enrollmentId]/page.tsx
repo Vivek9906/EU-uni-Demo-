@@ -160,11 +160,7 @@ export default function StudentVerificationResultPage({ params }: { params: { en
                   <span className="font-semibold text-foreground">{formatLevel(data.programLevel)}</span>
                 </div>
                 <div>
-                  <label className="block text-foreground-secondary text-xs font-bold uppercase tracking-wider mb-1">Mode of Study</label>
-                  <span className="font-semibold text-foreground">Online</span>
-                </div>
-                <div>
-                  <label className="block text-foreground-secondary text-xs font-bold uppercase tracking-wider mb-1">Enrollment Year</label>
+                  <label className="block text-foreground-secondary text-xs font-bold uppercase tracking-wider mb-1">Graduation Year</label>
                   <span className="font-semibold text-foreground">{data.enrollmentYear}</span>
                 </div>
                 {data.intendedStartDate && (
@@ -182,8 +178,13 @@ export default function StudentVerificationResultPage({ params }: { params: { en
               </div>
 
               <div className="institution-info flex items-center gap-4 p-4 bg-background-subtle rounded-lg border border-border/50">
-                <div className="eu-logo w-12 h-12 bg-primary rounded flex items-center justify-center text-white font-black text-xl flex-shrink-0">
-                  EU
+                <div className="flex-shrink-0 w-12 h-12 relative">
+                  <Image
+                    src="/logo.png"
+                    alt="EU American University Logo"
+                    fill
+                    className="object-contain"
+                  />
                 </div>
                 <div>
                   <strong className="block text-foreground font-bold">EU American University</strong>

@@ -70,7 +70,7 @@ export default async function PublicLayout({
     <>
       <MaintenanceBanner />
       <Navbar programsMenu={programsMenu} />
-      <main id="main-content">{children}</main>
+      <main id="main-content" className="pt-16 lg:pt-20">{children}</main>
       <Footer />
       <SubscriptionPopup />
     </>

@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Bell } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface Notice {
   id: string;
@@ -16,6 +17,7 @@ export function NavbarNotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     fetch('/api/notices')
@@ -81,7 +83,11 @@ export function NavbarNotificationBell() {
           </div>
           <div className="max-h-80 overflow-y-auto">
             {notices.map((notice) => (
-              <div key={notice.id} className="p-4 border-b border-border/50 hover:bg-background-subtle/50 transition-colors cursor-pointer group">
+              <div 
+                key={notice.id} 
+                onClick={() => { setIsOpen(false); router.push('/notices'); }}
+                className="p-4 border-b border-border/50 hover:bg-background-subtle/50 transition-colors cursor-pointer group"
+              >
                 <div className="flex items-start gap-3">
                   <div className={`w-2 h-2 mt-1.5 rounded-full shrink-0 ${
                     notice.type === 'alert' ? 'bg-error' :
@@ -96,7 +102,7 @@ export function NavbarNotificationBell() {
               </div>
             ))}
           </div>
-          <Link href="/news" className="block p-3 text-center text-xs font-bold text-primary hover:bg-primary/5 transition-colors">
+          <Link href="/notices" className="block p-3 text-center text-xs font-bold text-primary hover:bg-primary/5 transition-colors">
             View All Announcements
           </Link>
         </div>
