@@ -58,7 +58,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
             email: updated.email,
             programName: updated.programName,
             programLevel: updated.programLevel,
-            enrollmentYear: year,
+            graduatingYear: year,
             intendedStartDate: updated.intendedStart,
             status: 'enrolled',
             isPubliclyVisible: true,

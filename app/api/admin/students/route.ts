@@ -1,20 +1,27 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const {
       fullName,
       email,
       programName,
       programLevel,
-      enrollmentYear,
+      graduatingYear,
       enrollmentId: manualEnrollmentId,
       status,
       photo,
-      intendedStartDate,
-      expectedCompletion,
+      photoPublicId,
       isPubliclyVisible,
     } = body;
 
@@ -25,10 +32,10 @@ export async function POST(req: Request) {
     // Use manual enrollment ID if provided, otherwise auto-generate
     let enrollmentId = manualEnrollmentId?.trim();
     if (!enrollmentId) {
-      const year = parseInt(enrollmentYear) || new Date().getFullYear();
+      const year = parseInt(graduatingYear) || new Date().getFullYear();
       // Generate a unique enrollment ID
       const count = await prisma.student.count({
-        where: { enrollmentYear: year },
+        where: { graduatingYear: year },
       });
       const padded = String(count + 1).padStart(5, '0');
       enrollmentId = `EUAU-${year}-${padded}`;
@@ -47,18 +54,20 @@ export async function POST(req: Request) {
         fullName,
         email,
         programName,
-        programLevel: programLevel || 'Bachelors',
-        enrollmentYear: parseInt(enrollmentYear) || new Date().getFullYear(),
+        programLevel: programLevel || '',
+        graduatingYear: parseInt(graduatingYear) || new Date().getFullYear(),
         status: status || 'enrolled',
         enrollmentId,
         photo: photo || null,
-        intendedStartDate: intendedStartDate || null,
-        expectedCompletion: expectedCompletion || null,
+        photoPublicId: photoPublicId || null,
         isPubliclyVisible: isPubliclyVisible !== undefined ? isPubliclyVisible : true,
       }
     });
 
-    return NextResponse.json({ student });
+    revalidatePath('/student-verification');
+    revalidatePath('/dashboard/students');
+
+    return NextResponse.json({ success: true, student });
   } catch (error) {
     console.error('[STUDENT_CREATE_ERROR]', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

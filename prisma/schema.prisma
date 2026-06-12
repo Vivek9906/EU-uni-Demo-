@@ -247,10 +247,11 @@ model Student {
   email              String
   programName        String
   programLevel       String
-  enrollmentYear     Int
+  graduatingYear     Int          @default(2024)
   intendedStartDate  String?
   expectedCompletion String?
   photo              String?
+  photoPublicId      String?
   status             String       @default("enrolled")
   isPubliclyVisible  Boolean      @default(true)
   createdAt          DateTime     @default(now())
@@ -260,7 +261,7 @@ model Student {
   @@index([enrollmentId])
   @@index([status])
   @@index([programLevel])
-  @@index([enrollmentYear])
+  @@index([graduatingYear])
 }
 
 model Certification {

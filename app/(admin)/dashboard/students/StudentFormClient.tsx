@@ -1,7 +1,6 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { PROGRAMS } from '@/lib/programs'
 
 interface StudentFormClientProps {
   mode:    'create' | 'edit'
@@ -12,11 +11,10 @@ interface StudentFormClientProps {
     email:              string
     programName:        string
     programLevel:       string
-    enrollmentYear:     number
+    graduatingYear:     number
     status:             string
     photo:              string | null
-    intendedStartDate:  string | null
-    expectedCompletion: string | null
+    photoPublicId?:     string | null
     isPubliclyVisible:  boolean
   }
 }
@@ -32,12 +30,11 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
     fullName:           student?.fullName           ?? '',
     email:              student?.email              ?? '',
     programName:        student?.programName        ?? '',
-    programLevel:       student?.programLevel       ?? 'Bachelors',
-    enrollmentYear:     student?.enrollmentYear     ?? new Date().getFullYear(),
+    programLevel:       student?.programLevel       ?? '',
+    graduatingYear:     student?.graduatingYear     ?? new Date().getFullYear(),
     status:             student?.status             ?? 'enrolled',
     photo:              student?.photo              ?? '',
-    intendedStartDate:  student?.intendedStartDate  ?? '',
-    expectedCompletion: student?.expectedCompletion ?? '',
+    photoPublicId:      student?.photoPublicId      ?? '',
     isPubliclyVisible:  student?.isPubliclyVisible  ?? true,
   })
 
@@ -143,33 +140,31 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
 
               <div>
                 <label style={labelStyle}>Program Level <span style={{ color:'#DC2626' }}>*</span></label>
-                <select required value={form.programLevel} onChange={e => setForm(f => ({ ...f, programLevel: e.target.value }))} style={inputStyle}>
-                  <option value="Bachelors">Bachelor&apos;s</option>
-                  <option value="Masters">Master&apos;s</option>
-                  <option value="PhD">PhD</option>
-                  <option value="Honorary">Honorary</option>
-                  <option value="Certification">Certification</option>
-                </select>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Bachelor's, Master's, Honorary Doctorate"
+                  value={form.programLevel}
+                  onChange={e => setForm(f => ({ ...f, programLevel: e.target.value }))}
+                  style={inputStyle}
+                />
               </div>
 
               <div>
                 <label style={labelStyle}>Program Name <span style={{ color:'#DC2626' }}>*</span></label>
-                {form.programLevel === 'Certification' ? (
-                  <input required value={form.programName} onChange={e => setForm(f => ({ ...f, programName: e.target.value }))} style={inputStyle} />
-                ) : (
-                  <select required value={form.programName} onChange={e => setForm(f => ({ ...f, programName: e.target.value }))} style={inputStyle}>
-                    <option value="" disabled>Select a program...</option>
-                    {form.programLevel === 'Bachelors' && PROGRAMS.bachelors.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
-                    {form.programLevel === 'Masters' && PROGRAMS.masters.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
-                    {form.programLevel === 'PhD' && PROGRAMS.phd.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
-                    {form.programLevel === 'Honorary' && PROGRAMS.honorary.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
-                  </select>
-                )}
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Master of Business Administration (MBA)"
+                  value={form.programName}
+                  onChange={e => setForm(f => ({ ...f, programName: e.target.value }))}
+                  style={inputStyle}
+                />
               </div>
 
               <div>
-                <label style={labelStyle}>Enrollment Year <span style={{ color:'#DC2626' }}>*</span></label>
-                <input type="number" required value={form.enrollmentYear} onChange={e => setForm(f => ({ ...f, enrollmentYear: parseInt(e.target.value) || 2024 }))} style={inputStyle} />
+                <label style={labelStyle}>Graduating Year <span style={{ color:'#DC2626' }}>*</span></label>
+                <input type="number" required value={form.graduatingYear} onChange={e => setForm(f => ({ ...f, graduatingYear: parseInt(e.target.value) || 2024 }))} style={inputStyle} />
               </div>
 
               <div>
@@ -180,28 +175,6 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
                   <option value="graduated">Graduated</option>
                   <option value="suspended">Suspended</option>
                 </select>
-              </div>
-
-              <div>
-                <label style={labelStyle}>Intended Start Date</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Fall 2024"
-                  value={form.intendedStartDate}
-                  onChange={e => setForm(f => ({ ...f, intendedStartDate: e.target.value }))}
-                  style={inputStyle}
-                />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Expected Completion</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Spring 2028"
-                  value={form.expectedCompletion}
-                  onChange={e => setForm(f => ({ ...f, expectedCompletion: e.target.value }))}
-                  style={inputStyle}
-                />
               </div>
 
               <div>
@@ -250,7 +223,7 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
                           const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
                           if (res.ok) {
                             const data = await res.json();
-                            setForm(f => ({ ...f, photo: data.url }));
+                            setForm(f => ({ ...f, photo: data.url, photoPublicId: data.publicId || '' }));
                           } else {
                             const err = await res.json();
                             alert(err.error || 'Upload failed');
@@ -275,7 +248,7 @@ export function StudentFormClient({ mode, student }: StudentFormClientProps) {
                 {form.photo && (
                   <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
                     <img src={form.photo} alt="Preview" style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid #E2E8F0' }} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-                    <button type="button" onClick={() => setForm(f => ({ ...f, photo: '' }))} style={{ fontSize: 12, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>Remove photo</button>
+                    <button type="button" onClick={() => setForm(f => ({ ...f, photo: '', photoPublicId: '' }))} style={{ fontSize: 12, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>Remove photo</button>
                   </div>
                 )}
               </div>

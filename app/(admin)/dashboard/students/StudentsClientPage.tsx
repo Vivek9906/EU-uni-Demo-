@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Search, Plus, Loader2, Upload, UserPlus, X, Download, ImageUp } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { useRouter } from 'next/navigation';
-import { PROGRAMS } from '@/lib/programs';
+
 
 interface Student {
   id: string;
@@ -13,8 +13,7 @@ interface Student {
   email: string;
   programName: string;
   programLevel: string;
-  enrollmentYear: number;
-  intendedStartDate: string | null;
+  graduatingYear: number;
   status: string;
 }
 
@@ -33,10 +32,11 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
     email: '',
     enrollmentId: '',
     programName: '',
-    programLevel: 'Bachelors',
-    enrollmentYear: new Date().getFullYear(),
+    programLevel: '',
+    graduatingYear: new Date().getFullYear(),
     status: 'enrolled',
     photo: '',
+    photoPublicId: '',
   });
 
   // Bulk Upload State
@@ -64,10 +64,11 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
           email: '',
           enrollmentId: '',
           programName: '',
-          programLevel: 'Bachelors',
-          enrollmentYear: new Date().getFullYear(),
+          programLevel: '',
+          graduatingYear: new Date().getFullYear(),
           status: 'enrolled',
           photo: '',
+          photoPublicId: '',
         });
         router.refresh();
       } else {
@@ -263,19 +264,6 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
             {activeTab === 'manual' ? (
               <form onSubmit={handleManualSubmit} className="p-6 space-y-5">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="col-span-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
-                    <label className="block text-sm font-bold text-slate-700 mb-2">Enrollment Type</label>
-                    <div className="flex gap-6">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="enrollmentType" checked={formData.programLevel !== 'Certification'} onChange={() => setFormData({...formData, programLevel: 'Bachelors', programName: ''})} className="w-4 h-4 text-amber-600 focus:ring-amber-500" />
-                        <span className="text-sm font-semibold text-slate-700">Degree Program</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="enrollmentType" checked={formData.programLevel === 'Certification'} onChange={() => setFormData({...formData, programLevel: 'Certification', programName: ''})} className="w-4 h-4 text-amber-600 focus:ring-amber-500" />
-                        <span className="text-sm font-semibold text-slate-700">Certification</span>
-                      </label>
-                    </div>
-                  </div>
                   <div>
                     <label className="block text-sm font-bold text-slate-700 mb-1.5">Enrollment ID *</label>
                     <input
@@ -307,56 +295,36 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
                       className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                     />
                   </div>
-                  {formData.programLevel !== 'Certification' && (
                   <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Program Level</label>
-                    <select
+                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Program Level *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Bachelor's, Master's, Honorary Doctorate"
                       value={formData.programLevel}
                       onChange={e => setFormData({ ...formData, programLevel: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none"
-                    >
-                      <option value="Bachelors">Bachelor&apos;s</option>
-                      <option value="Masters">Master&apos;s</option>
-                      <option value="PhD">PhD</option>
-                      <option value="Honorary">Honorary</option>
-                    </select>
-                  </div>
-                  )}
-                  <div className={formData.programLevel === 'Certification' ? 'col-span-2' : ''}>
-                    <label className="block text-sm font-bold text-slate-700 mb-1.5">
-                      {formData.programLevel === 'Certification' ? 'Certification Name *' : 'Program Name *'}
-                    </label>
-                    {formData.programLevel === 'Certification' ? (
-                      <input
-                        type="text"
-                        required
-                        value={formData.programName}
-                        onChange={e => setFormData({ ...formData, programName: e.target.value })}
-                        className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
-                      />
-                    ) : (
-                      <select
-                        required
-                        value={formData.programName}
-                        onChange={e => setFormData({ ...formData, programName: e.target.value })}
-                        className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none"
-                      >
-                        <option value="" disabled>Select a program...</option>
-                        {formData.programLevel === 'Bachelors' && PROGRAMS.bachelors.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
-                        {formData.programLevel === 'Masters' && PROGRAMS.masters.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
-                        {formData.programLevel === 'PhD' && PROGRAMS.phd.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
-                        {formData.programLevel === 'Honorary' && PROGRAMS.honorary.map(p => <option key={p.title} value={p.title}>{p.title}</option>)}
-                      </select>
-                    )}
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                    />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Enrollment Year</label>
+                    <label className="block text-sm font-bold text-slate-700 mb-1.5">Program Name *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Master of Business Administration (MBA)"
+                      value={formData.programName}
+                      onChange={e => setFormData({ ...formData, programName: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Graduating Year</label>
                     <input
                       type="number"
                       required
-                      value={formData.enrollmentYear}
-                      onChange={e => setFormData({ ...formData, enrollmentYear: parseInt(e.target.value) })}
-                      className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                      value={formData.graduatingYear}
+                      onChange={e => setFormData({ ...formData, graduatingYear: parseInt(e.target.value) })}
+                      className="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-900 focus:border-amber-500 focus:bg-white focus:ring-amber-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -405,7 +373,7 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
                               const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
                               if (res.ok) {
                                 const data = await res.json();
-                                setFormData(prev => ({ ...prev, photo: data.url }));
+                                setFormData(prev => ({ ...prev, photo: data.url, photoPublicId: data.publicId || '' }));
                               } else {
                                 const err = await res.json();
                                 alert(err.error || 'Upload failed');
@@ -432,7 +400,7 @@ export function StudentsClientPage({ students, total, page, limit }: { students:
                     {formData.photo && (
                       <div className="mt-2 flex items-center gap-3">
                         <img src={formData.photo} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-slate-200" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-                        <button type="button" onClick={() => setFormData({ ...formData, photo: '' })} className="text-xs text-red-500 hover:text-red-700">Remove</button>
+                        <button type="button" onClick={() => setFormData({ ...formData, photo: '', photoPublicId: '' })} className="text-xs text-red-500 hover:text-red-700">Remove</button>
                       </div>
                     )}
                   </div>

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { seedDatabase } from '@/prisma/seed'
 
+// TODO: SECURITY — This route is unguarded. Anyone can trigger a full database re-seed.
+// Consider adding auth guard or deleting this route after initial setup.
 export async function GET() {
   try {
     await seedDatabase()

@@ -10,9 +10,7 @@ interface StudentData {
   fullName: string;
   programName: string;
   programLevel: string;
-  enrollmentYear: number;
-  intendedStartDate: string | null;
-  expectedCompletion: string | null;
+  graduatingYear: number;
   status: string;
   photo: string | null;
 }
@@ -24,16 +22,6 @@ function getInitials(name: string) {
     .join('')
     .substring(0, 2)
     .toUpperCase();
-}
-
-function formatLevel(level: string) {
-  const levels: Record<string, string> = {
-    bachelors: "Bachelor's Degree",
-    masters: "Master's Degree",
-    honorary: "Honorary Doctorate",
-    certification: "Professional Certification",
-  };
-  return levels[level] || level;
 }
 
 export default function StudentVerificationResultPage({ params }: { params: { enrollmentId: string } }) {
@@ -157,24 +145,12 @@ export default function StudentVerificationResultPage({ params }: { params: { en
                 </div>
                 <div>
                   <label className="block text-foreground-secondary text-xs font-bold uppercase tracking-wider mb-1">Program Level</label>
-                  <span className="font-semibold text-foreground">{formatLevel(data.programLevel)}</span>
+                  <span className="font-semibold text-foreground">{data.programLevel}</span>
                 </div>
                 <div>
                   <label className="block text-foreground-secondary text-xs font-bold uppercase tracking-wider mb-1">Graduation Year</label>
-                  <span className="font-semibold text-foreground">{data.enrollmentYear}</span>
+                  <span className="font-semibold text-foreground">{data.graduatingYear}</span>
                 </div>
-                {data.intendedStartDate && (
-                  <div>
-                    <label className="block text-foreground-secondary text-xs font-bold uppercase tracking-wider mb-1">Start Date</label>
-                    <span className="font-semibold text-foreground">{data.intendedStartDate}</span>
-                  </div>
-                )}
-                {data.expectedCompletion && (
-                  <div>
-                    <label className="block text-foreground-secondary text-xs font-bold uppercase tracking-wider mb-1">Expected Completion</label>
-                    <span className="font-semibold text-foreground">{data.expectedCompletion}</span>
-                  </div>
-                )}
               </div>
 
               <div className="institution-info flex items-center gap-4 p-4 bg-background-subtle rounded-lg border border-border/50">
