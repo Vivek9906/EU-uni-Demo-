@@ -19,7 +19,7 @@ export async function GET(
     const rawId = params.enrollmentId?.trim()?.toUpperCase();
     const normalizedId = rawId?.replace(/^AMU-/, 'EUAU-');
 
-    if (!normalizedId || !/^EUAU-\d{4}-\d{5}$/.test(normalizedId)) {
+    if (!normalizedId || !/^EUAU-.+$/.test(normalizedId)) {
       return NextResponse.json({ found: false }, { status: 200 });
     }
 

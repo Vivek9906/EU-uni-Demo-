@@ -70,7 +70,7 @@ export default function ContactPage() {
             <div className="space-y-6">
               <h2 className="font-heading text-2xl font-bold mb-6">Contact Information</h2>
               <div className="card p-6">
-                <h3 className="font-heading text-base font-bold mb-4">🇺🇸 USA Office</h3>
+                <h3 className="font-heading text-base font-bold mb-4">🏫 Campus</h3>
                 <div className="space-y-3 text-sm text-foreground-secondary">
                   <div className="flex items-start gap-3"><MapPin size={16} className="text-primary shrink-0 mt-0.5" /><span>Suite 2.408<br/>1616 Guadalupe Street<br/>Austin, TX 78701<br/>United States</span></div>
                   <div className="flex items-center gap-3"><Mail size={16} className="text-primary shrink-0" />info@euamericanuniversity.us</div>
