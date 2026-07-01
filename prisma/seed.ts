@@ -373,14 +373,27 @@ async function main() {
   }
   console.log('✅ Programs created');
 
-  // Partners
+  // Partners — must match exactly the public /partners page
+  await prisma.partner.deleteMany({});
   const SEED_PARTNERS = [
-    { name: 'California University FCE', address: 'California, USA', region: 'North America', country: 'United States', website: 'https://cufce.org', email: 'info@cufce.org', logoUrl: '/partners/cufce.png', isActive: true, order: 1 },
-    { name: 'Esep Le Berger', address: 'Benin Republic', region: 'Africa', country: 'Benin', website: 'https://esepleberger.com', email: 'contact@esepleberger.com', logoUrl: '/partners/esep.png', isActive: true, order: 2 },
-    { name: 'University of Nicosia', address: 'Nicosia, Cyprus', region: 'Europe', country: 'Cyprus', website: 'https://unic.ac.cy', email: 'info@unic.ac.cy', logoUrl: '/partners/nicosia.png', isActive: true, order: 3 },
-    { name: 'Ballsbridge University', address: 'Dominica', region: 'Caribbean', country: 'Dominica', website: 'https://ballsbridgeuniversity.org', email: 'info@ballsbridge.org', logoUrl: '/partners/ballsbridge.png', isActive: true, order: 4 },
-    { name: 'City University Cambodia', address: 'Phnom Penh, Cambodia', region: 'Asia', country: 'Cambodia', website: 'https://cityuniversity.edu.kh', email: 'info@cityuniversity.edu.kh', logoUrl: '/partners/cityuniv.png', isActive: true, order: 5 },
-    { name: 'Prowess University', address: 'Delaware, USA', region: 'North America', country: 'United States', website: 'https://prowessuniversity.edu', email: 'info@prowessuniversity.edu', logoUrl: '/partners/prowess.png', isActive: true, order: 6 },
+    // Asia-Pacific Region
+    { name: 'Elite Learning Institute', address: 'Bangkok, Thailand', region: 'Asia-Pacific Region', country: 'Thailand', isActive: true, order: 1 },
+    { name: 'Pacific Education Solutions', address: 'Singapore', region: 'Asia-Pacific Region', country: 'Singapore', isActive: true, order: 2 },
+    { name: 'Innovation Academy Manila', address: 'Philippines', region: 'Asia-Pacific Region', country: 'Philippines', isActive: true, order: 3 },
+    { name: 'Gulf Excellence Academy', address: 'Dubai, UAE', region: 'Asia-Pacific Region', country: 'UAE', isActive: true, order: 4 },
+    // Europe Region
+    { name: 'Iberian Education Network', address: 'Madrid, Spain', region: 'Europe Region', country: 'Spain', isActive: true, order: 5 },
+    { name: 'Continental Education Hub', address: 'Berlin, Germany', region: 'Europe Region', country: 'Germany', isActive: true, order: 6 },
+    { name: 'Franco-European Alliance', address: 'Paris, France', region: 'Europe Region', country: 'France', isActive: true, order: 7 },
+    { name: 'Qualify Learn', address: 'United Kingdom', region: 'Europe Region', country: 'United Kingdom', isActive: true, order: 8 },
+    // Americas Region
+    { name: 'North American Education Alliance', address: 'Toronto, Canada', region: 'Americas Region', country: 'Canada', isActive: true, order: 9 },
+    { name: 'Pan-American Executive Institute', address: 'Mexico City, Mexico', region: 'Americas Region', country: 'Mexico', isActive: true, order: 10 },
+    { name: 'South American Learning Network', address: 'São Paulo, Brazil', region: 'Americas Region', country: 'Brazil', isActive: true, order: 11 },
+    // Africa Region
+    { name: 'African Excellence Institute', address: 'Cape Town, South Africa', region: 'Africa Region', country: 'South Africa', isActive: true, order: 12 },
+    { name: 'Continental Learning Hub', address: 'Nairobi, Kenya', region: 'Africa Region', country: 'Kenya', isActive: true, order: 13 },
+    { name: 'West Africa Education Network', address: 'Accra, Ghana', region: 'Africa Region', country: 'Ghana', isActive: true, order: 14 },
   ]
   
   for (const p of SEED_PARTNERS) {
