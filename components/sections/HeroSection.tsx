@@ -4,11 +4,10 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
 const BG_IMAGES = [
-  '/images/hero/hero-1.png',
-  '/images/hero/hero-2.png',
-  '/images/hero/hero-3.png',
-  '/images/hero/hero-4.png',
-  '/images/hero/hero-5.png',
+  '/images/hero/custom-hero-1.jpg',
+  '/images/hero/custom-hero-2.jpg',
+  '/images/hero/custom-hero-3.jpg',
+  '/images/hero/custom-hero-4.png',
 ]
 
 // Unsplash fallbacks — used automatically if a local image fails to load
