@@ -4,19 +4,34 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding database...');
+  // ============================================================
+  // PRODUCTION GUARD
+  // ============================================================
+  // In production, seeding is blocked unless BOTH environment
+  // variables are explicitly set. This prevents accidental
+  // data modification in production.
+  // ============================================================
+  if (process.env.NODE_ENV === 'production') {
+    const allowSeed = process.env.ALLOW_PRODUCTION_SEED;
+    const confirmSeed = process.env.CONFIRM_PRODUCTION_SEED;
 
-  await prisma.siteSettings.deleteMany();
-  await prisma.legalPage.deleteMany();
-  await prisma.notice.deleteMany();
-  await prisma.testimonial.deleteMany();
-  await prisma.fAQ.deleteMany();
-  await prisma.event.deleteMany();
-  await prisma.news.deleteMany();
-  await prisma.certification.deleteMany();
-  await prisma.student.deleteMany();
-  await prisma.program.deleteMany();
-  await prisma.adminUser.deleteMany();
+    if (
+      allowSeed !== 'true' ||
+      confirmSeed !== 'I_UNDERSTAND_THIS_WILL_MODIFY_PRODUCTION'
+    ) {
+      throw new Error(
+        '🚫 PRODUCTION SEED BLOCKED.\n' +
+        'To run seed in production, you must set BOTH:\n' +
+        '  ALLOW_PRODUCTION_SEED=true\n' +
+        '  CONFIRM_PRODUCTION_SEED=I_UNDERSTAND_THIS_WILL_MODIFY_PRODUCTION\n' +
+        'Aborting to protect production data.'
+      );
+    }
+
+    console.warn('⚠️  Running seed in PRODUCTION mode. Proceeding with caution...');
+  }
+
+  console.log('🌱 Seeding database...');
 
   // 1. Super Admin User
   const hashedPassword = await bcrypt.hash('Admin@EU2025!', 12);
@@ -169,7 +184,11 @@ async function main() {
   ];
 
   for (const news of newsData) {
-    await prisma.news.create({ data: news });
+    await prisma.news.upsert({
+      where: { slug: news.slug },
+      update: {},
+      create: news,
+    });
   }
   console.log('✅ News articles created');
 
@@ -295,60 +314,74 @@ async function main() {
   ];
 
   for (const event of eventsData) {
-    await prisma.event.create({ data: event });
+    await prisma.event.upsert({
+      where: { slug: event.slug },
+      update: {},
+      create: event,
+    });
   }
   console.log('✅ Events created');
 
-  // 6. FAQ Items
-  const faqData = [
-    { question: 'What are the admission requirements for the MBA program?', answer: 'Applicants must hold a recognized bachelor\'s degree from an accredited institution. Professional experience is valued but not mandatory for the Bachelor\'s level. For the Master\'s level MBA, a minimum of 2 years of professional experience is preferred. All applicants must submit a completed application form, official transcripts, a statement of purpose, and a current CV/resume.', category: 'Admissions', order: 1 },
-    { question: 'How do I apply to EU American University?', answer: 'You can apply online through our application portal at /admissions/apply. Complete all required sections of the application form, upload supporting documents, and submit. You will receive a confirmation email with your unique Application Reference Number once your application is successfully submitted.', category: 'Admissions', order: 2 },
-    { question: 'What is the application deadline?', answer: 'EU American University operates on a rolling admissions basis, meaning applications are reviewed as they are received. However, we recommend applying at least 8 weeks before your intended start date to allow sufficient time for processing.', category: 'Admissions', order: 3 },
-    { question: 'Can international students apply?', answer: 'Absolutely. EU American University welcomes students from all countries and backgrounds. We have students from over 100 countries. International applicants follow the same application process.', category: 'Admissions', order: 4 },
-    { question: 'Are there scholarships available?', answer: 'Yes, EU American University offers several scholarship opportunities including merit-based scholarships, need-based financial aid, and special scholarships for international students. Visit our Scholarships page for details.', category: 'Admissions', order: 5 },
-    { question: 'What programs does EU American University offer?', answer: 'EU American University offers Bachelor\'s programs (BBA, BPA, BSW), Master\'s programs (MBA, MPA, MSW), a doctoral program (Doctor of Philosophy — PhD), honorary recognition programs (Honorary Doctorate, Honorary Professorship), and 30 professional certification programs across five categories.', category: 'Programs', order: 1 },
-    { question: 'What is the difference between the Bachelor\'s and Master\'s programs?', answer: 'Bachelor\'s programs provide foundational education covering core disciplines. Master\'s programs build on this with advanced coursework in strategic leadership, specialized electives, and capstone research. Master\'s programs are designed for professionals seeking senior leadership roles.', category: 'Programs', order: 2 },
-    { question: 'What is an Honorary Doctorate?', answer: 'An Honorary Doctorate (Honoris Causa) is a prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society. The program name submitted during application is exactly what appears on your certificate.', category: 'Programs', order: 3 },
-    { question: 'Are programs available online?', answer: 'Yes, all EU American University programs are delivered online, making quality education accessible to working professionals worldwide. Our online programs use modern learning platforms with interactive coursework and digital resources.', category: 'Programs', order: 4 },
-    { question: 'What are the tuition fees?', answer: 'Tuition fees vary by program. Please contact our admissions office at info@euamericanuniversity.us for the current fee schedule. EU American University strives to make quality education accessible and offers various financial aid options.', category: 'Fees', order: 1 },
-    { question: 'Are there payment plans available?', answer: 'Yes, EU American University offers flexible payment plans that allow students to spread their tuition payments over the duration of their program.', category: 'Fees', order: 2 },
-    { question: 'Can I get a refund if I withdraw?', answer: 'EU American University has a structured refund policy. Full refund within 14 days of enrollment if coursework has not started, 50% within 30 days, and no refund after 30 days. See our Refund Policy page for details.', category: 'Fees', order: 3 },
-    { question: 'How can I verify my student status or certificate?', answer: 'Use our Student Verification page at /student-verification. Enter your Enrollment ID for instant verification.', category: 'Certificates', order: 1 },
-    { question: 'How can I verify my enrollment status?', answer: 'Use the Student Verification portal at /student-verification. Enter your Enrollment ID (format: EUAU-YYYY-NNNNN) to view your verified enrollment status and academic details.', category: 'Certificates', order: 2 },
-    { question: 'Is my EU American University degree recognized internationally?', answer: 'EU American University is accredited by recognized accreditation bodies and operates with authorization in France. Our degrees are recognized in many countries. We hold IARC and QAHE accreditation and are members of ACBSP, IACBE, and ASIC UK.', category: 'Certificates', order: 3 },
-  ];
+  // 6. FAQ Items — skip if any already exist (no unique field for upsert)
+  const existingFaqCount = await prisma.fAQ.count();
+  if (existingFaqCount === 0) {
+    const faqData = [
+      { question: 'What are the admission requirements for the MBA program?', answer: 'Applicants must hold a recognized bachelor\'s degree from an accredited institution. Professional experience is valued but not mandatory for the Bachelor\'s level. For the Master\'s level MBA, a minimum of 2 years of professional experience is preferred. All applicants must submit a completed application form, official transcripts, a statement of purpose, and a current CV/resume.', category: 'Admissions', order: 1 },
+      { question: 'How do I apply to EU American University?', answer: 'You can apply online through our application portal at /admissions/apply. Complete all required sections of the application form, upload supporting documents, and submit. You will receive a confirmation email with your unique Application Reference Number once your application is successfully submitted.', category: 'Admissions', order: 2 },
+      { question: 'What is the application deadline?', answer: 'EU American University operates on a rolling admissions basis, meaning applications are reviewed as they are received. However, we recommend applying at least 8 weeks before your intended start date to allow sufficient time for processing.', category: 'Admissions', order: 3 },
+      { question: 'Can international students apply?', answer: 'Absolutely. EU American University welcomes students from all countries and backgrounds. We have students from over 100 countries. International applicants follow the same application process.', category: 'Admissions', order: 4 },
+      { question: 'Are there scholarships available?', answer: 'Yes, EU American University offers several scholarship opportunities including merit-based scholarships, need-based financial aid, and special scholarships for international students. Visit our Scholarships page for details.', category: 'Admissions', order: 5 },
+      { question: 'What programs does EU American University offer?', answer: 'EU American University offers Bachelor\'s programs (BBA, BPA, BSW), Master\'s programs (MBA, MPA, MSW), a doctoral program (Doctor of Philosophy — PhD), honorary recognition programs (Honorary Doctorate, Honorary Professorship), and 30 professional certification programs across five categories.', category: 'Programs', order: 1 },
+      { question: 'What is the difference between the Bachelor\'s and Master\'s programs?', answer: 'Bachelor\'s programs provide foundational education covering core disciplines. Master\'s programs build on this with advanced coursework in strategic leadership, specialized electives, and capstone research. Master\'s programs are designed for professionals seeking senior leadership roles.', category: 'Programs', order: 2 },
+      { question: 'What is an Honorary Doctorate?', answer: 'An Honorary Doctorate (Honoris Causa) is a prestigious academic recognition awarded to individuals who have demonstrated exceptional achievement and significant contributions to their field, community, or society. The program name submitted during application is exactly what appears on your certificate.', category: 'Programs', order: 3 },
+      { question: 'Are programs available online?', answer: 'Yes, all EU American University programs are delivered online, making quality education accessible to working professionals worldwide. Our online programs use modern learning platforms with interactive coursework and digital resources.', category: 'Programs', order: 4 },
+      { question: 'What are the tuition fees?', answer: 'Tuition fees vary by program. Please contact our admissions office at info@euamericanuniversity.us for the current fee schedule. EU American University strives to make quality education accessible and offers various financial aid options.', category: 'Fees', order: 1 },
+      { question: 'Are there payment plans available?', answer: 'Yes, EU American University offers flexible payment plans that allow students to spread their tuition payments over the duration of their program.', category: 'Fees', order: 2 },
+      { question: 'Can I get a refund if I withdraw?', answer: 'EU American University has a structured refund policy. Full refund within 14 days of enrollment if coursework has not started, 50% within 30 days, and no refund after 30 days. See our Refund Policy page for details.', category: 'Fees', order: 3 },
+      { question: 'How can I verify my student status or certificate?', answer: 'Use our Student Verification page at /student-verification. Enter your Enrollment ID for instant verification.', category: 'Certificates', order: 1 },
+      { question: 'How can I verify my enrollment status?', answer: 'Use the Student Verification portal at /student-verification. Enter your Enrollment ID (format: EUAU-YYYY-NNNNN) to view your verified enrollment status and academic details.', category: 'Certificates', order: 2 },
+      { question: 'Is my EU American University degree recognized internationally?', answer: 'EU American University is accredited by recognized accreditation bodies and operates with authorization in France. Our degrees are recognized in many countries. We hold IARC and QAHE accreditation and are members of ACBSP, IACBE, and ASIC UK.', category: 'Certificates', order: 3 },
+    ];
 
-  for (const faq of faqData) {
-    await prisma.fAQ.create({ data: { ...faq, isActive: true } });
+    for (const faq of faqData) {
+      await prisma.fAQ.create({ data: { ...faq, isActive: true } });
+    }
+    console.log('✅ FAQ items created');
+  } else {
+    console.log('⏭️  FAQ items already exist, skipping');
   }
-  console.log('✅ FAQ items created');
 
-  // 7. Testimonials
-  const testimonialData = [
-    {
-      name: 'Dr. James Okoye',
-      program: 'Honorary Doctorate in Business Leadership',
-      content: 'Receiving the Honorary Doctorate from EU American University was a defining moment in my career. The recognition validated decades of work in community development across West Africa. I am proud to be part of this distinguished alumni network.',
-      isApproved: true,
-    },
-    {
-      name: 'Maria Fernandez',
-      program: 'Master of Business Administration (MBA)',
-      content: 'The MBA program at EU American University transformed my approach to business leadership. The flexible online format allowed me to continue working while pursuing my degree, and the curriculum was directly applicable to my role as a marketing director.',
-      isApproved: true,
-    },
-    {
-      name: 'Prof. Ahmed Al-Rashid',
-      program: 'Honorary Professorship',
-      content: 'Being awarded an Honorary Professorship by EU American University was an incredible honor that recognized my contributions to education in the Middle East. The process was thorough and professional.',
-      isApproved: true,
-    },
-  ];
+  // 7. Testimonials — skip if any already exist (no unique field for upsert)
+  const existingTestimonialCount = await prisma.testimonial.count();
+  if (existingTestimonialCount === 0) {
+    const testimonialData = [
+      {
+        name: 'Dr. James Okoye',
+        program: 'Honorary Doctorate in Business Leadership',
+        content: 'Receiving the Honorary Doctorate from EU American University was a defining moment in my career. The recognition validated decades of work in community development across West Africa. I am proud to be part of this distinguished alumni network.',
+        isApproved: true,
+      },
+      {
+        name: 'Maria Fernandez',
+        program: 'Master of Business Administration (MBA)',
+        content: 'The MBA program at EU American University transformed my approach to business leadership. The flexible online format allowed me to continue working while pursuing my degree, and the curriculum was directly applicable to my role as a marketing director.',
+        isApproved: true,
+      },
+      {
+        name: 'Prof. Ahmed Al-Rashid',
+        program: 'Honorary Professorship',
+        content: 'Being awarded an Honorary Professorship by EU American University was an incredible honor that recognized my contributions to education in the Middle East. The process was thorough and professional.',
+        isApproved: true,
+      },
+    ];
 
-  for (const testimonial of testimonialData) {
-    await prisma.testimonial.create({ data: testimonial });
+    for (const testimonial of testimonialData) {
+      await prisma.testimonial.create({ data: testimonial });
+    }
+    console.log('✅ Testimonials created');
+  } else {
+    console.log('⏭️  Testimonials already exist, skipping');
   }
-  console.log('✅ Testimonials created');
 
   // 8. Programs
   const SEED_PROGRAMS = [
@@ -373,8 +406,7 @@ async function main() {
   }
   console.log('✅ Programs created');
 
-  // Partners — must match exactly the public /partners page
-  await prisma.partner.deleteMany({});
+  // Partners — upsert by unique name (no deleteMany)
   const SEED_PARTNERS = [
     // Asia-Pacific Region
     { name: 'Elite Learning Institute', address: 'Bangkok, Thailand', region: 'Asia-Pacific Region', country: 'Thailand', isActive: true, order: 1 },
@@ -405,18 +437,23 @@ async function main() {
   }
   console.log('✅ Partners created');
 
-  // 9. Notices
-  const noticeData = [
-    { title: 'Fall 2025 Enrollment Now Open', content: 'Applications for the Fall 2025 semester are now being accepted across all programs. Prospective students are encouraged to submit their applications early.', category: 'academic', isActive: true },
-    { title: 'Updated Academic Calendar 2025-2026', content: 'The academic calendar for the 2025-2026 academic year has been published. Key dates include the Fall semester start on September 15, 2025.', category: 'academic', isActive: true },
-    { title: 'New Professional Certification Programs Available', content: 'EU American University has launched 30 professional certification programs across five categories. Visit the Certifications page to explore all available programs.', category: 'academic', isActive: true },
-    { title: 'Student Verification Portal Now Live', content: 'Students can now verify their enrollment status online at /student-verification using their Enrollment ID.', category: 'general', isActive: true },
-  ];
+  // 9. Notices — skip if any already exist (no unique field for upsert)
+  const existingNoticeCount = await prisma.notice.count();
+  if (existingNoticeCount === 0) {
+    const noticeData = [
+      { title: 'Fall 2025 Enrollment Now Open', content: 'Applications for the Fall 2025 semester are now being accepted across all programs. Prospective students are encouraged to submit their applications early.', category: 'academic', isActive: true },
+      { title: 'Updated Academic Calendar 2025-2026', content: 'The academic calendar for the 2025-2026 academic year has been published. Key dates include the Fall semester start on September 15, 2025.', category: 'academic', isActive: true },
+      { title: 'New Professional Certification Programs Available', content: 'EU American University has launched 30 professional certification programs across five categories. Visit the Certifications page to explore all available programs.', category: 'academic', isActive: true },
+      { title: 'Student Verification Portal Now Live', content: 'Students can now verify their enrollment status online at /student-verification using their Enrollment ID.', category: 'general', isActive: true },
+    ];
 
-  for (const notice of noticeData) {
-    await prisma.notice.create({ data: notice });
+    for (const notice of noticeData) {
+      await prisma.notice.create({ data: notice });
+    }
+    console.log('✅ Notices created');
+  } else {
+    console.log('⏭️  Notices already exist, skipping');
   }
-  console.log('✅ Notices created');
 
   // 10. Legal Pages
   const legalPages = [
@@ -493,10 +530,6 @@ async function main() {
   console.log('✅ System settings created');
 
   console.log('🎉 Database seeded successfully!');
-}
-
-export async function seedDatabase() {
-  await main()
 }
 
 if (require.main === module) {

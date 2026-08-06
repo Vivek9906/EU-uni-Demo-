@@ -1,0 +1,272 @@
+# =============================================================================
+# Neon Branch Backup — Daily Automated Backup
+# =============================================================================
+# Creates a Neon branch backup cloned from the main branch every day.
+# NEVER modifies, resets, or overwrites the main branch.
+# All branches are retained permanently (no automatic cleanup).
+#
+# Required GitHub Secrets:
+#   NEON_API_KEY         — Neon API key
+#   NEON_PROJECT_ID      — Neon project ID
+#   NEON_MAIN_BRANCH_ID  — Branch ID of the main production branch
+#   NEON_DATABASE_NAME   — Database name (e.g. neondb)
+#   NEON_ROLE_NAME       — Database role name
+# =============================================================================
+
+name: Neon Branch Backup
+
+on:
+  schedule:
+    # Run daily at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      branch_prefix:
+        description: 'Branch name prefix (default: backup)'
+        required: false
+        default: 'backup'
+
+concurrency:
+  group: neon-backup
+  cancel-in-progress: false
+
+env:
+  NEON_API_BASE: https://console.neon.tech/api/v2
+
+jobs:
+  backup:
+    name: Create & Verify Neon Backup Branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Validate Secrets
+        run: |
+          for secret in "${{ secrets.NEON_API_KEY }}" "${{ secrets.NEON_PROJECT_ID }}" "${{ secrets.NEON_MAIN_BRANCH_ID }}" "${{ secrets.NEON_DATABASE_NAME }}" "${{ secrets.NEON_ROLE_NAME }}"; do
+            if [ -z "$secret" ]; then
+              echo "❌ FAILED: Missing required Neon secret(s)."
+              exit 1
+            fi
+          done
+
+      # ---------------------------------------------------------------
+      # 1. Generate branch name with timestamp
+      # ---------------------------------------------------------------
+      - name: Generate branch name
+        id: branch_name
+        run: |
+          PREFIX="${{ github.event.inputs.branch_prefix || 'backup' }}"
+          TIMESTAMP=$(date -u +"%Y-%m-%d-%H-%M")
+          BRANCH_NAME="${PREFIX}-${TIMESTAMP}"
+          echo "name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+          echo "📋 Branch name: ${BRANCH_NAME}"
+          echo "🕐 Timestamp (UTC): $(date -u)"
+
+      # ---------------------------------------------------------------
+      # 2. Create Neon branch cloned from main
+      # ---------------------------------------------------------------
+      - name: Create Neon backup branch
+        id: create_branch
+        run: |
+          echo "🔄 Creating Neon branch: ${{ steps.branch_name.outputs.name }}"
+          echo "📌 Cloning from main branch: ${{ secrets.NEON_MAIN_BRANCH_ID }}"
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/branches" \
+            -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "branch": {
+                "name": "${{ steps.branch_name.outputs.name }}",
+                "parent_id": "${{ secrets.NEON_MAIN_BRANCH_ID }}"
+              },
+              "endpoints": [
+                {
+                  "type": "read_only"
+                }
+              ]
+            }')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "📡 HTTP Status: ${HTTP_CODE}"
+
+          if [ "$HTTP_CODE" -ne 201 ]; then
+            echo "❌ FAILED: Branch creation returned HTTP ${HTTP_CODE}"
+            echo "Response: ${BODY}"
+            exit 1
+          fi
+
+          BRANCH_ID=$(echo "$BODY" | jq -r '.branch.id')
+          ENDPOINT_ID=$(echo "$BODY" | jq -r '.endpoints[0].id // empty')
+
+          if [ -z "$BRANCH_ID" ] || [ "$BRANCH_ID" = "null" ]; then
+            echo "❌ FAILED: Could not extract branch ID from response"
+            echo "Response: ${BODY}"
+            exit 1
+          fi
+
+          echo "branch_id=${BRANCH_ID}" >> $GITHUB_OUTPUT
+          echo "endpoint_id=${ENDPOINT_ID}" >> $GITHUB_OUTPUT
+          echo "✅ Branch created: ${BRANCH_ID}"
+          if [ -n "$ENDPOINT_ID" ] && [ "$ENDPOINT_ID" != "null" ]; then
+            echo "✅ Endpoint created: ${ENDPOINT_ID}"
+          fi
+
+      # ---------------------------------------------------------------
+      # 3. Wait for branch to become ready
+      # ---------------------------------------------------------------
+      - name: Wait for branch to become ready
+        run: |
+          echo "⏳ Waiting for branch to become ready..."
+          BRANCH_ID="${{ steps.create_branch.outputs.branch_id }}"
+
+          for i in $(seq 1 30); do
+            RESPONSE=$(curl -s \
+              "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${BRANCH_ID}" \
+              -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
+
+            STATE=$(echo "$RESPONSE" | jq -r '.branch.state // empty')
+            echo "  Attempt ${i}/30: state=${STATE}"
+
+            if [ "$STATE" = "ready" ]; then
+              echo "✅ Branch is ready"
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          echo "❌ FAILED: Branch did not become ready within 5 minutes"
+          exit 1
+
+      # ---------------------------------------------------------------
+      # 4. Verify branch exists and is accessible
+      # ---------------------------------------------------------------
+      - name: Verify branch exists
+        run: |
+          echo "🔍 Verifying branch exists..."
+          BRANCH_ID="${{ steps.create_branch.outputs.branch_id }}"
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${BRANCH_ID}" \
+            -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "❌ FAILED: Branch verification returned HTTP ${HTTP_CODE}"
+            echo "Response: ${BODY}"
+            exit 1
+          fi
+
+          BRANCH_NAME=$(echo "$BODY" | jq -r '.branch.name')
+          PARENT_ID=$(echo "$BODY" | jq -r '.branch.parent_id')
+
+          echo "✅ Branch verified: ${BRANCH_NAME}"
+          echo "✅ Parent branch: ${PARENT_ID}"
+
+          # Verify it was cloned from the correct parent (main)
+          if [ "$PARENT_ID" != "${{ secrets.NEON_MAIN_BRANCH_ID }}" ]; then
+            echo "❌ FAILED: Branch was not cloned from main!"
+            echo "Expected parent: ${{ secrets.NEON_MAIN_BRANCH_ID }}"
+            echo "Actual parent: ${PARENT_ID}"
+            exit 1
+          fi
+
+          echo "✅ Confirmed: cloned from main branch"
+
+      # ---------------------------------------------------------------
+      # 5. Get connection string and verify database schema
+      # ---------------------------------------------------------------
+      - name: Verify database schema
+        run: |
+          echo "🔍 Verifying database schema on backup branch..."
+          BRANCH_ID="${{ steps.create_branch.outputs.branch_id }}"
+
+          # Get connection URI for the backup branch
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/connection_uri?branch_id=${BRANCH_ID}&database_name=${{ secrets.NEON_DATABASE_NAME }}&role_name=${{ secrets.NEON_ROLE_NAME }}" \
+            -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "❌ FAILED: Could not get connection URI (HTTP ${HTTP_CODE})"
+            echo "Response: ${BODY}"
+            exit 1
+          fi
+
+          CONNECTION_URI=$(echo "$BODY" | jq -r '.uri')
+
+          if [ -z "$CONNECTION_URI" ] || [ "$CONNECTION_URI" = "null" ]; then
+            echo "❌ FAILED: Connection URI is empty"
+            exit 1
+          fi
+
+          echo "✅ Connection URI obtained"
+
+          # Install psql
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client > /dev/null 2>&1
+
+          echo "🔌 Connection Details:"
+          echo "  Database: $(psql "$CONNECTION_URI" -tA -c "SELECT current_database();")"
+          echo "  User:     $(psql "$CONNECTION_URI" -tA -c "SELECT current_user();")"
+          echo "  Version:  $(psql "$CONNECTION_URI" -tA -c "SELECT version();")"
+
+          # Verify critical tables exist
+          TABLES=("Student" "Application" "Certificate" "Program")
+
+          for TABLE in "${TABLES[@]}"; do
+            RESULT=$(psql "$CONNECTION_URI" -t -c "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '${TABLE}');" 2>&1)
+
+            if echo "$RESULT" | grep -q 't'; then
+              COUNT=$(psql "$CONNECTION_URI" -tA -c "SELECT COUNT(*) FROM \"${TABLE}\";")
+              printf "✅ %-12s ...... %s rows\n" "${TABLE}" "${COUNT}"
+            else
+              echo "❌ FAILED: Table '${TABLE}' does NOT exist on backup branch"
+              echo "Result: ${RESULT}"
+              exit 1
+            fi
+          done
+
+          # Verify additional tables for complete schema match
+          ADDITIONAL_TABLES=("AdminUser" "Event" "News" "Certification" "Partner" "FAQ" "Notice")
+
+          for TABLE in "${ADDITIONAL_TABLES[@]}"; do
+            RESULT=$(psql "$CONNECTION_URI" -t -c "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '${TABLE}');" 2>&1)
+
+            if echo "$RESULT" | grep -q 't'; then
+              echo "✅ Table '${TABLE}' exists"
+            else
+              echo "⚠️  WARNING: Table '${TABLE}' not found (non-critical)"
+            fi
+          done
+
+          echo ""
+          echo "✅ Schema verification complete"
+
+      # ---------------------------------------------------------------
+      # 6. Summary
+      # ---------------------------------------------------------------
+      - name: Backup summary
+        if: always()
+        run: |
+          echo "============================================="
+          echo "  NEON BACKUP SUMMARY"
+          echo "============================================="
+          echo "  Time (UTC):    $(date -u)"
+          echo "  Branch Name:   ${{ steps.branch_name.outputs.name }}"
+          echo "  Branch ID:     ${{ steps.create_branch.outputs.branch_id }}"
+          echo "  Parent:        main (${{ secrets.NEON_MAIN_BRANCH_ID }})"
+          echo "  Timestamp UTC: $(date -u)"
+          echo "  Git Commit SHA: ${{ github.sha }}"
+          echo "  GitHub Run ID: ${{ github.run_id }}"
+          echo "  Repository:    ${{ github.repository }}"
+          echo "  Status:        ${{ job.status }}"
+          echo "  Project:       ${{ secrets.NEON_PROJECT_ID }}"
+          echo "  Neon Console:  https://console.neon.tech/app/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${{ steps.create_branch.outputs.branch_id }}"
+          echo "============================================="
