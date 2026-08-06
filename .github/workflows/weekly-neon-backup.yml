@@ -1,0 +1,256 @@
+# =============================================================================
+# Weekly Neon Branch Backup — Automated Sunday Backup
+# =============================================================================
+# Creates a Neon branch backup cloned from the main branch every Sunday.
+# Automatically retains the 26 most recent weekly backups and cleans up older ones.
+# NEVER modifies, resets, or overwrites the main branch.
+#
+# Required GitHub Secrets:
+#   NEON_API_KEY         — Neon API key
+#   NEON_PROJECT_ID      — Neon project ID
+#   NEON_MAIN_BRANCH_ID  — Branch ID of the main production branch
+#   NEON_DATABASE_NAME   — Database name (e.g. neondb)
+#   NEON_ROLE_NAME       — Database role name
+# =============================================================================
+
+name: Weekly Neon Backup
+
+on:
+  schedule:
+    # Run every Sunday at 02:00 UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: weekly-neon-backup
+  cancel-in-progress: false
+
+env:
+  NEON_API_BASE: https://console.neon.tech/api/v2
+
+jobs:
+  backup:
+    name: Create & Verify Weekly Neon Backup
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ---------------------------------------------------------------
+      # 1. Validate Secrets
+      # ---------------------------------------------------------------
+      - name: Validate Secrets
+        run: |
+          for secret in "${{ secrets.NEON_API_KEY }}" "${{ secrets.NEON_PROJECT_ID }}" "${{ secrets.NEON_MAIN_BRANCH_ID }}" "${{ secrets.NEON_DATABASE_NAME }}" "${{ secrets.NEON_ROLE_NAME }}"; do
+            if [ -z "$secret" ]; then
+              echo "❌ FAILED: Missing required Neon secret(s)."
+              exit 1
+            fi
+          done
+
+      # ---------------------------------------------------------------
+      # 2. Generate branch name
+      # ---------------------------------------------------------------
+      - name: Generate branch name
+        id: branch_name
+        run: |
+          # Format: weekly-YYYY-Www (e.g., weekly-2026-W31)
+          # %V provides the ISO 8601 week number
+          BRANCH_NAME="weekly-$(date -u +"%Y-W%V")"
+          echo "name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+          echo "📋 Branch name: ${BRANCH_NAME}"
+
+      # ---------------------------------------------------------------
+      # 3. Create Neon branch cloned from main
+      # ---------------------------------------------------------------
+      - name: Create Neon backup branch
+        id: create_branch
+        run: |
+          BRANCH_NAME="${{ steps.branch_name.outputs.name }}"
+          
+          # Check if today's weekly backup already exists
+          EXISTING_BRANCH=$(curl -s \
+            "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/branches" \
+            -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}" | \
+            jq -r ".branches[] | select(.name == \"$BRANCH_NAME\") | .id")
+
+          if [ -n "$EXISTING_BRANCH" ]; then
+            echo "Weekly backup already exists. Skipping branch creation."
+            echo "branch_exists=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "🔄 Creating Neon branch: $BRANCH_NAME"
+          echo "📌 Cloning from main branch: ${{ secrets.NEON_MAIN_BRANCH_ID }}"
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/branches" \
+            -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "branch": {
+                "name": "'"$BRANCH_NAME"'",
+                "parent_id": "${{ secrets.NEON_MAIN_BRANCH_ID }}"
+              },
+              "endpoints": [
+                {
+                  "type": "read_only"
+                }
+              ]
+            }')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "📡 HTTP Status: ${HTTP_CODE}"
+
+          if [ "$HTTP_CODE" -ne 201 ]; then
+            echo "❌ FAILED: Branch creation returned HTTP ${HTTP_CODE}"
+            echo "Response: ${BODY}"
+            exit 1
+          fi
+
+          BRANCH_ID=$(echo "$BODY" | jq -r '.branch.id')
+          
+          if [ -z "$BRANCH_ID" ] || [ "$BRANCH_ID" = "null" ]; then
+            echo "❌ FAILED: Could not extract branch ID from response"
+            echo "Response: ${BODY}"
+            exit 1
+          fi
+
+          echo "branch_id=${BRANCH_ID}" >> $GITHUB_OUTPUT
+          echo "✅ Branch created: ${BRANCH_ID}"
+
+      # ---------------------------------------------------------------
+      # 4. Wait for connection URI
+      # ---------------------------------------------------------------
+      - name: Wait for connection URI
+        if: steps.create_branch.outputs.branch_exists != 'true'
+        run: |
+          echo "⏳ Waiting for connection URI to become available..."
+          BRANCH_ID="${{ steps.create_branch.outputs.branch_id }}"
+
+          for i in $(seq 1 30); do
+            RESPONSE=$(curl -s \
+              "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/connection_uri?branch_id=${BRANCH_ID}&database_name=${{ secrets.NEON_DATABASE_NAME }}&role_name=${{ secrets.NEON_ROLE_NAME }}" \
+              -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
+
+            URI=$(echo "$RESPONSE" | jq -r '.uri // empty')
+
+            if [ -n "$URI" ] && [ "$URI" != "null" ]; then
+              echo "✅ Connection URI obtained successfully"
+              exit 0
+            fi
+
+            echo "  Attempt ${i}/30: Waiting for connection URI..."
+            sleep 10
+          done
+
+          echo "❌ FAILED: Could not obtain connection URI within 5 minutes"
+          exit 1
+
+      # ---------------------------------------------------------------
+      # 5. Verify database schema
+      # ---------------------------------------------------------------
+      - name: Verify database schema
+        if: steps.create_branch.outputs.branch_exists != 'true'
+        run: |
+          echo "🔍 Verifying database schema on backup branch..."
+          BRANCH_ID="${{ steps.create_branch.outputs.branch_id }}"
+
+          # Get connection URI for the backup branch
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/connection_uri?branch_id=${BRANCH_ID}&database_name=${{ secrets.NEON_DATABASE_NAME }}&role_name=${{ secrets.NEON_ROLE_NAME }}" \
+            -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "❌ FAILED: Could not get connection URI (HTTP ${HTTP_CODE})"
+            echo "Response: ${BODY}"
+            exit 1
+          fi
+
+          CONNECTION_URI=$(echo "$BODY" | jq -r '.uri')
+
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client > /dev/null 2>&1
+
+          echo "🔌 Connection Details:"
+          echo "  Database: $(psql "$CONNECTION_URI" -tA -c "SELECT current_database();")"
+          echo "  User:     $(psql "$CONNECTION_URI" -tA -c "SELECT current_user();")"
+
+          # Verify critical tables exist
+          TABLES=("Student" "Application" "Certificate" "Program")
+
+          for TABLE in "${TABLES[@]}"; do
+            RESULT=$(psql "$CONNECTION_URI" -t -c "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '${TABLE}');" 2>&1)
+
+            if echo "$RESULT" | grep -q 't'; then
+              COUNT=$(psql "$CONNECTION_URI" -tA -c "SELECT COUNT(*) FROM \"${TABLE}\";")
+              printf "✅ %-12s ...... %s rows\n" "${TABLE}" "${COUNT}"
+            else
+              echo "❌ FAILED: Table '${TABLE}' does NOT exist on backup branch"
+              echo "Result: ${RESULT}"
+              exit 1
+            fi
+          done
+          echo "✅ Schema verification complete"
+
+      # ---------------------------------------------------------------
+      # 6. Apply Retention Policy
+      # ---------------------------------------------------------------
+      - name: Cleanup old weekly backups
+        id: cleanup
+        run: |
+          echo "🧹 Applying retention policy (keeping newest 26 weekly backups)..."
+          
+          # Fetch all branches
+          RESPONSE=$(curl -s \
+            "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/branches" \
+            -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
+            
+          # Extract weekly branches, sort by creation date descending, and isolate those beyond the top 26
+          TO_DELETE=$(echo "$RESPONSE" | jq -r '.branches | map(select(.name | test("^weekly-[0-9]{4}-W[0-9]{2}$"))) | sort_by(.created_at) | reverse | .[26:][].id')
+          TOTAL_COUNT=$(echo "$RESPONSE" | jq '.branches | map(select(.name | test("^weekly-[0-9]{4}-W[0-9]{2}$"))) | length')
+          
+          KEPT_COUNT=$(( TOTAL_COUNT > 26 ? 26 : TOTAL_COUNT ))
+          DELETED_COUNT=0
+          
+          if [ -n "$TO_DELETE" ]; then
+            for ID in $TO_DELETE; do
+              echo "🗑️ Deleting old weekly backup branch ID: $ID"
+              DEL_RES=$(curl -s -w "\n%{http_code}" -X DELETE \
+                "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${ID}" \
+                -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
+              DEL_CODE=$(echo "$DEL_RES" | tail -1)
+              
+              if [ "$DEL_CODE" -eq 200 ] || [ "$DEL_CODE" -eq 201 ] || [ "$DEL_CODE" -eq 204 ]; then
+                echo "✅ Deleted successfully."
+                DELETED_COUNT=$((DELETED_COUNT + 1))
+              else
+                echo "⚠️ WARNING: Failed to delete branch $ID (HTTP $DEL_CODE). Skipping."
+              fi
+            done
+          else
+            echo "ℹ️ No old weekly backups to delete (Total: $TOTAL_COUNT)."
+          fi
+          
+          echo "kept_count=$KEPT_COUNT" >> $GITHUB_OUTPUT
+          echo "deleted_count=$DELETED_COUNT" >> $GITHUB_OUTPUT
+
+      # ---------------------------------------------------------------
+      # 7. Summary
+      # ---------------------------------------------------------------
+      - name: Weekly backup summary
+        if: always()
+        run: |
+          echo "============================================="
+          echo "  WEEKLY NEON BACKUP SUMMARY"
+          echo "============================================="
+          echo "  Backup Name:         ${{ steps.branch_name.outputs.name }}"
+          echo "  Branch ID:           ${{ steps.create_branch.outputs.branch_id }}"
+          echo "  Creation Time:       $(date -u)"
+          echo "  Verification Status: ${{ job.status }}"
+          echo "  Backups Kept:        ${{ steps.cleanup.outputs.kept_count || 'N/A' }}"
+          echo "  Backups Deleted:     ${{ steps.cleanup.outputs.deleted_count || '0' }}"
+          echo "============================================="
