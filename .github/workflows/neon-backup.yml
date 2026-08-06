@@ -119,26 +119,26 @@ jobs:
       # ---------------------------------------------------------------
       - name: Wait for branch to become ready
         run: |
-          echo "⏳ Waiting for branch to become ready..."
+          echo "⏳ Waiting for connection URI to become available..."
           BRANCH_ID="${{ steps.create_branch.outputs.branch_id }}"
 
           for i in $(seq 1 30); do
             RESPONSE=$(curl -s \
-              "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${BRANCH_ID}" \
+              "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/connection_uri?branch_id=${BRANCH_ID}&database_name=${{ secrets.NEON_DATABASE_NAME }}&role_name=${{ secrets.NEON_ROLE_NAME }}" \
               -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
 
-            STATE=$(echo "$RESPONSE" | jq -r '.branch.state // empty')
-            echo "  Attempt ${i}/30: state=${STATE}"
+            URI=$(echo "$RESPONSE" | jq -r '.uri // empty')
 
-            if [ "$STATE" = "ready" ]; then
-              echo "✅ Branch is ready"
+            if [ -n "$URI" ] && [ "$URI" != "null" ]; then
+              echo "✅ Connection URI obtained successfully"
               exit 0
             fi
 
+            echo "  Attempt ${i}/30: Waiting for connection URI..."
             sleep 10
           done
 
-          echo "❌ FAILED: Branch did not become ready within 5 minutes"
+          echo "❌ FAILED: Could not obtain connection URI within 5 minutes"
           exit 1
 
       # ---------------------------------------------------------------
