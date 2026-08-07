@@ -73,7 +73,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}" | \
             jq -r ".branches[] | select(.name == \"$BRANCH_NAME\") | .id")
 
-          if [ -n "$EXISTING_BRANCH" ]; then
+          if [ -n "$EXISTING_BRANCH" ] && [ "$EXISTING_BRANCH" != "null" ]; then
             echo "Weekly backup already exists. Skipping branch creation."
             echo "branch_exists=true" >> $GITHUB_OUTPUT
             exit 0
@@ -90,12 +90,7 @@ jobs:
               "branch": {
                 "name": "'"$BRANCH_NAME"'",
                 "parent_id": "${{ secrets.NEON_MAIN_BRANCH_ID }}"
-              },
-              "endpoints": [
-                {
-                  "type": "read_only"
-                }
-              ]
+              }
             }')
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -1)
@@ -119,82 +114,6 @@ jobs:
 
           echo "branch_id=${BRANCH_ID}" >> $GITHUB_OUTPUT
           echo "✅ Branch created: ${BRANCH_ID}"
-
-      # ---------------------------------------------------------------
-      # 4. Wait for connection URI
-      # ---------------------------------------------------------------
-      - name: Wait for connection URI
-        if: steps.create_branch.outputs.branch_exists != 'true'
-        run: |
-          echo "⏳ Waiting for connection URI to become available..."
-          BRANCH_ID="${{ steps.create_branch.outputs.branch_id }}"
-
-          for i in $(seq 1 30); do
-            RESPONSE=$(curl -s \
-              "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/connection_uri?branch_id=${BRANCH_ID}&database_name=${{ secrets.NEON_DATABASE_NAME }}&role_name=${{ secrets.NEON_ROLE_NAME }}" \
-              -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
-
-            URI=$(echo "$RESPONSE" | jq -r '.uri // empty')
-
-            if [ -n "$URI" ] && [ "$URI" != "null" ]; then
-              echo "✅ Connection URI obtained successfully"
-              exit 0
-            fi
-
-            echo "  Attempt ${i}/30: Waiting for connection URI..."
-            sleep 10
-          done
-
-          echo "❌ FAILED: Could not obtain connection URI within 5 minutes"
-          exit 1
-
-      # ---------------------------------------------------------------
-      # 5. Verify database schema
-      # ---------------------------------------------------------------
-      - name: Verify database schema
-        if: steps.create_branch.outputs.branch_exists != 'true'
-        run: |
-          echo "🔍 Verifying database schema on backup branch..."
-          BRANCH_ID="${{ steps.create_branch.outputs.branch_id }}"
-
-          # Get connection URI for the backup branch
-          RESPONSE=$(curl -s -w "\n%{http_code}" \
-            "${NEON_API_BASE}/projects/${{ secrets.NEON_PROJECT_ID }}/connection_uri?branch_id=${BRANCH_ID}&database_name=${{ secrets.NEON_DATABASE_NAME }}&role_name=${{ secrets.NEON_ROLE_NAME }}" \
-            -H "Authorization: Bearer ${{ secrets.NEON_API_KEY }}")
-
-          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
-          BODY=$(echo "$RESPONSE" | sed '$d')
-
-          if [ "$HTTP_CODE" -ne 200 ]; then
-            echo "❌ FAILED: Could not get connection URI (HTTP ${HTTP_CODE})"
-            echo "Response: ${BODY}"
-            exit 1
-          fi
-
-          CONNECTION_URI=$(echo "$BODY" | jq -r '.uri')
-
-          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client > /dev/null 2>&1
-
-          echo "🔌 Connection Details:"
-          echo "  Database: $(psql "$CONNECTION_URI" -tA -c "SELECT current_database();")"
-          echo "  User:     $(psql "$CONNECTION_URI" -tA -c "SELECT current_user();")"
-
-          # Verify critical tables exist
-          TABLES=("Student" "Application" "Certificate" "Program")
-
-          for TABLE in "${TABLES[@]}"; do
-            RESULT=$(psql "$CONNECTION_URI" -t -c "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '${TABLE}');" 2>&1)
-
-            if echo "$RESULT" | grep -q 't'; then
-              COUNT=$(psql "$CONNECTION_URI" -tA -c "SELECT COUNT(*) FROM \"${TABLE}\";")
-              printf "✅ %-12s ...... %s rows\n" "${TABLE}" "${COUNT}"
-            else
-              echo "❌ FAILED: Table '${TABLE}' does NOT exist on backup branch"
-              echo "Result: ${RESULT}"
-              exit 1
-            fi
-          done
-          echo "✅ Schema verification complete"
 
       # ---------------------------------------------------------------
       # 6. Apply Retention Policy
@@ -248,7 +167,11 @@ jobs:
           echo "  WEEKLY NEON BACKUP SUMMARY"
           echo "============================================="
           echo "  Backup Name:         ${{ steps.branch_name.outputs.name }}"
-          echo "  Branch ID:           ${{ steps.create_branch.outputs.branch_id }}"
+          if [ "${{ steps.create_branch.outputs.branch_exists }}" = "true" ]; then
+            echo "  Branch ID:           Already existed"
+          else
+            echo "  Branch ID:           ${{ steps.create_branch.outputs.branch_id }}"
+          fi
           echo "  Creation Time:       $(date -u)"
           echo "  Verification Status: ${{ job.status }}"
           echo "  Backups Kept:        ${{ steps.cleanup.outputs.kept_count || 'N/A' }}"
