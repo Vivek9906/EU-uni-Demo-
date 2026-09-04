@@ -121,10 +121,8 @@ export default function RootLayout({
                 email: 'info@euamericanuniversity.us',
               },
               sameAs: [
-                'https://eu-uni-demo.vercel.app',
                 'https://www.linkedin.com/school/eu-american-university/',
                 'https://www.facebook.com/euamericanuniversity/',
-                'https://twitter.com/EUAU'
               ],
               offers: {
                 '@type': 'Offer',
