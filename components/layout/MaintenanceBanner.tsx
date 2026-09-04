@@ -1,13 +1,18 @@
 import { prisma } from '@/lib/db'
+import { unstable_cache } from 'next/cache'
 
-async function getMaintenanceState() {
-  try {
-    const settings = await prisma.systemSettings.findUnique({ where: { id: 'system_settings' } })
-    return { isActive: settings?.isMaintenanceMode ?? false, message: settings?.maintenanceMessage ?? 'Website is currently under maintenance.' }
-  } catch {
-    return { isActive: false, message: '' }
-  }
-}
+const getMaintenanceState = unstable_cache(
+  async () => {
+    try {
+      const settings = await prisma.systemSettings.findUnique({ where: { id: 'system_settings' } })
+      return { isActive: settings?.isMaintenanceMode ?? false, message: settings?.maintenanceMessage ?? 'Website is currently under maintenance.' }
+    } catch {
+      return { isActive: false, message: '' }
+    }
+  },
+  ['maintenance-state'],
+  { revalidate: 60, tags: ['maintenance'] }
+)
 
 export async function MaintenanceBanner() {
   const { isActive, message } = await getMaintenanceState()

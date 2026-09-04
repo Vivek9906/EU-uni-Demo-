@@ -11,23 +11,22 @@ export interface TestimonialItem {
 }
 
 export default function TestimonialsCarousel({ testimonials }: { testimonials: TestimonialItem[] }) {
-  if (!testimonials || testimonials.length === 0) return null;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const next = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setCurrentIndex((i) => (i + 1) % testimonials.length);
+    setCurrentIndex((i) => (i + 1) % (testimonials?.length || 1));
     setTimeout(() => setIsAnimating(false), 400);
-  }, [isAnimating]);
+  }, [isAnimating, testimonials?.length]);
 
   const prev = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setCurrentIndex((i) => (i - 1 + testimonials.length) % testimonials.length);
+    setCurrentIndex((i) => (i - 1 + (testimonials?.length || 1)) % (testimonials?.length || 1));
     setTimeout(() => setIsAnimating(false), 400);
-  }, [isAnimating]);
+  }, [isAnimating, testimonials?.length]);
 
   useEffect(() => {
     const timer = setInterval(next, 4000);
@@ -44,6 +43,8 @@ export default function TestimonialsCarousel({ testimonials }: { testimonials: T
   };
 
   const visible = getVisibleTestimonials();
+
+  if (!testimonials || testimonials.length === 0) return null;
 
   return (
     <section className="testimonials-section">

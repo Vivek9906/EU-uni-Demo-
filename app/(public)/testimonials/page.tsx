@@ -1,6 +1,7 @@
-export const dynamic = 'force-dynamic';
+
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
 import { PageHero } from '@/components/ui/PageHero';
 import { Quote } from 'lucide-react';
 import Link from 'next/link';
@@ -9,6 +10,36 @@ export const metadata: Metadata = {
   title: 'Testimonials', 
   description: 'Hear from EU American University graduates about their transformative experiences.' 
 };
+
+const getTestimonialsForPage = (page: number, programFilter: string, limit: number) =>
+  unstable_cache(
+    async () => {
+      const where: any = { isApproved: true };
+      if (programFilter !== 'all') {
+        where.program = { contains: programFilter };
+      }
+
+      const [testimonials, total] = await prisma.$transaction([
+        prisma.testimonial.findMany({
+          where,
+          orderBy: { submittedAt: 'desc' },
+          skip: (page - 1) * limit,
+          take: limit,
+          select: {
+            id: true,
+            name: true,
+            program: true,
+            content: true,
+            photo: true,
+          },
+        }),
+        prisma.testimonial.count({ where }),
+      ]);
+      return { testimonials, total };
+    },
+    [`testimonials-page-${page}-${programFilter}-${limit}`],
+    { revalidate: 300, tags: ['testimonials'] }
+  );
 
 export default async function TestimonialsPage({
   searchParams,
@@ -19,20 +50,16 @@ export default async function TestimonialsPage({
   const programFilter = searchParams?.program ?? 'all';
   const limit = 12;
 
-  const where: any = { isApproved: true };
-  if (programFilter !== 'all') {
-    where.program = { contains: programFilter };
+  let testimonials: any[] = [];
+  let total = 0;
+  
+  try {
+    const result = await getTestimonialsForPage(page, programFilter, limit)();
+    testimonials = result.testimonials;
+    total = result.total;
+  } catch (error) {
+    console.error('[TestimonialsPage] DB error:', error);
   }
-
-  const [testimonials, total] = await prisma.$transaction([
-    prisma.testimonial.findMany({
-      where,
-      orderBy: { submittedAt: 'desc' },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-    prisma.testimonial.count({ where }),
-  ]);
 
   const totalPages = Math.ceil(total / limit);
 
@@ -74,14 +101,14 @@ export default async function TestimonialsPage({
                 <div key={t.id} className="bg-white p-8 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow flex flex-col h-full relative group">
                   <Quote className="w-10 h-10 text-[#E09900]/20 absolute top-6 right-6 group-hover:text-[#E09900]/40 transition-colors" />
                   <p className="text-foreground-secondary leading-relaxed mb-8 italic flex-1 relative z-10 text-sm">
-                    "{t.content}"
+                    &quot;{t.content}&quot;
                   </p>
                   <div className="flex items-center gap-4 mt-auto">
                     {t.photo ? (
                       <img src={t.photo} alt={t.name} className="w-12 h-12 rounded-full object-cover border-2 border-background-subtle" />
                     ) : (
                       <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
-                        {t.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase()}
+                        {t.name.split(' ').map((n: string) => n[0]).join('').substring(0,2).toUpperCase()}
                       </div>
                     )}
                     <div>

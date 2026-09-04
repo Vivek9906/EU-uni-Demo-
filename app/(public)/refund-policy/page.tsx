@@ -1,6 +1,6 @@
-export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { prisma } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -8,10 +8,28 @@ export const metadata: Metadata = {
   description: 'Refund Policy for EU American University',
 };
 
+const getCachedLegalPage = unstable_cache(
+  async (slug: string) => {
+    return prisma.legalPage.findUnique({
+      where: { slug },
+      select: {
+        title: true,
+        content: true,
+        slug: true,
+      },
+    });
+  },
+  ['legal-page-refund-policy'],
+  { revalidate: 3600, tags: ['legal-pages'] }
+);
+
 export default async function RefundPolicyPage() {
-  const legalPage = await prisma.legalPage.findUnique({
-    where: { slug: 'refund-policy' },
-  });
+  let legalPage = null;
+  try {
+    legalPage = await getCachedLegalPage('refund-policy');
+  } catch (error) {
+    console.error('[RefundPolicyPage] DB error:', error);
+  }
 
   return (
     <section className="section-padding bg-background-subtle min-h-[80vh]">

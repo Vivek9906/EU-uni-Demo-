@@ -70,7 +70,7 @@ export function SubscriptionPopup() {
           {success ? (
             <div className="text-center py-4">
               <CheckCircle className="w-12 h-12 text-success mx-auto mb-3" />
-              <h4 className="font-bold text-lg text-foreground">You're Subscribed!</h4>
+              <h4 className="font-bold text-lg text-foreground">You&apos;re Subscribed!</h4>
               <p className="text-foreground-secondary text-sm">Thank you for joining our newsletter.</p>
             </div>
           ) : (

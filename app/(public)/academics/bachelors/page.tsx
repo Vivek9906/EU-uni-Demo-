@@ -3,17 +3,46 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 import { prisma } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
+import { PROGRAMS } from '@/lib/programs';
 
 export const metadata: Metadata = {
   title: "Bachelor's Programs",
   description: "Explore EU American University's Bachelor's programs. Fully online, globally recognized undergraduate degrees.",
 };
 
+const getCachedPrograms = unstable_cache(
+  async () => {
+    return prisma.program.findMany({
+      where: { level: 'bachelors', isActive: true },
+      orderBy: { order: 'asc' },
+      select: {
+        title: true,
+        slug: true,
+        level: true,
+        description: true,
+        imageUrl: true,
+      },
+    });
+  },
+  ['academics-programs-bachelors'],
+  { revalidate: 3600, tags: ['programs'] }
+);
+
 export default async function BachelorsPage() {
-  const programs = await prisma.program.findMany({
-    where: { level: 'bachelors', isActive: true },
-    orderBy: { order: 'asc' },
-  });
+  let programs: any[] = [];
+  try {
+    programs = await getCachedPrograms();
+  } catch (error) {
+    console.error('[BachelorsPage] DB error:', error);
+    programs = PROGRAMS.bachelors.map((p) => ({
+      title: p.title,
+      slug: p.slug,
+      level: p.level,
+      description: (p as any).description ?? '',
+      imageUrl: null,
+    }));
+  }
 
   return (
     <>

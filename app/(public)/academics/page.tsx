@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { ArrowRight, Globe } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 import { prisma } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
+import { PROGRAMS_ORDERED } from '@/lib/programs';
 
 export const metadata: Metadata = {
   title: 'Academic Programs',
@@ -10,11 +12,39 @@ export const metadata: Metadata = {
     'Explore EU American University\'s academic programs: Bachelor\'s (BBA, BPA, BSW), Master\'s (MBA, MPA, MSW), Doctoral research programs, and Honorary programs.',
 };
 
+const getCachedPrograms = unstable_cache(
+  async () => {
+    return prisma.program.findMany({
+      where: { isActive: true },
+      orderBy: { order: 'asc' },
+      select: {
+        title: true,
+        slug: true,
+        level: true,
+        description: true,
+        imageUrl: true,
+        order: true,
+      },
+    });
+  },
+  ['academics-programs-all'],
+  { revalidate: 3600, tags: ['programs'] }
+);
+
 export default async function AcademicsPage() {
-  const dbPrograms = await prisma.program.findMany({
-    where: { isActive: true },
-    orderBy: { order: 'asc' }
-  });
+  let dbPrograms: any[] = [];
+  try {
+    dbPrograms = await getCachedPrograms();
+  } catch (error) {
+    console.error('[AcademicsPage] DB error:', error);
+    dbPrograms = PROGRAMS_ORDERED.map((p) => ({
+      title: p.title,
+      slug: p.slug,
+      level: p.level,
+      description: (p as any).description ?? '',
+      imageUrl: null,
+    }));
+  }
 
   const phd = dbPrograms.filter(p => p.level === 'phd');
   const honorary = dbPrograms.filter(p => p.level === 'honorary');

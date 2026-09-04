@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/db'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
@@ -39,6 +39,7 @@ export async function createProgram(data: {
     revalidatePath('/academics/phd')
     revalidatePath('/academics/honorary')
     revalidatePath(`/academics/${data.level}/${data.slug}`)
+    revalidateTag('programs')
     return { success: true, program: { ...program, createdAt: program.createdAt.toISOString(), updatedAt: program.updatedAt.toISOString() } }
   } catch (err) {
     console.error('[ADMIN][programs] create failed:', err)
@@ -65,6 +66,7 @@ export async function updateProgram(id: string, data: {
     revalidatePath('/academics/phd')
     revalidatePath('/academics/honorary')
     revalidatePath(`/academics/${program.level}/${program.slug}`)
+    revalidateTag('programs')
     return { success: true, program: { ...program, createdAt: program.createdAt.toISOString(), updatedAt: program.updatedAt.toISOString() } }
   } catch (err) {
     console.error('[ADMIN][programs] update failed:', err)
@@ -82,6 +84,7 @@ export async function deleteProgram(id: string) {
     revalidatePath('/academics/masters')
     revalidatePath('/academics/phd')
     revalidatePath('/academics/honorary')
+    revalidateTag('programs')
     return { success: true }
   } catch (err) {
     console.error('[ADMIN][programs] delete failed:', err)

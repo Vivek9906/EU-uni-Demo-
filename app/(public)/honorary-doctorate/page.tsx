@@ -6,12 +6,32 @@ import { PageHero } from '@/components/ui/PageHero';
 export const metadata: Metadata = { title: 'Honorary Doctorate', description: 'Be recognized for a lifetime of achievement. Learn about EUAU\'s Honorary Doctorate (Honoris Causa) program.' };
 
 import { prisma } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
+
+const getCachedFaqs = unstable_cache(
+  async () => {
+    return prisma.fAQ.findMany({
+      where: { isActive: true, category: 'Programs' }, // Or however they categorize it
+      orderBy: { order: 'asc' },
+      select: {
+        id: true,
+        question: true,
+        answer: true,
+        category: true,
+      },
+    });
+  },
+  ['honorary-doctorate-faqs'],
+  { revalidate: 300, tags: ['faqs'] }
+);
 
 export default async function HonoraryDoctoratePage() {
-  const faqs = await prisma.fAQ.findMany({
-    where: { isActive: true, category: 'Programs' }, // Or however they categorize it
-    orderBy: { order: 'asc' },
-  });
+  let faqs: any[] = [];
+  try {
+    faqs = await getCachedFaqs();
+  } catch (error) {
+    console.error('[HonoraryDoctoratePage] DB error:', error);
+  }
   return (
     <>
       <PageHero

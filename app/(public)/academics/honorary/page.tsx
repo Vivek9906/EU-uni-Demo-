@@ -3,17 +3,46 @@ import Link from 'next/link';
 import { ArrowRight, Award, GraduationCap } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 import { prisma } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
+import { PROGRAMS } from '@/lib/programs';
 
 export const metadata: Metadata = {
   title: 'Honorary Programs',
   description: 'EU American University Honorary programs: Honorary Doctorate (Honoris Causa) and Honorary Professorship.',
 };
 
+const getCachedPrograms = unstable_cache(
+  async () => {
+    return prisma.program.findMany({
+      where: { level: 'honorary', isActive: true },
+      orderBy: { order: 'asc' },
+      select: {
+        title: true,
+        slug: true,
+        level: true,
+        description: true,
+        imageUrl: true,
+      },
+    });
+  },
+  ['academics-programs-honorary'],
+  { revalidate: 3600, tags: ['programs'] }
+);
+
 export default async function HonoraryPage() {
-  const programs = await prisma.program.findMany({
-    where: { level: 'honorary', isActive: true },
-    orderBy: { order: 'asc' },
-  });
+  let programs: any[] = [];
+  try {
+    programs = await getCachedPrograms();
+  } catch (error) {
+    console.error('[HonoraryPage] DB error:', error);
+    programs = PROGRAMS.honorary.map(p => ({
+      title: p.title,
+      slug: p.slug,
+      level: p.level,
+      description: p.description ?? '',
+      imageUrl: null,
+    }));
+  }
 
   return (
     <>

@@ -3,17 +3,41 @@ import { Bell, FileText, Calendar } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 
 export const metadata: Metadata = { title: 'Notices', description: 'Official university notices and announcements from EU American University.' };
-export const dynamic = 'force-dynamic';
-
 import { prisma } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
+
+const getCachedNotices = unstable_cache(
+  async () => {
+    const data = await prisma.notice.findMany({
+      where: { isActive: true },
+      orderBy: { postedAt: 'desc' },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        category: true,
+        postedAt: true,
+        attachmentUrl: true,
+      },
+    });
+    return data.map(n => ({
+      ...n,
+      postedAt: n.postedAt.toISOString()
+    }));
+  },
+  ['notices-list'],
+  { revalidate: 300, tags: ['notices'] }
+);
 
 const categoryColors: Record<string, string> = { academic: 'badge-primary', admin: 'badge-accent', exam: 'badge-error', general: 'badge-success' };
 
 export default async function NoticesPage() {
-  const notices = await prisma.notice.findMany({
-    where: { isActive: true },
-    orderBy: { postedAt: 'desc' }
-  });
+  let notices: any[] = [];
+  try {
+    notices = await getCachedNotices();
+  } catch (error) {
+    console.error('[NoticesPage] DB error:', error);
+  }
   return (
     <>
       <PageHero
@@ -29,7 +53,13 @@ export default async function NoticesPage() {
                 <div className="flex items-start gap-3">
                   <Bell className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <div className="flex items-center gap-2 mb-1"><span className={categoryColors[n.category] || 'badge-primary'}>{n.category}</span><span className="text-xs text-foreground-muted flex items-center gap-1"><Calendar size={12} />{n.postedAt.toLocaleDateString()}</span></div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className={categoryColors[n.category] || 'badge-primary'}>{n.category}</span>
+                      <span className="text-xs text-foreground-muted shrink-0 whitespace-nowrap mt-1 flex items-center gap-1">
+                        <Calendar size={12} />
+                        {new Date(n.postedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                    </div>
                     <h3 className="font-heading text-base font-bold mb-1">{n.title}</h3>
                     <p className="text-sm text-foreground-secondary">{n.content}</p>
                   </div>

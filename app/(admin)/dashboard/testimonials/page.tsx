@@ -103,7 +103,7 @@ export default function TestimonialsAdminPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm text-slate-600 max-w-xl line-clamp-2 italic">"{testimonial.content}"</div>
+                      <div className="text-sm text-slate-600 max-w-xl line-clamp-2 italic">&quot;{testimonial.content}&quot;</div>
                     </td>
                     <td className="px-6 py-4">
                       {testimonial.isApproved ? (

@@ -36,7 +36,19 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const certificates = await prisma.certificate.findMany({ orderBy: { createdAt: 'desc' } });
+    const certificates = await prisma.certificate.findMany({
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        certificateId: true,
+        holderName: true,
+        programName: true,
+        issuedDate: true,
+        applicationId: true,
+        isValid: true,
+        createdAt: true,
+      },
+    });
     return NextResponse.json({ certificates });
   } catch (error) {
     console.error('Certificate fetch error:', error);

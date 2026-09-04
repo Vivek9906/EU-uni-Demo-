@@ -27,6 +27,7 @@ export async function toggleMaintenanceMode(isActive: boolean, message?: string)
     })
     revalidatePath('/')
     revalidatePath('/dashboard/settings')
+    revalidateTag('maintenance')
     return { success: true }
   } catch (err) {
     console.error('[ADMIN][settings] toggle maintenance failed:', err)

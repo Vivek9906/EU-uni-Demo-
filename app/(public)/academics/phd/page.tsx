@@ -3,17 +3,46 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { PageHero } from '@/components/ui/PageHero';
 import { prisma } from '@/lib/db';
+import { unstable_cache } from 'next/cache';
+import { PROGRAMS } from '@/lib/programs';
 
 export const metadata: Metadata = {
   title: 'PhD Programs',
   description: 'EU American University PhD programs. Advance the boundaries of knowledge through independent research and academic inquiry.',
 };
 
+const getCachedPrograms = unstable_cache(
+  async () => {
+    return prisma.program.findMany({
+      where: { level: 'phd', isActive: true },
+      orderBy: { order: 'asc' },
+      select: {
+        title: true,
+        slug: true,
+        level: true,
+        description: true,
+        imageUrl: true,
+      },
+    });
+  },
+  ['academics-programs-phd'],
+  { revalidate: 3600, tags: ['programs'] }
+);
+
 export default async function PhdPage() {
-  const programs = await prisma.program.findMany({
-    where: { level: 'phd', isActive: true },
-    orderBy: { order: 'asc' },
-  });
+  let programs: any[] = [];
+  try {
+    programs = await getCachedPrograms();
+  } catch (error) {
+    console.error('[PhdPage] DB error:', error);
+    programs = PROGRAMS.phd.map(p => ({
+      title: p.title,
+      slug: p.slug,
+      level: p.level,
+      description: p.description ?? '',
+      imageUrl: null,
+    }));
+  }
 
   return (
     <>

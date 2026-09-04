@@ -181,7 +181,7 @@ export default function DoctorOfPhilosophyPage() {
             <div className="card p-7">
               <div className="mb-4 flex items-center gap-3">
                 <Lightbulb className="h-7 w-7 text-accent" />
-                <h2 className="text-2xl font-bold">What You'll Achieve</h2>
+                <h2 className="text-2xl font-bold">What You&apos;ll Achieve</h2>
               </div>
               <ul className="space-y-3">
                 {outcomes.map((item) => (
