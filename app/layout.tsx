@@ -36,6 +36,9 @@ export const metadata: Metadata = {
     'higher education',
     'distance learning',
   ],
+  verification: {
+    google: '6A-TXSbAsjdFOnYHIbfGpCsOJNSdBKabUr_gcN0oovk',
+  },
   authors: [{ name: 'EU American University', url: 'https://euamericanuniversity.us' }],
   creator: 'EU American University',
   publisher: 'EU American University',
